@@ -9,7 +9,7 @@ Source files for generating the documentation for Brightspace UI at [https://d2q
 
 The site is built using [Jekyll](https://jekyllrb.com/), a web site generator which turns HTML, CSS,  [Markdown](https://daringfireball.net/projects/markdown/) and [Liquid](https://github.com/Shopify/liquid/wiki) templates into a static site. It's the same thing [GitHub Pages](https://pages.github.com/) uses, so you know it's cool.
 
-To get started, follow [Jekyll's Quick-start guide](https://jekyllrb.com/docs/quickstart/). You'll need Ruby.
+To get started, follow [Jekyll's Quick-start guide](https://jekyllrb.com/docs/quickstart/). You'll need Ruby.  Note that on Windows you may also need to install Ruby devkit, Python & Pygments, and the Pygments.rb gem.
 
 ### Building and Serving
 
