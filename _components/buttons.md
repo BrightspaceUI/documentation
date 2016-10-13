@@ -72,6 +72,6 @@ Then import the components you need:
 
 ### Fiddle with it!
 
-<script async src="//jsfiddle.net/capa/z34s1zdq/embed/html,result/"></script>
+<script async src="//jsfiddle.net/capa/z34s1zdq/embed/html,result/?bodyColor=f9fafb"></script>
 
 {% include github.html name=page.github %}
