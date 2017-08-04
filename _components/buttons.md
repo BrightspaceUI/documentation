@@ -70,4 +70,8 @@ Then import the components you need:
   href="bower_components/d2l-button/d2l-floating-buttons.html">
 {% endexample %}
 
+### Fiddle with it!
+
+<script async src="//jsfiddle.net/capa/z34s1zdq/embed/html,result/?bodyColor=f9fafb"></script>
+
 {% include github.html name=page.github %}
