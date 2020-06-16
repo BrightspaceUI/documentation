@@ -1,9 +1,0 @@
-{
-  "entrypoint": "_assets/web-components/wc.html",
-  "builds": [{
-    "bundle": true,
-    "js": {"minifiy": true},
-    "css": {"minifiy": true},
-    "html": {"minifiy": true}
-  }]
-}
