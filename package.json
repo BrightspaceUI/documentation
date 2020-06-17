@@ -26,7 +26,7 @@
     "eslint-plugin-lit": "^1",
     "eslint-plugin-sort-class-members": "^1",
     "lit-analyzer": "^1",
-    "rimraf": "^2.6.3",
+    "rimraf": "^3.0.2",
     "rollup": "^2.3.4"
   },
   "dependencies": {
