@@ -1,18 +1,7 @@
-language: ruby
-rvm:
-  - 2.2
-before_install:
-  - nvm install stable
-install:
-  - nvm use stable
-  - npm install
+language: node_js
+node_js: node
+addons:
+  chrome: stable
 script:
-  - npm run build
-  - if [ "$TRAVIS_PULL_REQUEST" != "false" ]; then jekyll build -b /pr/$TRAVIS_PULL_REQUEST/; else jekyll build; fi
-after_success:
-  - '[ "$TRAVIS_SECURE_ENV_VARS" = "true" ] && npm run publish-s3'
-env:
-  global:
-  - AMAZON_ACCESS_KEY_ID="AKIAJVDO2NQZ5NOFDA6Q"
-  # AWS_SECRET_ACCESS_KEY
-  - secure: "dY9aSmmneuTRjtJwEb4EGWRxQQZ2qqO6A6gjLgezM/WXUUwMjG3ZgQKFkw4/C3VezE7zWuqp7ydeyYEt9XIO7bexl4lkp+8T/bNFxNHLpy3OWu0a8+ncDWdz698VlJU9SQyLh7rzOIz6o38/9g9w1zvIiDONWHmy+uOLlPUhKSuY9d8SLtF0CZyjGqITmLgEtoYNtfLuHZURyRWWZ3r8G16DA04TJboLV7ZVu/8Nad1sAh1FBx0/otNimYhsbC37ZJz0xQolrZtI9r2pHpEeN6vFjOVXfZ4Mit6K0Dgw5lzeUtpGTGgjVDhpJo314S1fueggVgclbU7d4hr0Fm4ODrew1DRVj+45l62goLh3ohAqKNIY/hTjAm6ItQJEP0+uZUNs0h5rdZIF6Ht5wC/uezmXO2MHNdLPGzZs1KgfnD/oZEGc5PvIHHo73pLNGE8vMVLYwFZmLkmVkr28G2gyk+KRMHoLWxY7Oo2GiEyU7PjKLSs2zHYns6DLG435LWJ74P+030xmnk2OcRXCefV9NK/Bl1795HBPQ+EFtVt9kQQdy8TL28CJXUC7Rrm+5mDet0R74OJNJtEf+2qV6nKCixpFDRTssT9pFcFCIU7FRSJ+Wc5Jmj6FWdJCf3kRdyUvOIVjgl4I1gfmDpXmtltUlbXnsVCgq69IiiPHEFh4N+k="
+- npm run lint
+

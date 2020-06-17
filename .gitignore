@@ -1,7 +1,5 @@
-bower_components
-node_modules
-_build
-_site
-.sass-cache
-npm-debug.log
-Gemfile.lock
+coverage
+custom-elements.json
+dist
+node_modules/
+package-lock.json
