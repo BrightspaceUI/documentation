@@ -1,16 +1,18 @@
 import './component.js';
 import './component-list.js';
 import './welcome.js';
-import 'd2l-table/d2l-table.js';
 import '@brightspace-ui/core/components/link/link.js';
 import { css, html, LitElement } from 'lit-element';
+import { default as components } from '../data/components.js';
 import page from 'page';
 
 export class DesignSystem extends LitElement {
 	static get properties() {
 		return {
+			_actionComponents: { type: Array },
 			_component: { type: String },
 			_currentView: { type: String },
+			_formComponents: { type: Array },
 			_showActionComponents: { type: Boolean },
 			_showFormComponents: { type: Boolean }
 		};
@@ -91,9 +93,23 @@ export class DesignSystem extends LitElement {
 		this._showActionComponents = false;
 		this._showFormComponents = false;
 		this._installRoutes();
+
+		this._actionComponents = [];
+		this._formComponents = [];
+
+		components.forEach((component) => {
+			if (component.type === 'action') this._actionComponents.push(component);
+			else if (component.type === 'form') this._formComponents.push(component);
+		});
 	}
 
 	render() {
+		const actionComponentsList = this._actionComponents.map((action) => html`
+			<li><d2l-link small href="/components/${action.tag}">${action.name}</d2l-link></li>
+		`);
+		const formComponentsList = this._formComponents.map((form) => html`
+			<li><d2l-link small href="/components/${form.tag}">${form.name}</d2l-link></li>
+		`);
 		return html`
 			<header>
 				<div>
@@ -113,13 +129,13 @@ export class DesignSystem extends LitElement {
 							<li role="listitem">
 								<d2l-link @click="${this._onClickActions}" href="/components/actions">Actions</d2l-link>
 								<ul ?hidden="${!this._showActionComponents}">
-									<li><d2l-link small href="/components/button">Button</d2l-link></li>
+									${actionComponentsList}
 								</ul>
 							</li>
 							<li role="listitem">
 								<d2l-link @click="${this._onClickForms}" href="/components/forms">Forms</d2l-link>
 								<ul ?hidden="${!this._showFormComponents}">
-									<li><d2l-link small href="/components/input">Input</d2l-link></li>
+									${formComponentsList}
 								</ul>
 							</li>
 						</ul>
@@ -142,8 +158,8 @@ export class DesignSystem extends LitElement {
 		page.redirect('/', '/welcome');
 		page('/welcome', () => this._currentView = 'welcome');
 		page('/components', () => this._currentView = 'component-list');
-		page('/components/actions', () => this._currentView = 'actions');
-		page('/components/forms', () => this._currentView = 'forms');
+		page('/components/actions', () => this._currentView = 'welcome');
+		page('/components/forms', () => this._currentView = 'welcome');
 		page('/components/:component', this._componentRoute.bind(this));
 		page('*', () => this._currentView = 'welcome');
 		page();

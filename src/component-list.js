@@ -2,42 +2,29 @@ import '@brightspace-ui/core/components/link/link.js';
 import '@brightspace-ui/core/components/status-indicator/status-indicator.js';
 import 'd2l-table/d2l-table.js';
 import { css, html, LitElement } from 'lit-element';
-import { default as coreComponents } from '../data/core.js';
+import { default as components } from '../data/components.js';
 import { heading2Styles } from '@brightspace-ui/core/components/typography/styles.js';
 import { tableStyles } from './table-styles.js';
 
 export class DesignSystemComponentList extends LitElement {
-	static get properties() {
-		return {
-			_components: { type: Array },
-			_componentsFetched: { type: Boolean }
-		};
-	}
-
 	static get styles() {
 		return [heading2Styles, tableStyles, css`
 			:host {
 				display: block;
 			}
+
+			:host([hidden]) {
+				display: none;
+			}
+
+			h1.d2l-heading-2 {
+				margin-top: 0;
+			}
 		`];
 	}
 
-	constructor() {
-		super();
-
-		this._commponents = [];
-		this._componentsFetched = false;
-	}
-
-	firstUpdated(changedProperties) {
-		super.firstUpdated(changedProperties);
-
-		this._commponents = this._commponents.concat(coreComponents);
-		this._componentsFetched = true;
-	}
-
 	render() {
-		const rows = this._commponents.map(component => {
+		const rows = components.map(component => {
 			const name = component.readme ? html`<d2l-link href="${component.readme}">${component.name}</d2l-link>` : html`<div>${component.name}</div>`;
 			return html`
 				<d2l-tr>

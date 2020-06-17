@@ -1,5 +1,4 @@
 import { css, html, LitElement } from 'lit-element';
-import { heading2Styles } from '@brightspace-ui/core/components/typography/styles.js';
 
 export class DesignSystemWelcome extends LitElement {
 	static get properties() {
@@ -10,11 +9,15 @@ export class DesignSystemWelcome extends LitElement {
 	}
 
 	static get styles() {
-		return [heading2Styles, css`
+		return css`
 			:host {
-				display: block;
+				display: inline-block;
 			}
-		`];
+
+			:host([hidden]) {
+				display: none;
+			}
+		`;
 	}
 
 	render() {

@@ -1,58 +1,34 @@
 {
+  "name": "d2l-design-system",
+  "description": "",
   "scripts": {
+    "lint": "npm run lint:eslint && npm run lint:lit",
     "lint:eslint": "eslint --ext .js,.html . --ignore-path .gitignore",
-    "format:eslint": "eslint --ext .js,.html . --fix --ignore-path .gitignore",
-    "lint:prettier": "prettier \"**/*.js\" --check --ignore-path .gitignore",
-    "format:prettier": "prettier \"**/*.js\" --write --ignore-path .gitignore",
-    "lint": "npm run lint:eslint && npm run lint:prettier",
-    "format": "npm run format:eslint && npm run format:prettier",
-    "test": "karma start --coverage",
+    "lint:lit": "lit-analyzer src/*.js --strict --rules.no-unknown-tag-name off",
+    "test": "npm run lint && karma start --coverage",
     "test:watch": "karma start --auto-watch=true --single-run=false",
     "build": "rimraf dist && rollup -c rollup.config.js",
     "start:build": "npm run build && es-dev-server --root-dir dist --app-index index.html --open --compatibility none",
     "start": "es-dev-server --app-index index.html --node-resolve --open --watch"
   },
+  "author": "D2L Corporation",
+  "license": "Apache-2.0",
   "devDependencies": {
+    "@open-wc/building-rollup": "^1.0.0",
+    "@open-wc/eslint-config": "^2.0.0",
+    "@open-wc/testing": "^2.0.0",
+    "@open-wc/testing-karma": "^3.0.0",
+    "deepmerge": "^3.2.0",
+    "es-dev-server": "^1.5.0",
     "eslint": "^7",
     "eslint-config-brightspace": "^0.9.0",
     "eslint-plugin-html": "^6",
     "eslint-plugin-lit": "^1",
     "eslint-plugin-sort-class-members": "^1",
-    "@open-wc/eslint-config": "^2.0.0",
-    "prettier": "^2.0.4",
-    "eslint-config-prettier": "^6.11.0",
-    "husky": "^1.0.0",
-    "lint-staged": "^8.0.0",
-    "@open-wc/testing-karma": "^3.0.0",
-    "deepmerge": "^3.2.0",
-    "@open-wc/testing": "^2.0.0",
-    "@open-wc/building-rollup": "^1.0.0",
+    "lit-analyzer": "^1",
     "rimraf": "^2.6.3",
-    "rollup": "^2.3.4",
-    "es-dev-server": "^1.5.0"
+    "rollup": "^2.3.4"
   },
-  "eslintConfig": {
-    "extends": [
-      "@open-wc/eslint-config",
-      "eslint-config-prettier"
-    ]
-  },
-  "prettier": {
-    "singleQuote": true,
-    "arrowParens": "avoid"
-  },
-  "lint-staged": {
-    "*.js": [
-      "eslint --fix",
-      "prettier --write",
-      "git add"
-    ]
-  },
-  "name": "d2l-components",
-  "version": "0.0.0",
-  "description": "Webcomponent d2l-components following open-wc recommendations",
-  "author": "d2l-components",
-  "license": "MIT",
   "dependencies": {
     "@brightspace-ui/core": "^1.52.2",
     "d2l-table": "BrightspaceUI/table#semver:^2",
