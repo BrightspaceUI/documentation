@@ -3,8 +3,8 @@ export default [
 		'name': 'Inline Alert',
 		'readme': 'https://github.com/BrightspaceUI/core/tree/master/components/alert#d2l-alert',
 		'development': {
-			'state': 'success',
-			'text': 'complete'
+			'state': 'default',
+			'text': 'out of date'
 		},
 		'design': {
 			'state': 'success',
@@ -16,8 +16,8 @@ export default [
 		'name': 'Toast Alert',
 		'readme': 'https://github.com/BrightspaceUI/core/tree/master/components/alert#d2l-alert-toast',
 		'development': {
-			'state': 'success',
-			'text': 'complete'
+			'state': 'default',
+			'text': 'out of date'
 		},
 		'design': {
 			'state': 'success',
@@ -39,11 +39,24 @@ export default [
 		'tag': 'd2l-backdrop',
 		'type': 'Overlay'
 	}, {
-		'name': 'Button',
-		'readme': 'https://github.com/BrightspaceUI/core/tree/master/components/button#d2l-button',
+		'name': 'Breadcrumbs',
+		'readme': 'https://github.com/BrightspaceUI/breadcrumbs#d2l-breadcrumbs',
 		'development': {
 			'state': 'success',
 			'text': 'complete'
+		},
+		'design': {
+			'state': 'success',
+			'text': 'complete'
+		},
+		'tag': 'd2l-breadcrumbs',
+		'type': 'Navigation'
+	}, {
+		'name': 'Button',
+		'readme': 'https://github.com/BrightspaceUI/core/tree/master/components/button#d2l-button',
+		'development': {
+			'state': 'default',
+			'text': 'out of date'
 		},
 		'design': {
 			'state': 'success',
@@ -104,6 +117,19 @@ export default [
 		'tag': 'd2l-calendar',
 		'type': 'Forms'
 	}, {
+		'name': 'Card',
+		'readme': 'https://github.com/BrightspaceUI/card#d2l-card',
+		'development': {
+			'state': 'success',
+			'text': 'complete'
+		},
+		'design': {
+			'state': 'success',
+			'text': 'complete'
+		},
+		'tag': 'd2l-card',
+		'type': 'Structure'
+	}, {
 		'name': 'Dialog',
 		'readme': 'https://github.com/BrightspaceUI/core/tree/master/components/dialog#d2l-dialog',
 		'development': {
@@ -133,8 +159,8 @@ export default [
 		'name': 'Dropdown - Opener - Generic Wrapper',
 		'readme': 'https://github.com/BrightspaceUI/core/tree/master/components/dropdown#d2l-dropdown',
 		'development': {
-			'state': 'success',
-			'text': 'complete'
+			'state': 'default',
+			'text': 'out of date'
 		},
 		'design': {
 			'state': 'success',
@@ -302,6 +328,19 @@ export default [
 		'name': 'Search Input',
 		'readme': 'https://github.com/BrightspaceUI/core/blob/master/components/inputs/docs/input-search.md#search-inputs',
 		'development': {
+			'state': 'default',
+			'text': 'out of date'
+		},
+		'design': {
+			'state': 'success',
+			'text': 'complete'
+		},
+		'tag': 'd2l-input-search',
+		'type': 'Navigation'
+	}, {
+		'name': 'Select List Styles',
+		'readme': 'https://github.com/BrightspaceUI/core/blob/master/components/inputs/docs/input-select-styles.md#select-lists',
+		'development': {
 			'state': 'success',
 			'text': 'complete'
 		},
@@ -309,7 +348,7 @@ export default [
 			'state': 'success',
 			'text': 'complete'
 		},
-		'tag': 'd2l-input-search',
+		'tag': 'input-select-styles',
 		'type': 'Navigation'
 	}, {
 		'name': 'Link',
@@ -493,5 +532,174 @@ export default [
 		},
 		'tag': 'd2l-more-less',
 		'type': 'Structure'
+	}, {
+		'name': 'Navigation',
+		'readme': 'https://github.com/BrightspaceUI/navigation#d2l-navigation',
+		'development': {
+			'state': 'success',
+			'text': 'complete'
+		},
+		'design': {
+			'state': 'success',
+			'text': 'complete'
+		},
+		'tag': 'd2l-navigation',
+		'type': 'Navigation'
+	}, {
+		'name': 'Immersive Navigation',
+		'readme': 'https://github.com/BrightspaceUI/navigation#d2l-navigation-immersive',
+		'development': {
+			'state': 'success',
+			'text': 'complete'
+		},
+		'design': {
+			'state': 'success',
+			'text': 'complete'
+		},
+		'tag': 'd2l-navigation-immersive',
+		'type': 'Navigation'
+	}, {
+		'name': 'Offscreen',
+		'readme': 'https://github.com/BrightspaceUI/core/tree/master/components/offscreen#off-screen-content',
+		'development': {
+			'state': 'success',
+			'text': 'complete'
+		},
+		'design': {
+			'state': 'alert',
+			'text': 'incomplete'
+		},
+		'tag': 'd2l-offscreen',
+		'type': 'Structure'
+	}, {
+		'name': 'Profile Image',
+		'readme': 'https://github.com/BrightspaceHypermediaComponents/users',
+		'development': {
+			'state': 'success',
+			'text': 'complete'
+		},
+		'design': {
+			'state': 'success',
+			'text': 'complete'
+		},
+		'tag': 'd2l-profile-image',
+		'type': 'Other'
+	}, {
+		'name': 'Filter Dropdown',
+		'readme': 'https://github.com/BrightspaceUI/facet-filter-sort#d2l-filter-dropdown',
+		'development': {
+			'state': 'success',
+			'text': 'complete'
+		},
+		'design': {
+			'state': 'alert',
+			'text': 'incomplete'
+		},
+		'tag': 'd2l-filter-dropdown',
+		'type': 'Actions'
+	}, {
+		'name': 'Sort Dropdown',
+		'readme': 'https://github.com/BrightspaceUI/facet-filter-sort#d2l-sort-by-dropdown',
+		'development': {
+			'state': 'default',
+			'text': 'out of date'
+		},
+		'design': {
+			'state': 'success',
+			'text': 'complete'
+		},
+		'tag': 'd2l-sort-by-dropdown',
+		'type': 'Actions'
+	}, {
+		'name': 'Search Facets',
+		'readme': 'https://github.com/BrightspaceUI/facet-filter-sort#d2l-search-facets',
+		'development': {
+			'state': 'default',
+			'text': 'out of date'
+		},
+		'design': {
+			'state': 'alert',
+			'text': 'incomplete'
+		},
+		'tag': 'd2l-search-facets',
+		'type': 'Actions'
+	}, {
+		'name': 'Search Results Count',
+		'readme': 'https://github.com/BrightspaceUI/facet-filter-sort#d2l-search-results-count',
+		'development': {
+			'state': 'default',
+			'text': 'out of date'
+		},
+		'design': {
+			'state': 'alert',
+			'text': 'incomplete'
+		},
+		'tag': 'd2l-search-results-count',
+		'type': 'Actions'
+	}, {
+		'name': 'Applied Filters',
+		'readme': 'https://github.com/BrightspaceUI/facet-filter-sort#d2l-applied-filters',
+		'development': {
+			'state': 'success',
+			'text': 'complete'
+		},
+		'design': {
+			'state': 'alert',
+			'text': 'incomplete'
+		},
+		'tag': 'd2l-applied-filters',
+		'type': 'Actions'
+	}, {
+		'name': 'Status Indicator',
+		'readme': 'https://github.com/BrightspaceUI/core/tree/master/components/status-indicator#d2l-status-indicator',
+		'development': {
+			'state': 'default',
+			'text': 'out of date'
+		},
+		'design': {
+			'state': 'success',
+			'text': 'complete'
+		},
+		'tag': 'd2l-status-indicator',
+		'type': 'Feedback'
+	}, {
+		'name': 'Table',
+		'readme': 'https://github.com/BrightspaceUI/table#d2l-table',
+		'development': {
+			'state': 'success',
+			'text': 'complete'
+		},
+		'design': {
+			'state': 'success',
+			'text': 'complete'
+		},
+		'tag': 'd2l-table',
+		'type': 'Structure'
+	}, {
+		'name': 'Tabs',
+		'readme': 'https://github.com/BrightspaceUI/core/tree/master/components/tabs#d2l-tabs',
+		'development': {
+			'state': 'success',
+			'text': 'complete'
+		},
+		'design': {
+			'state': 'success',
+			'text': 'complete'
+		},
+		'tag': 'd2l-tabs',
+		'type': 'Structure'
+	}, {
+		'name': 'Tooltip',
+		'readme': 'https://github.com/BrightspaceUI/core/tree/master/components/tooltip#d2l-tooltip',
+		'development': {
+			'state': 'success',
+			'text': 'complete'
+		},
+		'design': {
+			'state': 'success',
+			'text': 'complete'
+		},
+		'tag': 'd2l-tooltip',
+		'type': 'Feedback'
 	}
 ];

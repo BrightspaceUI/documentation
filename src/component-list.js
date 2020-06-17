@@ -34,6 +34,9 @@ export class DesignSystemComponentList extends LitElement {
 			d2l-table {
 				padding-top: 1rem;
 			}
+			d2l-link d2l-status-indicator {
+				cursor: pointer;
+			}
 		`];
 	}
 
@@ -48,11 +51,12 @@ export class DesignSystemComponentList extends LitElement {
 	render() {
 		const rows = components.map(component => {
 			if (this._filter && !component.name.toLowerCase().includes(this._filter.toLowerCase())) return null;
-			const name = component.readme ? html`<d2l-link href="${component.readme}">${component.name}</d2l-link>` : html`<div>${component.name}</div>`;
+			const baseState = html`<d2l-status-indicator state="${component.development.state}" text="${component.development.text}"></d2l-status-indicator>`;
+			const state = component.readme ? html`<d2l-link href="${component.readme}">${baseState}</d2l-link>` : baseState;
 			return html`
 				<d2l-tr>
-					<d2l-td>${name}</d2l-td>
-					<d2l-td><d2l-status-indicator state="${component.development.state}" text="${component.development.text}"></d2l-status-indicator></d2l-td>
+					<d2l-td><d2l-link href="/components/${component.tag}">${component.name}</d2l-link></d2l-td>
+					<d2l-td>${state}</d2l-td>
 					<d2l-td><d2l-status-indicator state="${component.design.state}" text="${component.design.text}"></d2l-status-indicator></d2l-td>
 				</d2l-tr>
 			`;

@@ -32,7 +32,6 @@ export class DesignSystem extends LitElement {
 				display: flex;
 				height: 4.5rem;
 				padding-left: 4.5rem;
-				// position: sticky;
 				top: 0;
 			}
 
@@ -52,7 +51,7 @@ export class DesignSystem extends LitElement {
 				background: linear-gradient(to right, #FFFFFF, #F9FAFB);
 				border-right: 1px solid #e6eaf0;
 				box-sizing: border-box;
-				flex: 0 1 30%;
+				flex: 0 1 24%;
 				padding-top: 1.5rem;
 				position: sticky;
 				top: 3rem;
