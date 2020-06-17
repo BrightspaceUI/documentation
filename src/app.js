@@ -9,12 +9,10 @@ import page from 'page';
 export class DesignSystem extends LitElement {
 	static get properties() {
 		return {
-			_actionComponents: { type: Array },
+			_categories: { type: Object },
 			_component: { type: String },
 			_currentView: { type: String },
-			_formComponents: { type: Array },
-			_showActionComponents: { type: Boolean },
-			_showFormComponents: { type: Boolean }
+			_shownCategory: { type: String }
 		};
 	}
 
@@ -34,6 +32,8 @@ export class DesignSystem extends LitElement {
 				display: flex;
 				height: 4.5rem;
 				padding-left: 4.5rem;
+				// position: sticky;
+				top: 0;
 			}
 
 			main {
@@ -54,16 +54,19 @@ export class DesignSystem extends LitElement {
 				box-sizing: border-box;
 				flex: 0 1 24%;
 				padding-top: 1.5rem;
-				position: sticky;
+				// position: sticky;
 				top: 3rem;
 			}
 
 			.d2l-design-system-main {
 				background-color: white;
 				flex: 1 1 auto;
+				overflow: scroll;
+				padding-bottom: 2rem;
 				padding-left: 1.5rem;
 				padding-right: 1.5rem;
 				padding-top: 2rem;
+				overflow-y: auto;
 			}
 
 			ul {
@@ -87,29 +90,32 @@ export class DesignSystem extends LitElement {
 
 	constructor() {
 		super();
-
 		this._component = '';
 		this._currentView = 'welcome';
-		this._showActionComponents = false;
-		this._showFormComponents = false;
+		this._shownCategory = '';
 		this._installRoutes();
 
-		this._actionComponents = [];
-		this._formComponents = [];
-
+		this._categories = {'Actions': [], 'Forms': [], 'Feedback': [], 'Overlay': []};
 		components.forEach((component) => {
-			if (component.type === 'action') this._actionComponents.push(component);
-			else if (component.type === 'form') this._formComponents.push(component);
+			Object.keys(this._categories).forEach((category) => {
+				if (component.type === category) this._categories[category].push(component);
+			});
 		});
 	}
 
 	render() {
-		const actionComponentsList = this._actionComponents.map((action) => html`
-			<li><d2l-link small href="/components/${action.tag}">${action.name}</d2l-link></li>
-		`);
-		const formComponentsList = this._formComponents.map((form) => html`
-			<li><d2l-link small href="/components/${form.tag}">${form.name}</d2l-link></li>
-		`);
+		const categories = Object.keys(this._categories).map((category) => {
+			const children = this._categories[category].map((component) => html`
+			 	<li><d2l-link small href="/components/${component.tag}">${component.name}</d2l-link></li>
+			`);
+			return html`<li role="listitem">
+				<d2l-link @click="${this._onClick}" data-type="${category}" href="/components/${this._categories[category][0].tag}">${category}</d2l-link>
+				<ul ?hidden="${this._shownCategory !== category}">
+					${children}
+				</ul>
+			</li>`;
+		});
+
 		return html`
 			<header>
 				<div>
@@ -126,18 +132,7 @@ export class DesignSystem extends LitElement {
 							<li role="listitem">
 								<d2l-link href="/components">Component Status</d2l-link>
 							</li>
-							<li role="listitem">
-								<d2l-link @click="${this._onClickActions}" href="/components/actions">Actions</d2l-link>
-								<ul ?hidden="${!this._showActionComponents}">
-									${actionComponentsList}
-								</ul>
-							</li>
-							<li role="listitem">
-								<d2l-link @click="${this._onClickForms}" href="/components/forms">Forms</d2l-link>
-								<ul ?hidden="${!this._showFormComponents}">
-									${formComponentsList}
-								</ul>
-							</li>
+							${categories}
 						</ul>
 					</nav>
 				</div>
@@ -151,7 +146,8 @@ export class DesignSystem extends LitElement {
 	_componentRoute(context) {
 		this._currentView = 'component';
 		const componentName = context.params['component'];
-		this._component = componentName;
+		const thing = components.filter((component) =>  component.tag === componentName);
+		this._component = JSON.stringify(thing[0]);
 	}
 
 	_installRoutes() {
@@ -165,12 +161,8 @@ export class DesignSystem extends LitElement {
 		page();
 	}
 
-	_onClickActions() {
-		this._showActionComponents = !this._showActionComponents;
-	}
-
-	_onClickForms() {
-		this._showFormComponents = !this._showFormComponents;
+	_onClick(e) {
+		this._shownCategory = e.target.getAttribute('data-type');
 	}
 
 	_renderCurrentView() {

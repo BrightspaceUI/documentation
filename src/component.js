@@ -4,6 +4,7 @@ export class DesignSystemComponent extends LitElement {
 	static get properties() {
 		return {
 			component: { type: String },
+			_componentInfo: { type: Object }
 		};
 	}
 
@@ -23,12 +24,21 @@ export class DesignSystemComponent extends LitElement {
 		super();
 
 		this.component = '';
+		this._componentInfo = {};
 	}
 
 	render() {
 		return html`
-			<div>${this.component}</div>
+			<h1>${this._componentInfo.name}</h1>
 		`;
+	}
+
+	updated(changedProperties) {
+		super.updated(changedProperties);
+
+		changedProperties.forEach((_, prop) => {
+			if (prop === 'component') this._componentInfo = JSON.parse(this.component);
+		});
 	}
 }
 customElements.define('d2l-design-system-component', DesignSystemComponent);
