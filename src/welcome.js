@@ -1,13 +1,6 @@
 import { css, html, LitElement } from 'lit-element';
 
 export class DesignSystemWelcome extends LitElement {
-	static get properties() {
-		return {
-			_components: { type: Array },
-			_componentsFetched: { type: Boolean }
-		};
-	}
-
 	static get styles() {
 		return css`
 			:host {
