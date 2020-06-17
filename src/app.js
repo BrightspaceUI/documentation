@@ -52,10 +52,11 @@ export class DesignSystem extends LitElement {
 				background: linear-gradient(to right, #FFFFFF, #F9FAFB);
 				border-right: 1px solid #e6eaf0;
 				box-sizing: border-box;
-				flex: 0 1 24%;
+				flex: 0 1 30%;
 				padding-top: 1.5rem;
-				// position: sticky;
+				position: sticky;
 				top: 3rem;
+				overflow-y: scroll;
 			}
 
 			.d2l-design-system-main {
@@ -66,7 +67,6 @@ export class DesignSystem extends LitElement {
 				padding-left: 1.5rem;
 				padding-right: 1.5rem;
 				padding-top: 2rem;
-				overflow-y: auto;
 			}
 
 			ul {
@@ -95,7 +95,15 @@ export class DesignSystem extends LitElement {
 		this._shownCategory = '';
 		this._installRoutes();
 
-		this._categories = {'Actions': [], 'Forms': [], 'Feedback': [], 'Overlay': []};
+		this._categories = {
+			'Actions': [],
+			'Feedback': [],
+			'Forms': [],
+			'Navigation': [],
+			'Overlay': [],
+			'Structure': [],
+			'Other': []
+		};
 		components.forEach((component) => {
 			Object.keys(this._categories).forEach((category) => {
 				if (component.type === category) this._categories[category].push(component);
