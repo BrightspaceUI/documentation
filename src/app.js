@@ -21,50 +21,33 @@ export class DesignSystem extends LitElement {
 
 	static get styles() {
 		return css`
-			:host {
-				display: block;
-				height: 100%;
-				min-height: 100%;
-			}
-
 			header {
 				align-items: center;
 				background-color: white;
 				box-shadow: rgba(0, 0, 0, 0.22) 0px 0px 3px 0px;
-				box-sizing: border-box;
 				display: flex;
 				height: 4.5rem;
 				padding-left: 4.5rem;
+				position: sticky;
 				top: 0;
+				z-index: 1000;
 			}
 
 			main {
-				align-content: stretch;
-				align-items: stretch;
-				box-sizing: border-box;
 				display: flex;
-				flex-direction: row;
-				flex-wrap: nowrap;
-				justify-content: flex-start;
-				height: 100%;
-				padding-top: 2px;
+				min-height: calc(100vh - 4.5rem);
 			}
 
 			.d2l-design-system-side-nav {
 				background: linear-gradient(to right, #FFFFFF, #F9FAFB);
 				border-right: 1px solid #e6eaf0;
-				box-sizing: border-box;
 				flex: 0 1 24%;
 				padding-top: 1.5rem;
-				position: sticky;
-				top: 3rem;
-				overflow-y: scroll;
 			}
 
 			.d2l-design-system-main {
 				background-color: white;
 				flex: 1 1 auto;
-				overflow: scroll;
 				padding: 2rem 1.5rem;
 			}
 
