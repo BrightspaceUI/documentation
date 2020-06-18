@@ -70,9 +70,7 @@ export class DesignSystem extends LitElement {
 			.d2l-link.d2l-design-system-link-selected {
 				border-left: 4px solid var(--d2l-color-celestine-minus-1);
 				color: var(--d2l-color-celestine-minus-1);
-				padding-left: 0.3rem;
-				padding-bottom: 0.15rem;
-				padding-top: 0.15rem;
+				padding: 0.15rem 0 0.15rem 0.3rem;
 			}
 
 			ul ul {
@@ -182,13 +180,13 @@ export class DesignSystem extends LitElement {
 	}
 
 	_componentRoute(context) {
-		this._shownNested = '';
 		this._currentView = 'component';
 		const componentName = context.params['component'];
 		const filtered = components.filter((component) =>  component.tag === componentName);
-		this._shownCategory = filtered[0].type;
 		this._component = JSON.stringify(filtered[0]);
+		this._shownCategory = filtered[0].type;
 		this._shownComponent = filtered[0].name;
+		this._shownNested = '';
 	}
 
 	_installRoutes() {
@@ -196,17 +194,17 @@ export class DesignSystem extends LitElement {
 		page('/welcome', () => {
 			this._currentView = 'welcome';
 			this._shownCategory = '';
-			this._shownNested = '';
 			this._shownComponent = '';
+			this._shownNested = '';
 		});
 		page('/components', () => {
 			this._currentView = 'component-list';
 			this._shownCategory = '';
-			this._shownNested = '';
 			this._shownComponent = '';
+			this._shownNested = '';
 		});
 		page('/components/:component', this._componentRoute.bind(this));
-		page('/components/:parentComponent/:component', this._nestedComponentRoute.bind(this));
+		page('/components/:parentCategory/:component', this._nestedComponentRoute.bind(this));
 		page('*', () => this._currentView = 'welcome');
 		page();
 	}
@@ -214,13 +212,15 @@ export class DesignSystem extends LitElement {
 	_nestedComponentRoute(context) {
 		this._currentView = 'component';
 		const componentName = context.params['component'];
-		const parentName = context.params['parentComponent'];
+		const parentName = context.params['parentCategory'];
 		const filtered1 = components.filter((component) => component.name === parentName);
-		const filtered2 = filtered1[0].childComponents.filter((component) =>  component.tag === componentName);
-		this._shownCategory = filtered1[0].type;
-		this._component = JSON.stringify(filtered2[0]);
-		this._shownComponent = filtered2[0].name;
-		this._shownNested = filtered1[0].name;
+		const parentCategory = filtered1[0];
+		const filtered2 = parentCategory.childComponents.filter((component) =>  component.tag === componentName);
+		const childComponent = filtered2[0];
+		this._component = JSON.stringify(childComponent);
+		this._shownCategory = parentCategory.type;
+		this._shownComponent = childComponent.name;
+		this._shownNested = parentCategory.name;
 	}
 
 	_onClick(e) {
