@@ -220,6 +220,7 @@ export class DesignSystem extends LitElement {
 		this._shownCategory = filtered1[0].type;
 		this._component = JSON.stringify(filtered2[0]);
 		this._shownComponent = filtered2[0].name;
+		this._shownNested = filtered1[0].name;
 	}
 
 	_onClick(e) {
