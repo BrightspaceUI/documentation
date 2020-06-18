@@ -156,109 +156,112 @@ export default [
 		'tag': 'd2l-dialog-confirm',
 		'type': 'Overlay'
 	}, {
-		'name': 'Dropdown - Opener - Generic Wrapper',
-		'readme': 'https://github.com/BrightspaceUI/core/tree/master/components/dropdown#d2l-dropdown',
-		'development': {
-			'state': 'default',
-			'text': 'out of date'
-		},
-		'design': {
-			'state': 'success',
-			'text': 'complete'
-		},
-		'tag': 'd2l-dropdown',
-		'type': 'Actions'
-	}, {
-		'name': 'Dropdown - Opener - Button',
-		'readme': 'https://github.com/BrightspaceUI/core/tree/master/components/dropdown#d2l-dropdown-button',
-		'development': {
-			'state': 'success',
-			'text': 'complete'
-		},
-		'design': {
-			'state': 'success',
-			'text': 'complete'
-		},
-		'tag': 'd2l-dropdown-button',
-		'type': 'Actions'
-	}, {
-		'name': 'Dropdown - Opener - Subtle Button',
-		'readme': 'https://github.com/BrightspaceUI/core/tree/master/components/dropdown#d2l-dropdown-button-subtle',
-		'development': {
-			'state': 'success',
-			'text': 'complete'
-		},
-		'design': {
-			'state': 'success',
-			'text': 'complete'
-		},
-		'tag': 'd2l-dropdown-button-subtle',
-		'type': 'Actions'
-	}, {
-		'name': 'Dropdown - Opener - Context Menu',
-		'readme': 'https://github.com/BrightspaceUI/core/tree/master/components/dropdown#d2l-dropdown-context-menu',
-		'development': {
-			'state': 'success',
-			'text': 'complete'
-		},
-		'design': {
-			'state': 'alert',
-			'text': 'incomplete'
-		},
-		'tag': 'd2l-dropdown-context-menu',
-		'type': 'Actions'
-	}, {
-		'name': 'Dropdown - Opener - More',
-		'readme': 'https://github.com/BrightspaceUI/core/tree/master/components/dropdown#d2l-dropdown-more',
-		'development': {
-			'state': 'success',
-			'text': 'complete'
-		},
-		'design': {
-			'state': 'alert',
-			'text': 'incomplete'
-		},
-		'tag': 'd2l-dropdown-more',
-		'type': 'Actions'
-	}, {
-		'name': 'Dropdown - Content - Generic',
-		'readme': 'https://github.com/BrightspaceUI/core/tree/master/components/dropdown#d2l-dropdown-content',
-		'development': {
-			'state': 'success',
-			'text': 'complete'
-		},
-		'design': {
-			'state': 'alert',
-			'text': 'incomplete'
-		},
-		'tag': 'd2l-dropdown-content',
-		'type': 'Actions'
-	}, {
-		'name': 'Dropdown - Content - Menu',
-		'readme': 'https://github.com/BrightspaceUI/core/tree/master/components/dropdown#d2l-dropdown-menu',
-		'development': {
-			'state': 'success',
-			'text': 'complete'
-		},
-		'design': {
-			'state': 'success',
-			'text': 'complete'
-		},
-		'tag': 'd2l-dropdown-menu',
-		'type': 'Actions'
-	}, {
-		'name': 'Dropdown - Content - Tabs',
-		'readme': 'https://github.com/BrightspaceUI/core/tree/master/components/dropdown#d2l-dropdown-tabs',
-		'development': {
-			'state': 'success',
-			'text': 'complete'
-		},
-		'design': {
-			'state': 'alert',
-			'text': 'incomplete'
-		},
-		'tag': 'd2l-dropdown-tabs',
-		'type': 'Actions'
+		'name': 'Dropdown',
+		'type': 'Actions',
+		'childComponents': [{
+			'name': 'Dropdown - Opener - Generic Wrapper',
+			'readme': 'https://github.com/BrightspaceUI/core/tree/master/components/dropdown#d2l-dropdown',
+			'development': {
+				'state': 'default',
+				'text': 'out of date'
+			},
+			'design': {
+				'state': 'success',
+				'text': 'complete'
+			},
+			'tag': 'd2l-dropdown'
+		}, {
+			'name': 'Dropdown - Opener - Button',
+			'readme': 'https://github.com/BrightspaceUI/core/tree/master/components/dropdown#d2l-dropdown-button',
+			'development': {
+				'state': 'success',
+				'text': 'complete'
+			},
+			'design': {
+				'state': 'success',
+				'text': 'complete'
+			},
+			'tag': 'd2l-dropdown-button',
+			'type': 'Actions'
+		}, {
+			'name': 'Dropdown - Opener - Subtle Button',
+			'readme': 'https://github.com/BrightspaceUI/core/tree/master/components/dropdown#d2l-dropdown-button-subtle',
+			'development': {
+				'state': 'success',
+				'text': 'complete'
+			},
+			'design': {
+				'state': 'success',
+				'text': 'complete'
+			},
+			'tag': 'd2l-dropdown-button-subtle',
+			'type': 'Actions'
+		}, {
+			'name': 'Dropdown - Opener - Context Menu',
+			'readme': 'https://github.com/BrightspaceUI/core/tree/master/components/dropdown#d2l-dropdown-context-menu',
+			'development': {
+				'state': 'success',
+				'text': 'complete'
+			},
+			'design': {
+				'state': 'alert',
+				'text': 'incomplete'
+			},
+			'tag': 'd2l-dropdown-context-menu',
+			'type': 'Actions'
+		}, {
+			'name': 'Dropdown - Opener - More',
+			'readme': 'https://github.com/BrightspaceUI/core/tree/master/components/dropdown#d2l-dropdown-more',
+			'development': {
+				'state': 'success',
+				'text': 'complete'
+			},
+			'design': {
+				'state': 'alert',
+				'text': 'incomplete'
+			},
+			'tag': 'd2l-dropdown-more',
+			'type': 'Actions'
+		}, {
+			'name': 'Dropdown - Content - Generic',
+			'readme': 'https://github.com/BrightspaceUI/core/tree/master/components/dropdown#d2l-dropdown-content',
+			'development': {
+				'state': 'success',
+				'text': 'complete'
+			},
+			'design': {
+				'state': 'alert',
+				'text': 'incomplete'
+			},
+			'tag': 'd2l-dropdown-content',
+			'type': 'Actions'
+		}, {
+			'name': 'Dropdown - Content - Menu',
+			'readme': 'https://github.com/BrightspaceUI/core/tree/master/components/dropdown#d2l-dropdown-menu',
+			'development': {
+				'state': 'success',
+				'text': 'complete'
+			},
+			'design': {
+				'state': 'success',
+				'text': 'complete'
+			},
+			'tag': 'd2l-dropdown-menu',
+			'type': 'Actions'
+		}, {
+			'name': 'Dropdown - Content - Tabs',
+			'readme': 'https://github.com/BrightspaceUI/core/tree/master/components/dropdown#d2l-dropdown-tabs',
+			'development': {
+				'state': 'success',
+				'text': 'complete'
+			},
+			'design': {
+				'state': 'alert',
+				'text': 'incomplete'
+			},
+			'tag': 'd2l-dropdown-tabs',
+			'type': 'Actions'
+		}]
 	}, {
 		'name': 'Checkbox',
 		'readme': 'https://github.com/BrightspaceUI/core/blob/master/components/inputs/docs/input-checkbox.md#checkboxes',
@@ -349,7 +352,7 @@ export default [
 			'text': 'complete'
 		},
 		'tag': 'input-select-styles',
-		'type': 'Navigation'
+		'type': 'Forms'
 	}, {
 		'name': 'Link',
 		'readme': 'https://github.com/BrightspaceUI/core/tree/master/components/link#links',
@@ -417,69 +420,73 @@ export default [
 		'type': 'Feedback'
 	}, {
 		'name': 'Menu',
-		'readme': 'https://github.com/BrightspaceUI/core/tree/master/components/menu#d2l-menu',
-		'development': {
-			'state': 'success',
-			'text': 'complete'
-		},
-		'design': {
-			'state': 'success',
-			'text': 'complete'
-		},
-		'tag': 'd2l-menu',
-		'type': 'Actions'
-	}, {
-		'name': 'Menu Item',
-		'readme': 'https://github.com/BrightspaceUI/core/tree/master/components/menu#d2l-menu-item',
-		'development': {
-			'state': 'success',
-			'text': 'complete'
-		},
-		'design': {
-			'state': 'success',
-			'text': 'complete'
-		},
-		'tag': 'd2l-menu-item',
-		'type': 'Actions'
-	}, {
-		'name': 'Menu Item - Link',
-		'readme': 'https://github.com/BrightspaceUI/core/tree/master/components/menu#d2l-menu-item-link',
-		'development': {
-			'state': 'success',
-			'text': 'complete'
-		},
-		'design': {
-			'state': 'alert',
-			'text': 'incomplete'
-		},
-		'tag': 'd2l-menu-item-link',
-		'type': 'Actions'
-	}, {
-		'name': 'Menu Item - Checkbox',
-		'readme': 'https://github.com/BrightspaceUI/core/tree/master/components/menu#d2l-menu-item-checkbox',
-		'development': {
-			'state': 'success',
-			'text': 'complete'
-		},
-		'design': {
-			'state': 'alert',
-			'text': 'incomplete'
-		},
-		'tag': 'd2l-menu-item-checkbox',
-		'type': 'Actions'
-	}, {
-		'name': 'Menu Item - Radio',
-		'readme': 'https://github.com/BrightspaceUI/core/tree/master/components/menu#d2l-menu-item-radio',
-		'development': {
-			'state': 'success',
-			'text': 'complete'
-		},
-		'design': {
-			'state': 'alert',
-			'text': 'incomplete'
-		},
-		'tag': 'd2l-menu-item-radio',
-		'type': 'Actions'
+		'type': 'Actions',
+		'childComponents': [{
+			'name': 'Menu',
+			'readme': 'https://github.com/BrightspaceUI/core/tree/master/components/menu#d2l-menu',
+			'development': {
+				'state': 'success',
+				'text': 'complete'
+			},
+			'design': {
+				'state': 'success',
+				'text': 'complete'
+			},
+			'tag': 'd2l-menu',
+			'type': 'Actions'
+		}, {
+			'name': 'Menu Item',
+			'readme': 'https://github.com/BrightspaceUI/core/tree/master/components/menu#d2l-menu-item',
+			'development': {
+				'state': 'success',
+				'text': 'complete'
+			},
+			'design': {
+				'state': 'success',
+				'text': 'complete'
+			},
+			'tag': 'd2l-menu-item',
+			'type': 'Actions'
+		}, {
+			'name': 'Menu Item - Link',
+			'readme': 'https://github.com/BrightspaceUI/core/tree/master/components/menu#d2l-menu-item-link',
+			'development': {
+				'state': 'success',
+				'text': 'complete'
+			},
+			'design': {
+				'state': 'alert',
+				'text': 'incomplete'
+			},
+			'tag': 'd2l-menu-item-link',
+			'type': 'Actions'
+		}, {
+			'name': 'Menu Item - Checkbox',
+			'readme': 'https://github.com/BrightspaceUI/core/tree/master/components/menu#d2l-menu-item-checkbox',
+			'development': {
+				'state': 'success',
+				'text': 'complete'
+			},
+			'design': {
+				'state': 'alert',
+				'text': 'incomplete'
+			},
+			'tag': 'd2l-menu-item-checkbox',
+			'type': 'Actions'
+		}, {
+			'name': 'Menu Item - Radio',
+			'readme': 'https://github.com/BrightspaceUI/core/tree/master/components/menu#d2l-menu-item-radio',
+			'development': {
+				'state': 'success',
+				'text': 'complete'
+			},
+			'design': {
+				'state': 'alert',
+				'text': 'incomplete'
+			},
+			'tag': 'd2l-menu-item-radio',
+			'type': 'Actions'
+		}]
 	}, {
 		'name': 'Meter - Linear',
 		'readme': 'https://github.com/BrightspaceUI/core/tree/master/components/meter#d2l-meter-linear',
@@ -598,6 +605,19 @@ export default [
 		'tag': 'd2l-filter-dropdown',
 		'type': 'Actions'
 	}, {
+		'name': 'Applied Filters',
+		'readme': 'https://github.com/BrightspaceUI/facet-filter-sort#d2l-applied-filters',
+		'development': {
+			'state': 'success',
+			'text': 'complete'
+		},
+		'design': {
+			'state': 'alert',
+			'text': 'incomplete'
+		},
+		'tag': 'd2l-applied-filters',
+		'type': 'Actions'
+	}, {
 		'name': 'Sort Dropdown',
 		'readme': 'https://github.com/BrightspaceUI/facet-filter-sort#d2l-sort-by-dropdown',
 		'development': {
@@ -635,19 +655,6 @@ export default [
 			'text': 'incomplete'
 		},
 		'tag': 'd2l-search-results-count',
-		'type': 'Actions'
-	}, {
-		'name': 'Applied Filters',
-		'readme': 'https://github.com/BrightspaceUI/facet-filter-sort#d2l-applied-filters',
-		'development': {
-			'state': 'success',
-			'text': 'complete'
-		},
-		'design': {
-			'state': 'alert',
-			'text': 'incomplete'
-		},
-		'tag': 'd2l-applied-filters',
 		'type': 'Actions'
 	}, {
 		'name': 'Status Indicator',

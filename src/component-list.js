@@ -51,15 +51,29 @@ export class DesignSystemComponentList extends LitElement {
 	render() {
 		const rows = components.map(component => {
 			if (this._filter && !component.name.toLowerCase().includes(this._filter.toLowerCase())) return null;
-			const baseState = html`<d2l-status-indicator state="${component.development.state}" text="${component.development.text}"></d2l-status-indicator>`;
-			const state = component.readme ? html`<d2l-link href="${component.readme}">${baseState}</d2l-link>` : baseState;
-			return html`
-				<d2l-tr>
-					<d2l-td><d2l-link href="/components/${component.tag}">${component.name}</d2l-link></d2l-td>
-					<d2l-td>${state}</d2l-td>
-					<d2l-td><d2l-status-indicator state="${component.design.state}" text="${component.design.text}"></d2l-status-indicator></d2l-td>
-				</d2l-tr>
-			`;
+			if (component.childComponents) {
+				return component.childComponents.map((childComponent) => {
+					const baseState = html`<d2l-status-indicator state="${childComponent.development.state}" text="${childComponent.development.text}"></d2l-status-indicator>`;
+					const state = childComponent.readme ? html`<d2l-link href="${childComponent.readme}">${baseState}</d2l-link>` : baseState;
+					return html`
+						<d2l-tr>
+							<d2l-td><d2l-link href="/components/${component.name}/${childComponent.tag}">${childComponent.name}</d2l-link></d2l-td>
+							<d2l-td>${state}</d2l-td>
+							<d2l-td><d2l-status-indicator state="${childComponent.design.state}" text="${childComponent.design.text}"></d2l-status-indicator></d2l-td>
+						</d2l-tr>
+					`;
+				});
+			} else {
+				const baseState = html`<d2l-status-indicator state="${component.development.state}" text="${component.development.text}"></d2l-status-indicator>`;
+				const state = component.readme ? html`<d2l-link href="${component.readme}">${baseState}</d2l-link>` : baseState;
+				return html`
+					<d2l-tr>
+						<d2l-td><d2l-link href="/components/${component.tag}">${component.name}</d2l-link></d2l-td>
+						<d2l-td>${state}</d2l-td>
+						<d2l-td><d2l-status-indicator state="${component.design.state}" text="${component.design.text}"></d2l-status-indicator></d2l-td>
+					</d2l-tr>
+				`;
+			}
 		});
 		return html`
 			<h1 class="d2l-heading-2">Component Status</h1>
