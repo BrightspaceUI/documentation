@@ -102,7 +102,7 @@ export default [
 			'text': 'incomplete'
 		},
 		'tag': 'd2l-floating-buttons',
-		'type': 'grouping'
+		'type': 'Structure'
 	}, {
 		'name': 'Calendar',
 		'readme': 'https://github.com/BrightspaceUI/core/tree/master/components/calendar#calendar',
