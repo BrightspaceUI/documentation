@@ -215,7 +215,6 @@ export class DesignSystem extends LitElement {
 		const filtered1 = components.filter((component) => component.name === parentName);
 		const filtered2 = filtered1[0].childComponents.filter((component) =>  component.tag === componentName);
 		this._shownCategory = filtered1[0].type;
-		this._shownNested = filtered1[0].name;
 		this._component = JSON.stringify(filtered2[0]);
 	}
 
