@@ -65,18 +65,20 @@ export class DesignSystem extends LitElement {
 				background-color: white;
 				flex: 1 1 auto;
 				overflow: scroll;
-				padding-bottom: 2rem;
-				padding-left: 1.5rem;
-				padding-right: 1.5rem;
-				padding-top: 2rem;
+				padding: 2rem 1.5rem;
 			}
 
 			ul {
 				padding-left: 4.5rem;
 			}
 
+			li {
+				list-style-type: none;
+				padding-bottom: 1rem;
+			}
+
 			ul ul {
-				padding-left: 1rem;
+				padding-left: 0.8rem;
 			}
 
 			ul ul li {
@@ -91,12 +93,7 @@ export class DesignSystem extends LitElement {
 				padding-left: 1.6rem;
 			}
 
-			li {
-				list-style-type: none;
-				padding-bottom: 1rem;
-			}
-
-			d2l-icon {
+			d2l-link d2l-icon {
 				color: var(--d2l-color-celestine);
 				margin-bottom: 0.25rem;
 			}

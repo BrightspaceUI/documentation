@@ -27,7 +27,7 @@ export default [
 		'type': 'Feedback'
 	}, {
 		'name': 'Backdrop',
-		'readme': 'https://github.com/BrightspaceUI/core/tree/master/components/alert#d2l-alert-toast',
+		'readme': 'https://github.com/BrightspaceUI/core/tree/master/components/backdrop#d2l-backdrop',
 		'development': {
 			'state': 'success',
 			'text': 'complete'

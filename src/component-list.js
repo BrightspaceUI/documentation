@@ -31,9 +31,11 @@ export class DesignSystemComponentList extends LitElement {
 			d2l-input-search {
 				max-width: 50%;
 			}
+
 			d2l-table {
 				padding-top: 1rem;
 			}
+
 			d2l-link d2l-status-indicator {
 				cursor: pointer;
 			}
