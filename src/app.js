@@ -48,8 +48,8 @@ export class DesignSystem extends LitElement {
 			}
 
 			nav {
-				overflow-y: scroll;
 				height: calc(100vh - 4.5rem);
+				overflow-y: scroll;
 			}
 
 			.d2l-design-system-main {
@@ -79,7 +79,6 @@ export class DesignSystem extends LitElement {
 
 			ul ul li {
 				padding-bottom: 0.2rem;
-				padding-top: 0.1rem;
 			}
 
 			ul ul li.d2l-design-system-nested {
