@@ -108,19 +108,10 @@ export class DesignSystem extends LitElement {
 		this._shownNested = '';
 		this._installRoutes();
 
-		this._categories = {
-			'Actions': [],
-			'Feedback': [],
-			'Forms': [],
-			'Navigation': [],
-			'Overlay': [],
-			'Structure': [],
-			'Other': []
-		};
+		this._categories = {};
 		components.forEach((component) => {
-			Object.keys(this._categories).forEach((category) => {
-				if (component.type === category) this._categories[category].push(component);
-			});
+			if (!this._categories[component.type]) this._categories[component.type] = [];
+			this._categories[component.type].push(component);
 		});
 	}
 
