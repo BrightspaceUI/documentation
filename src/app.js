@@ -3,9 +3,10 @@ import './component-list.js';
 import './welcome.js';
 import '@brightspace-ui/core/components/colors/colors.js';
 import '@brightspace-ui/core/components/icons/icon.js';
-import '@brightspace-ui/core/components/link/link.js';
 import { css, html, LitElement } from 'lit-element';
+import { classMap } from 'lit-html/directives/class-map.js';
 import { default as components } from '../data/components.js';
+import { linkStyles } from '@brightspace-ui/core/components/link/link.js';
 import page from 'page';
 
 export class DesignSystem extends LitElement {
@@ -15,12 +16,13 @@ export class DesignSystem extends LitElement {
 			_component: { type: String },
 			_currentView: { type: String },
 			_shownCategory: { type: String },
+			_shownComponent: { type: String },
 			_shownNested: { type: String }
 		};
 	}
 
 	static get styles() {
-		return css`
+		return [linkStyles, css`
 			header {
 				align-items: center;
 				background-color: white;
@@ -45,6 +47,11 @@ export class DesignSystem extends LitElement {
 				padding-top: 1.5rem;
 			}
 
+			nav {
+				overflow-y: scroll;
+				height: calc(100vh - 4.5rem);
+			}
+
 			.d2l-design-system-main {
 				background-color: white;
 				flex: 1 1 auto;
@@ -60,12 +67,21 @@ export class DesignSystem extends LitElement {
 				padding-bottom: 1rem;
 			}
 
+			.d2l-link.d2l-design-system-link-selected {
+				border-left: 4px solid var(--d2l-color-celestine-minus-1);
+				color: var(--d2l-color-celestine-minus-1);
+				padding-left: 0.3rem;
+				padding-bottom: 0.15rem;
+				padding-top: 0.15rem;
+			}
+
 			ul ul {
 				padding-left: 0.8rem;
 			}
 
 			ul ul li {
 				padding-bottom: 0.2rem;
+				padding-top: 0.1rem;
 			}
 
 			ul ul li.d2l-design-system-nested {
@@ -80,7 +96,7 @@ export class DesignSystem extends LitElement {
 				color: var(--d2l-color-celestine);
 				margin-bottom: 0.25rem;
 			}
-		`;
+		`];
 	}
 
 	constructor() {
@@ -88,6 +104,7 @@ export class DesignSystem extends LitElement {
 		this._component = '';
 		this._currentView = 'welcome';
 		this._shownCategory = '';
+		this._shownComponent = '';
 		this._shownNested = '';
 		this._installRoutes();
 
@@ -102,9 +119,16 @@ export class DesignSystem extends LitElement {
 		const categories = Object.keys(this._categories).map((category) => {
 			const children = this._categories[category].map((component) => {
 				if (component.childComponents) {
-					const nestedChildren = component.childComponents.map((childComponent) => html`<li><d2l-link small href="/components/${component.name}/${childComponent.tag}">${childComponent.name}</d2l-link></li>`);
+					const nestedChildren = component.childComponents.map((childComponent) => {
+						const classes = {
+							'd2l-link': true,
+							'd2l-link-small': true,
+							'd2l-design-system-link-selected': this._shownComponent === childComponent.name
+						};
+						return html`<li><a class="${classMap(classes)}" href="/components/${component.name}/${childComponent.tag}">${childComponent.name}</a></li>`;
+					});
 					return html`<li class="d2l-design-system-nested">
-						<d2l-link @click="${this._onClickNested}" data-type="${component.name}" href="/components/${component.name}/${component.childComponents[0].tag}" small>
+						<d2l-link small @click="${this._onClickNested}" data-type="${component.name}" href="/components/${component.name}/${component.childComponents[0].tag}">
 							<d2l-icon icon="tier1:arrow-expand-small" ?hidden="${this._shownNested === component.name}"></d2l-icon>
 							<d2l-icon icon="tier1:arrow-collapse-small" ?hidden="${this._shownNested !== component.name}"></d2l-icon>
 							${component.name}
@@ -114,7 +138,12 @@ export class DesignSystem extends LitElement {
 						</ul>
 					</li>`;
 				} else {
-					return html`<li><d2l-link small href="/components/${component.tag}">${component.name}</d2l-link></li>`;
+					const classes = {
+						'd2l-link': true,
+						'd2l-link-small': true,
+						'd2l-design-system-link-selected': this._shownComponent === component.name
+					};
+					return html`<li><a class="${classMap(classes)}" href="/components/${component.tag}">${component.name}</a></li>`;
 				}
 			});
 			return html`<li role="listitem">
@@ -159,6 +188,7 @@ export class DesignSystem extends LitElement {
 		const filtered = components.filter((component) =>  component.tag === componentName);
 		this._shownCategory = filtered[0].type;
 		this._component = JSON.stringify(filtered[0]);
+		this._shownComponent = filtered[0].name;
 	}
 
 	_installRoutes() {
@@ -167,11 +197,13 @@ export class DesignSystem extends LitElement {
 			this._currentView = 'welcome';
 			this._shownCategory = '';
 			this._shownNested = '';
+			this._shownComponent = '';
 		});
 		page('/components', () => {
 			this._currentView = 'component-list';
 			this._shownCategory = '';
 			this._shownNested = '';
+			this._shownComponent = '';
 		});
 		page('/components/:component', this._componentRoute.bind(this));
 		page('/components/:parentComponent/:component', this._nestedComponentRoute.bind(this));
@@ -187,6 +219,7 @@ export class DesignSystem extends LitElement {
 		const filtered2 = filtered1[0].childComponents.filter((component) =>  component.tag === componentName);
 		this._shownCategory = filtered1[0].type;
 		this._component = JSON.stringify(filtered2[0]);
+		this._shownComponent = filtered2[0].name;
 	}
 
 	_onClick(e) {
