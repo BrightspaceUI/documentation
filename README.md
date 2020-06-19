@@ -7,6 +7,12 @@
 
 After cloning the repo, run `npm install` to install dependencies.
 
+To regenerate the `component-doc-details.js` file, which contains the custom-elements.json details from included components:
+
+```shell
+npm run generate-component-doc-details
+```
+
 ### Running the demos
 
 To start an [es-dev-server](https://open-wc.org/developing/es-dev-server.html) that hosts the demo page and tests:
@@ -18,7 +24,7 @@ npm start
 To run the static production version of the application:
 
 ```shell
-npm start:build
+npm run start:build
 ```
 
 ### Linting
