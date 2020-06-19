@@ -136,7 +136,7 @@ export class DesignSystemComponentList extends LitElement {
 		}
 		const stateText = readme
 			? html`<d2l-link small href="${readme}">${componentStateInfo.text}</d2l-link>`
-			: html`<div class="d2l-body-small d2l-design-system-component-list-info-text">${componentStateInfo.text}`;
+			: html`<div class="d2l-body-small d2l-design-system-component-list-info-text">${componentStateInfo.text}</div>`;
 		return html`<d2l-icon data-state="${componentStateInfo.state}" icon="${icon}"></d2l-icon>${stateText}`;
 	}
 }
