@@ -29,7 +29,7 @@ export class DesignSystem extends LitElement {
 				box-shadow: rgba(0, 0, 0, 0.22) 0px 0px 3px 0px;
 				display: flex;
 				height: 4.5rem;
-				padding-left: 4.5rem;
+				padding-left: 4rem;
 				position: sticky;
 				top: 0;
 				z-index: 1000;
@@ -43,7 +43,7 @@ export class DesignSystem extends LitElement {
 			.d2l-design-system-side-nav {
 				background: linear-gradient(to right, #FFFFFF, #F9FAFB);
 				border-right: 1px solid #e6eaf0;
-				flex: 0 1 24%;
+				flex: 0 0 22%;
 				padding-top: 1.5rem;
 			}
 
@@ -59,7 +59,7 @@ export class DesignSystem extends LitElement {
 			}
 
 			ul {
-				padding-left: 4.5rem;
+				padding-left: 4rem;
 			}
 
 			li {
