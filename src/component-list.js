@@ -8,6 +8,25 @@ import { css, html, LitElement } from 'lit-element';
 import { default as components } from '../data/components.js';
 import { tableStyles } from './table-styles.js';
 
+function _getStateMessage(componentStateInfo, readme) {
+	let icon = 'tier1:important';
+	switch (componentStateInfo.state) {
+		case 'action':
+			icon = 'tier1:important';
+			break;
+		case 'alert':
+			icon = 'tier1:close-default';
+			break;
+		case 'success':
+			icon = 'tier1:check';
+			break;
+	}
+	const stateText = readme
+		? html`<d2l-link small href="${readme}">${componentStateInfo.text}</d2l-link>`
+		: html`<div class="d2l-body-small d2l-design-system-component-list-info-text">${componentStateInfo.text}</div>`;
+	return html`<d2l-icon data-state="${componentStateInfo.state}" icon="${icon}"></d2l-icon>${stateText}`;
+}
+
 export class DesignSystemComponentList extends LitElement {
 	static get properties() {
 		return {
@@ -76,8 +95,8 @@ export class DesignSystemComponentList extends LitElement {
 			if (this._filter && !component.name.toLowerCase().includes(this._filter.toLowerCase())) return null;
 			if (component.childComponents) {
 				return component.childComponents.map((childComponent) => {
-					const devState = this._getStateMessage(childComponent.development, childComponent.readme);
-					const designState = this._getStateMessage(childComponent.design);
+					const devState = _getStateMessage(childComponent.development, childComponent.readme);
+					const designState = _getStateMessage(childComponent.design);
 					return html`
 						<d2l-tr>
 							<d2l-td><d2l-link href="/components/${component.name}/${childComponent.tag}">${childComponent.name}</d2l-link></d2l-td>
@@ -87,8 +106,8 @@ export class DesignSystemComponentList extends LitElement {
 					`;
 				});
 			} else {
-				const devState = this._getStateMessage(component.development, component.readme);
-				const designState = this._getStateMessage(component.design);
+				const devState = _getStateMessage(component.development, component.readme);
+				const designState = _getStateMessage(component.design);
 				return html`
 					<d2l-tr>
 						<d2l-td><d2l-link href="/components/${component.tag}">${component.name}</d2l-link></d2l-td>
@@ -114,25 +133,6 @@ export class DesignSystemComponentList extends LitElement {
 				</d2l-tbody>
 			</d2l-table>
 		`;
-	}
-
-	_getStateMessage(componentStateInfo, readme) {
-		let icon = 'tier1:important';
-		switch (componentStateInfo.state) {
-			case 'action':
-				icon = 'tier1:important';
-				break;
-			case 'alert':
-				icon = 'tier1:close-default';
-				break;
-			case 'success':
-				icon = 'tier1:check';
-				break;
-		}
-		const stateText = readme
-			? html`<d2l-link small href="${readme}">${componentStateInfo.text}</d2l-link>`
-			: html`<div class="d2l-body-small d2l-design-system-component-list-info-text">${componentStateInfo.text}</div>`;
-		return html`<d2l-icon data-state="${componentStateInfo.state}" icon="${icon}"></d2l-icon>${stateText}`;
 	}
 }
 customElements.define('d2l-design-system-component-list', DesignSystemComponentList);
