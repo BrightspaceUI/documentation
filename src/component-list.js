@@ -2,7 +2,6 @@ import '@brightspace-ui/core/components/colors/colors.js';
 import '@brightspace-ui/core/components/icons/icon.js';
 import '@brightspace-ui/core/components/inputs/input-search.js';
 import '@brightspace-ui/core/components/link/link.js';
-import '@brightspace-ui/core/components/status-indicator/status-indicator.js';
 import 'd2l-table/d2l-table.js';
 import { bodySmallStyles, heading2Styles } from '@brightspace-ui/core/components/typography/styles.js';
 import { css, html, LitElement } from 'lit-element';
@@ -36,10 +35,6 @@ export class DesignSystemComponentList extends LitElement {
 
 			d2l-table {
 				padding-top: 1rem;
-			}
-
-			d2l-link d2l-status-indicator {
-				cursor: pointer;
 			}
 
 			d2l-icon {
