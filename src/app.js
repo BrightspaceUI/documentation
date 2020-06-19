@@ -3,9 +3,10 @@ import './component-list.js';
 import './welcome.js';
 import '@brightspace-ui/core/components/colors/colors.js';
 import '@brightspace-ui/core/components/icons/icon.js';
-import '@brightspace-ui/core/components/link/link.js';
 import { css, html, LitElement } from 'lit-element';
+import { classMap } from 'lit-html/directives/class-map.js';
 import { default as components } from '../data/components.js';
+import { linkStyles } from '@brightspace-ui/core/components/link/link.js';
 import page from 'page';
 
 export class DesignSystem extends LitElement {
@@ -15,56 +16,45 @@ export class DesignSystem extends LitElement {
 			_component: { type: String },
 			_currentView: { type: String },
 			_shownCategory: { type: String },
+			_shownComponent: { type: String },
 			_shownNested: { type: String }
 		};
 	}
 
 	static get styles() {
-		return css`
-			:host {
-				display: block;
-				height: 100%;
-				min-height: 100%;
-			}
-
+		return [linkStyles, css`
 			header {
 				align-items: center;
 				background-color: white;
 				box-shadow: rgba(0, 0, 0, 0.22) 0px 0px 3px 0px;
-				box-sizing: border-box;
 				display: flex;
 				height: 4.5rem;
 				padding-left: 4.5rem;
+				position: sticky;
 				top: 0;
+				z-index: 1000;
 			}
 
 			main {
-				align-content: stretch;
-				align-items: stretch;
-				box-sizing: border-box;
 				display: flex;
-				flex-direction: row;
-				flex-wrap: nowrap;
-				justify-content: flex-start;
-				height: 100%;
-				padding-top: 2px;
+				min-height: calc(100vh - 4.5rem);
 			}
 
 			.d2l-design-system-side-nav {
 				background: linear-gradient(to right, #FFFFFF, #F9FAFB);
 				border-right: 1px solid #e6eaf0;
-				box-sizing: border-box;
 				flex: 0 1 24%;
 				padding-top: 1.5rem;
-				position: sticky;
-				top: 3rem;
+			}
+
+			nav {
+				height: calc(100vh - 4.5rem);
 				overflow-y: scroll;
 			}
 
 			.d2l-design-system-main {
 				background-color: white;
 				flex: 1 1 auto;
-				overflow: scroll;
 				padding: 2rem 1.5rem;
 			}
 
@@ -75,6 +65,12 @@ export class DesignSystem extends LitElement {
 			li {
 				list-style-type: none;
 				padding-bottom: 1rem;
+			}
+
+			.d2l-link.d2l-design-system-link-selected {
+				border-left: 4px solid var(--d2l-color-celestine-minus-1);
+				color: var(--d2l-color-celestine-minus-1);
+				padding: 0.15rem 0 0.15rem 0.3rem;
 			}
 
 			ul ul {
@@ -97,7 +93,7 @@ export class DesignSystem extends LitElement {
 				color: var(--d2l-color-celestine);
 				margin-bottom: 0.25rem;
 			}
-		`;
+		`];
 	}
 
 	constructor() {
@@ -105,6 +101,7 @@ export class DesignSystem extends LitElement {
 		this._component = '';
 		this._currentView = 'welcome';
 		this._shownCategory = '';
+		this._shownComponent = '';
 		this._shownNested = '';
 		this._installRoutes();
 
@@ -119,9 +116,16 @@ export class DesignSystem extends LitElement {
 		const categories = Object.keys(this._categories).map((category) => {
 			const children = this._categories[category].map((component) => {
 				if (component.childComponents) {
-					const nestedChildren = component.childComponents.map((childComponent) => html`<li><d2l-link small href="/components/${component.name}/${childComponent.tag}">${childComponent.name}</d2l-link></li>`);
+					const nestedChildren = component.childComponents.map((childComponent) => {
+						const classes = {
+							'd2l-link': true,
+							'd2l-link-small': true,
+							'd2l-design-system-link-selected': this._shownComponent === childComponent.name
+						};
+						return html`<li><a class="${classMap(classes)}" href="/components/${component.name}/${childComponent.tag}">${childComponent.name}</a></li>`;
+					});
 					return html`<li class="d2l-design-system-nested">
-						<d2l-link @click="${this._onClickNested}" data-type="${component.name}" href="/components/${component.name}/${component.childComponents[0].tag}" small>
+						<d2l-link small @click="${this._onClickNested}" data-type="${component.name}" href="/components/${component.name}/${component.childComponents[0].tag}">
 							<d2l-icon icon="tier1:arrow-expand-small" ?hidden="${this._shownNested === component.name}"></d2l-icon>
 							<d2l-icon icon="tier1:arrow-collapse-small" ?hidden="${this._shownNested !== component.name}"></d2l-icon>
 							${component.name}
@@ -131,7 +135,12 @@ export class DesignSystem extends LitElement {
 						</ul>
 					</li>`;
 				} else {
-					return html`<li><d2l-link small href="/components/${component.tag}">${component.name}</d2l-link></li>`;
+					const classes = {
+						'd2l-link': true,
+						'd2l-link-small': true,
+						'd2l-design-system-link-selected': this._shownComponent === component.name
+					};
+					return html`<li><a class="${classMap(classes)}" href="/components/${component.tag}">${component.name}</a></li>`;
 				}
 			});
 			return html`<li role="listitem">
@@ -170,12 +179,13 @@ export class DesignSystem extends LitElement {
 	}
 
 	_componentRoute(context) {
-		this._shownNested = '';
 		this._currentView = 'component';
 		const componentName = context.params['component'];
 		const filtered = components.filter((component) =>  component.tag === componentName);
-		this._shownCategory = filtered[0].type;
 		this._component = JSON.stringify(filtered[0]);
+		this._shownCategory = filtered[0].type;
+		this._shownComponent = filtered[0].name;
+		this._shownNested = '';
 	}
 
 	_installRoutes() {
@@ -183,15 +193,17 @@ export class DesignSystem extends LitElement {
 		page('/welcome', () => {
 			this._currentView = 'welcome';
 			this._shownCategory = '';
+			this._shownComponent = '';
 			this._shownNested = '';
 		});
 		page('/components', () => {
 			this._currentView = 'component-list';
 			this._shownCategory = '';
+			this._shownComponent = '';
 			this._shownNested = '';
 		});
 		page('/components/:component', this._componentRoute.bind(this));
-		page('/components/:parentComponent/:component', this._nestedComponentRoute.bind(this));
+		page('/components/:parentCategory/:component', this._nestedComponentRoute.bind(this));
 		page('*', () => this._currentView = 'welcome');
 		page();
 	}
@@ -199,11 +211,15 @@ export class DesignSystem extends LitElement {
 	_nestedComponentRoute(context) {
 		this._currentView = 'component';
 		const componentName = context.params['component'];
-		const parentName = context.params['parentComponent'];
+		const parentName = context.params['parentCategory'];
 		const filtered1 = components.filter((component) => component.name === parentName);
-		const filtered2 = filtered1[0].childComponents.filter((component) =>  component.tag === componentName);
-		this._shownCategory = filtered1[0].type;
-		this._component = JSON.stringify(filtered2[0]);
+		const parentCategory = filtered1[0];
+		const filtered2 = parentCategory.childComponents.filter((component) =>  component.tag === componentName);
+		const childComponent = filtered2[0];
+		this._component = JSON.stringify(childComponent);
+		this._shownCategory = parentCategory.type;
+		this._shownComponent = childComponent.name;
+		this._shownNested = parentCategory.name;
 	}
 
 	_onClick(e) {
