@@ -1,11 +1,31 @@
+import '@brightspace-ui/core/components/colors/colors.js';
+import '@brightspace-ui/core/components/icons/icon.js';
 import '@brightspace-ui/core/components/inputs/input-search.js';
 import '@brightspace-ui/core/components/link/link.js';
-import '@brightspace-ui/core/components/status-indicator/status-indicator.js';
 import 'd2l-table/d2l-table.js';
+import { bodySmallStyles, heading2Styles } from '@brightspace-ui/core/components/typography/styles.js';
 import { css, html, LitElement } from 'lit-element';
 import { default as components } from '../data/components.js';
-import { heading2Styles } from '@brightspace-ui/core/components/typography/styles.js';
 import { tableStyles } from './table-styles.js';
+
+function _getStateMessage(componentStateInfo, readme) {
+	let icon = 'tier1:important';
+	switch (componentStateInfo.state) {
+		case 'action':
+			icon = 'tier1:important';
+			break;
+		case 'alert':
+			icon = 'tier1:close-default';
+			break;
+		case 'success':
+			icon = 'tier1:check';
+			break;
+	}
+	const stateText = readme
+		? html`<d2l-link small href="${readme}">${componentStateInfo.text}</d2l-link>`
+		: html`<div class="d2l-body-small d2l-design-system-component-list-info-text">${componentStateInfo.text}</div>`;
+	return html`<d2l-icon data-state="${componentStateInfo.state}" icon="${icon}"></d2l-icon>${stateText}`;
+}
 
 export class DesignSystemComponentList extends LitElement {
 	static get properties() {
@@ -15,7 +35,7 @@ export class DesignSystemComponentList extends LitElement {
 	}
 
 	static get styles() {
-		return [heading2Styles, tableStyles, css`
+		return [bodySmallStyles, heading2Styles, tableStyles, css`
 			:host {
 				display: block;
 			}
@@ -36,8 +56,28 @@ export class DesignSystemComponentList extends LitElement {
 				padding-top: 1rem;
 			}
 
-			d2l-link d2l-status-indicator {
-				cursor: pointer;
+			d2l-icon {
+				padding-right: 0.3rem;
+			}
+
+			d2l-icon[data-state="action"] {
+				color: var(--d2l-color-feedback-warning);
+			}
+
+			d2l-icon[data-state="alert"] {
+				color: var(--d2l-color-feedback-error);
+			}
+
+			d2l-icon[data-state="default"] {
+				color: var(--d2l-color-feedback-action);
+			}
+
+			d2l-icon[data-state="success"] {
+				color: var(--d2l-color-feedback-success);
+			}
+
+			.d2l-design-system-component-list-info-text {
+				display: inline-block;
 			}
 		`];
 	}
@@ -55,24 +95,24 @@ export class DesignSystemComponentList extends LitElement {
 			if (this._filter && !component.name.toLowerCase().includes(this._filter.toLowerCase())) return null;
 			if (component.childComponents) {
 				return component.childComponents.map((childComponent) => {
-					const baseState = html`<d2l-status-indicator state="${childComponent.development.state}" text="${childComponent.development.text}"></d2l-status-indicator>`;
-					const state = childComponent.readme ? html`<d2l-link href="${childComponent.readme}">${baseState}</d2l-link>` : baseState;
+					const devState = _getStateMessage(childComponent.development, childComponent.readme);
+					const designState = _getStateMessage(childComponent.design);
 					return html`
 						<d2l-tr>
 							<d2l-td><d2l-link href="/components/${component.name}/${childComponent.tag}">${childComponent.name}</d2l-link></d2l-td>
-							<d2l-td>${state}</d2l-td>
-							<d2l-td><d2l-status-indicator state="${childComponent.design.state}" text="${childComponent.design.text}"></d2l-status-indicator></d2l-td>
+							<d2l-td>${devState}</d2l-td>
+							<d2l-td>${designState}</d2l-td>
 						</d2l-tr>
 					`;
 				});
 			} else {
-				const baseState = html`<d2l-status-indicator state="${component.development.state}" text="${component.development.text}"></d2l-status-indicator>`;
-				const state = component.readme ? html`<d2l-link href="${component.readme}">${baseState}</d2l-link>` : baseState;
+				const devState = _getStateMessage(component.development, component.readme);
+				const designState = _getStateMessage(component.design);
 				return html`
 					<d2l-tr>
 						<d2l-td><d2l-link href="/components/${component.tag}">${component.name}</d2l-link></d2l-td>
-						<d2l-td>${state}</d2l-td>
-						<d2l-td><d2l-status-indicator state="${component.design.state}" text="${component.design.text}"></d2l-status-indicator></d2l-td>
+						<d2l-td>${devState}</d2l-td>
+						<d2l-td>${designState}</d2l-td>
 					</d2l-tr>
 				`;
 			}
