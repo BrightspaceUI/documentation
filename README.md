@@ -15,6 +15,12 @@ To start an [es-dev-server](https://open-wc.org/developing/es-dev-server.html) t
 npm start
 ```
 
+To run the static production version of the application:
+
+```shell
+npm start:build
+```
+
 ### Linting
 
 ```shell
