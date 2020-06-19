@@ -7,9 +7,8 @@
     "lint": "npm run lint:eslint && npm run lint:lit",
     "lint:eslint": "eslint --ext .js,.html . --ignore-path .gitignore",
     "lint:lit": "lit-analyzer src/*.js --strict --rules.no-unknown-tag-name off",
-    "postinstall": "npm run generate-component-doc-details",
     "start:build": "npm run build && es-dev-server --root-dir dist --app-index index.html --open --compatibility none",
-    "start": "es-dev-server --app-index index.html --node-resolve --open --watch",
+    "start": "npm run generate-component-doc-details && es-dev-server --app-index index.html --node-resolve --open --watch",
     "test": "npm run lint && karma start --coverage",
     "test:watch": "karma start --auto-watch=true --single-run=false"
   },
