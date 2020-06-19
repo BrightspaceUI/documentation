@@ -39,25 +39,3 @@ npm run lint:eslint
 # lit-analyzer only
 npm run lint:lit
 ```
-
-### Testing
-
-```shell
-# lint, unit test and visual-diff test
-npm test
-
-# lint only
-npm run lint
-
-# unit tests only
-npm run test:headless
-
-# debug or run a subset of local unit tests
-# then navigate to `http://localhost:9876/debug.html`
-npm run test:headless:watch
-
-## Versioning, Releasing & Deploying
-
-All version changes should obey [semantic versioning](https://semver.org/) rules.
-
-Include either `[increment major]`, `[increment minor]` or `[increment patch]` in your merge commit message to automatically increment the `package.json` version and create a tag.
