@@ -6,6 +6,7 @@ import 'd2l-table/d2l-table.js';
 import { bodySmallStyles, heading2Styles } from '@brightspace-ui/core/components/typography/styles.js';
 import { css, html, LitElement } from 'lit-element';
 import { default as components } from '../data/components.js';
+import { getComponentPathFromTagName } from '../data/structure.js';
 import { tableStyles } from './table-styles.js';
 
 function _getStateMessage(componentStateInfo, readme) {
@@ -99,7 +100,7 @@ export class DesignSystemComponentList extends LitElement {
 					const designState = _getStateMessage(childComponent.design);
 					return html`
 						<d2l-tr>
-							<d2l-td><d2l-link href="/components/${component.name}/${childComponent.tag}">${childComponent.name}</d2l-link></d2l-td>
+							<d2l-td><d2l-link href="${getComponentPathFromTagName(childComponent.tag)}">${childComponent.name}</d2l-link></d2l-td>
 							<d2l-td>${devState}</d2l-td>
 							<d2l-td>${designState}</d2l-td>
 						</d2l-tr>
@@ -110,7 +111,7 @@ export class DesignSystemComponentList extends LitElement {
 				const designState = _getStateMessage(component.design);
 				return html`
 					<d2l-tr>
-						<d2l-td><d2l-link href="/components/${component.tag}">${component.name}</d2l-link></d2l-td>
+						<d2l-td><d2l-link href="${getComponentPathFromTagName(component.tag)}">${component.name}</d2l-link></d2l-td>
 						<d2l-td>${devState}</d2l-td>
 						<d2l-td>${designState}</d2l-td>
 					</d2l-tr>

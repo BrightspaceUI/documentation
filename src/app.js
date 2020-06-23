@@ -4,20 +4,64 @@ import './welcome.js';
 import '@brightspace-ui/core/components/colors/colors.js';
 import '@brightspace-ui/core/components/icons/icon.js';
 import { css, html, LitElement } from 'lit-element';
+import { findItemFromPath, getItemPath, siteStructure } from '../data/structure.js';
 import { classMap } from 'lit-html/directives/class-map.js';
-import { default as components } from '../data/components.js';
 import { linkStyles } from '@brightspace-ui/core/components/link/link.js';
 import page from 'page';
+
+function buildSidebarItem(item, parents, currentPath) {
+
+	function onSidebarLinkClick(e) {
+		page(e.target.getAttribute('href'));
+		e.preventDefault();
+	}
+
+	parents.push(item);
+
+	const itemPath = getItemPath(item);
+	const selected = `${currentPath}/`.indexOf(`${itemPath.realPath}/`) === 0;
+
+	let link = null;
+	if (parents.length === 1) {
+		link = html`<d2l-link @click="${onSidebarLinkClick}" href="${itemPath.path}">${item.name}</d2l-link>`;
+	} else {
+		const classes = {
+			'd2l-link': true,
+			'd2l-link-small': true,
+			'd2l-design-system-link-selected': selected
+		};
+		link = html`<a @click="${onSidebarLinkClick}" class="${classMap(classes)}" href="${itemPath.path}">${item.name}</a>`;
+	}
+
+	let children = null;
+	if (item.children && item.children.length > 0) {
+		if (parents.length === 1) {
+			children = html`<ul ?hidden="${!selected}">
+				${item.children.map(child => buildSidebarItem(child, parents, currentPath))}
+			</ul>`;
+		} else if (parents.length === 2) {
+			link = html`<d2l-link @click="${onSidebarLinkClick}" small href="${itemPath.path}">
+					<d2l-icon icon="tier1:arrow-expand-small" ?hidden="${selected}"></d2l-icon>
+					<d2l-icon icon="tier1:arrow-collapse-small" ?hidden="${!selected}"></d2l-icon>
+					${item.name}
+				</d2l-link>`;
+			children = html`<ul ?hidden="${!selected}">
+				${item.children.map(child => buildSidebarItem(child, parents, currentPath))}
+			</ul>`;
+		}
+	}
+
+	parents.pop();
+
+	return html`
+		<li>${link}${children}</li>
+	`;
+}
 
 export class DesignSystem extends LitElement {
 	static get properties() {
 		return {
-			_categories: { type: Object },
-			_component: { type: String },
-			_currentView: { type: String },
-			_shownCategory: { type: String },
-			_shownComponent: { type: String },
-			_shownNested: { type: String }
+			_currentPath: { type: String, attribute: false }
 		};
 	}
 
@@ -98,59 +142,10 @@ export class DesignSystem extends LitElement {
 
 	constructor() {
 		super();
-		this._component = '';
-		this._currentView = 'welcome';
-		this._shownCategory = '';
-		this._shownComponent = '';
-		this._shownNested = '';
 		this._installRoutes();
-
-		this._categories = {};
-		components.forEach((component) => {
-			if (!this._categories[component.type]) this._categories[component.type] = [];
-			this._categories[component.type].push(component);
-		});
 	}
 
 	render() {
-		const categories = Object.keys(this._categories).map((category) => {
-			const children = this._categories[category].map((component) => {
-				if (component.childComponents) {
-					const nestedChildren = component.childComponents.map((childComponent) => {
-						const classes = {
-							'd2l-link': true,
-							'd2l-link-small': true,
-							'd2l-design-system-link-selected': this._shownComponent === childComponent.name
-						};
-						return html`<li><a class="${classMap(classes)}" href="/components/${component.name}/${childComponent.tag}">${childComponent.name}</a></li>`;
-					});
-					return html`<li class="d2l-design-system-nested">
-						<d2l-link small @click="${this._onClickNested}" data-type="${component.name}" href="/components/${component.name}/${component.childComponents[0].tag}">
-							<d2l-icon icon="tier1:arrow-expand-small" ?hidden="${this._shownNested === component.name}"></d2l-icon>
-							<d2l-icon icon="tier1:arrow-collapse-small" ?hidden="${this._shownNested !== component.name}"></d2l-icon>
-							${component.name}
-						</d2l-link>
-						<ul ?hidden="${this._shownNested !== component.name}">
-							${nestedChildren}
-						</ul>
-					</li>`;
-				} else {
-					const classes = {
-						'd2l-link': true,
-						'd2l-link-small': true,
-						'd2l-design-system-link-selected': this._shownComponent === component.name
-					};
-					return html`<li><a class="${classMap(classes)}" href="/components/${component.tag}">${component.name}</a></li>`;
-				}
-			});
-			return html`<li role="listitem">
-				<d2l-link @click="${this._onClick}" data-type="${category}" href="/components/${this._categories[category][0].tag}">${category}</d2l-link>
-				<ul ?hidden="${this._shownCategory !== category}">
-					${children}
-				</ul>
-			</li>`;
-		});
-
 		return html`
 			<header>
 				<div>
@@ -160,14 +155,8 @@ export class DesignSystem extends LitElement {
 			<main>
 				<div class="d2l-design-system-side-nav">
 					<nav aria-label="Component Information">
-						<ul role="list">
-							<li role="listitem">
-								<d2l-link href="/">Welcome</d2l-link>
-							</li>
-							<li role="listitem">
-								<d2l-link href="/components">Component Status</d2l-link>
-							</li>
-							${categories}
+						<ul>
+							${siteStructure.map((item) => buildSidebarItem(item, [], this._currentPath))}
 						</ul>
 					</nav>
 				</div>
@@ -178,68 +167,23 @@ export class DesignSystem extends LitElement {
 		`;
 	}
 
-	_componentRoute(context) {
-		this._currentView = 'component';
-		const componentName = context.params['component'];
-		const filtered = components.filter((component) =>  component.tag === componentName);
-		this._component = JSON.stringify(filtered[0]);
-		this._shownCategory = filtered[0].type;
-		this._shownComponent = filtered[0].name;
-		this._shownNested = '';
-	}
-
 	_installRoutes() {
+		page.base('/components');
 		page.redirect('/', '/welcome');
-		page('/welcome', () => {
-			this._currentView = 'welcome';
-			this._shownCategory = '';
-			this._shownComponent = '';
-			this._shownNested = '';
-		});
-		page('/components', () => {
-			this._currentView = 'component-list';
-			this._shownCategory = '';
-			this._shownComponent = '';
-			this._shownNested = '';
-		});
-		page('/components/:component', this._componentRoute.bind(this));
-		page('/components/:parentCategory/:component', this._nestedComponentRoute.bind(this));
-		page('*', () => this._currentView = 'welcome');
+		page('*', (context) => this._currentPath = context.canonicalPath);
 		page();
 	}
 
-	_nestedComponentRoute(context) {
-		this._currentView = 'component';
-		const componentName = context.params['component'];
-		const parentName = context.params['parentCategory'];
-		const filtered1 = components.filter((component) => component.name === parentName);
-		const parentCategory = filtered1[0];
-		const filtered2 = parentCategory.childComponents.filter((component) =>  component.tag === componentName);
-		const childComponent = filtered2[0];
-		this._component = JSON.stringify(childComponent);
-		this._shownCategory = parentCategory.type;
-		this._shownComponent = childComponent.name;
-		this._shownNested = parentCategory.name;
-	}
-
-	_onClick(e) {
-		const type = e.target.getAttribute('data-type');
-		if (this._shownCategory === type) this._shownCategory = '';
-		else this._shownCategory = type;
-	}
-
-	_onClickNested(e) {
-		const type = e.target.getAttribute('data-type');
-		if (this._shownNested === type) this._shownNested = '';
-		else this._shownNested = type;
-	}
-
 	_renderCurrentView() {
-		switch (this._currentView) {
-			case 'welcome': return html`<d2l-design-system-welcome></d2l-design-system-welcome>`;
-			case 'component': return html`<d2l-design-system-component component="${this._component}"></d2l-design-system-component>`;
-			case 'component-list': return html`<d2l-design-system-component-list></d2l-design-system-component-list>`;
+		const currentItem = findItemFromPath(this._currentPath);
+		if (currentItem.type === 'component') {
+			return html`<d2l-design-system-component tag-name="${currentItem.data.tagName}"></d2l-design-system-component>`;
 		}
+		if (this._currentPath === '/components/component-status') {
+			return html`<d2l-design-system-component-list></d2l-design-system-component-list>`;
+		}
+		return html`<d2l-design-system-welcome></d2l-design-system-welcome>`;
 	}
+
 }
 customElements.define('d2l-design-system', DesignSystem);
