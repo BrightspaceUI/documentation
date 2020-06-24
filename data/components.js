@@ -3,8 +3,8 @@ export default [
 		'name': 'Inline Alert',
 		'readme': 'https://github.com/BrightspaceUI/core/tree/master/components/alert#d2l-alert',
 		'development': {
-			'state': 'action',
-			'text': 'Out of date'
+			'state': 'success',
+			'text': 'Complete'
 		},
 		'design': {
 			'state': 'success',
@@ -55,8 +55,8 @@ export default [
 		'name': 'Button',
 		'readme': 'https://github.com/BrightspaceUI/core/tree/master/components/button#d2l-button',
 		'development': {
-			'state': 'action',
-			'text': 'Out of date'
+			'state': 'success',
+			'text': 'Complete'
 		},
 		'design': {
 			'state': 'success',
@@ -162,8 +162,8 @@ export default [
 			'name': 'Dropdown - Opener - Generic Wrapper',
 			'readme': 'https://github.com/BrightspaceUI/core/tree/master/components/dropdown#d2l-dropdown',
 			'development': {
-				'state': 'action',
-				'text': 'Out of date'
+				'state': 'success',
+				'text': 'Complete'
 			},
 			'design': {
 				'state': 'success',
@@ -276,6 +276,32 @@ export default [
 		'tag': 'd2l-input-checkbox',
 		'type': 'Forms'
 	}, {
+		'name': 'Checkbox Spacer',
+		'readme': 'https://github.com/BrightspaceUI/core/blob/master/components/inputs/docs/input-checkbox.md#checkbox-spacer',
+		'development': {
+			'state': 'success',
+			'text': 'Complete'
+		},
+		'design': {
+			'state': 'success',
+			'text': 'Complete'
+		},
+		'tag': 'd2l-input-checkbox-spacer',
+		'type': 'Forms'
+	}, {
+		'name': 'Radio Spacer',
+		'readme': 'https://github.com/BrightspaceUI/core/blob/master/components/inputs/docs/input-radio.md#radio-spacer',
+		'development': {
+			'state': 'success',
+			'text': 'Complete'
+		},
+		'design': {
+			'state': 'success',
+			'text': 'Complete'
+		},
+		'tag': 'd2l-input-radio-spacer',
+		'type': 'Forms'
+	}, {
 		'name': 'Text Input',
 		'readme': 'https://github.com/BrightspaceUI/core/blob/master/components/inputs/docs/input-text.md#text-inputs',
 		'development': {
@@ -287,6 +313,19 @@ export default [
 			'text': 'Complete'
 		},
 		'tag': 'd2l-input-text',
+		'type': 'Forms'
+	}, {
+		'name': 'Fieldset',
+		'readme': 'https://github.com/BrightspaceUI/core/tree/master/components/inputs#grouping-inputs-with-fieldset',
+		'development': {
+			'state': 'success',
+			'text': 'Complete'
+		},
+		'design': {
+			'state': 'alert',
+			'text': 'No design'
+		},
+		'tag': 'd2l-input-fieldset',
 		'type': 'Forms'
 	}, {
 		'name': 'Date Picker',
@@ -361,8 +400,8 @@ export default [
 			'text': 'Complete'
 		},
 		'design': {
-			'state': 'default',
-			'text': 'In progress'
+			'state': 'success',
+			'text': 'Complete'
 		},
 		'tag': 'd2l-link',
 		'type': 'Navigation'
@@ -393,8 +432,8 @@ export default [
 		'tag': 'd2l-list-item',
 		'type': 'Structure'
 	}, {
-		'name': 'List Content',
-		'readme': 'https://github.com/BrightspaceUI/core/tree/master/components/list#d2l-list-content',
+		'name': 'List Item Content',
+		'readme': 'https://github.com/BrightspaceUI/core/tree/master/components/list#d2l-list-item-content',
 		'development': {
 			'state': 'default',
 			'text': 'In progress'
@@ -403,7 +442,7 @@ export default [
 			'state': 'success',
 			'text': 'Complete'
 		},
-		'tag': 'd2l-list-content',
+		'tag': 'd2l-list-item-content',
 		'type': 'Structure'
 	}, {
 		'name': 'Loading Spinner',
@@ -455,8 +494,8 @@ export default [
 				'text': 'Complete'
 			},
 			'design': {
-				'state': 'alert',
-				'text': 'No design'
+				'state': 'success',
+				'text': 'Complete'
 			},
 			'tag': 'd2l-menu-item-link',
 			'type': 'Actions'
@@ -485,6 +524,19 @@ export default [
 				'text': 'No design'
 			},
 			'tag': 'd2l-menu-item-radio',
+			'type': 'Actions'
+		}, {
+			'name': 'Menu Item - Separator',
+			'readme': 'https://github.com/BrightspaceUI/core/tree/master/components/menu#d2l-menu',
+			'development': {
+				'state': 'success',
+				'text': 'Complete'
+			},
+			'design': {
+				'state': 'alert',
+				'text': 'No design'
+			},
+			'tag': 'd2l-menu-item-separator',
 			'type': 'Actions'
 		}]
 	}, {
@@ -696,6 +748,19 @@ export default [
 		'tag': 'd2l-tabs',
 		'type': 'Structure'
 	}, {
+		'name': 'Tab Panel',
+		'readme': 'https://github.com/BrightspaceUI/core/tree/master/components/tabs#d2l-tabs',
+		'development': {
+			'state': 'success',
+			'text': 'Complete'
+		},
+		'design': {
+			'state': 'success',
+			'text': 'Complete'
+		},
+		'tag': 'd2l-tab-panel',
+		'type': 'Structure'
+	}, {
 		'name': 'Tooltip',
 		'readme': 'https://github.com/BrightspaceUI/core/tree/master/components/tooltip#d2l-tooltip',
 		'development': {
@@ -708,5 +773,18 @@ export default [
 		},
 		'tag': 'd2l-tooltip',
 		'type': 'Feedback'
+	},  {
+		'name': 'Primary-Secondary Page Template',
+		'readme': 'https://github.com/BrightspaceUI/core/tree/master/templates/primary-secondary',
+		'development': {
+			'state': 'default',
+			'text': 'In progress'
+		},
+		'design': {
+			'state': 'default',
+			'text': 'In progress'
+		},
+		'tag': 'd2l-template-primary-secondary',
+		'type': 'Structure'
 	}
 ];

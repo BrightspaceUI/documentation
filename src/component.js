@@ -6,9 +6,11 @@ import { tableStyles } from './table-styles.js';
 
 function _getTable(componentInformation, title, hasTypeAndDefault) {
 	const rows = componentInformation.map((info) => {
+		const infoDefault = info.default ? info.default.replace(/\\"/g, '') : null;
+		const infoType = info.type ? info.type.replace(/\(/g, '').replace(/\)/g, '').replace(/\|/g, ', ') : null;
 		const typeDefaultRows = hasTypeAndDefault ? html`
-				<d2l-td>${info.type}</d2l-td>
-				<d2l-td>${info.default}</d2l-td>`
+				<d2l-td>${infoType}</d2l-td>
+				<d2l-td>${infoDefault}</d2l-td>`
 			: null;
 		return html`
 			<d2l-tr>
@@ -75,7 +77,7 @@ export class DesignSystemComponent extends LitElement {
 			return;
 		}
 
-		const description = componentInfo.description ? html`<h2 class="d2l-heading-4">Description:</h2><div>${componentInfo.description}</div>` : null;
+		const description = componentInfo.description ? html`<h2 class="d2l-heading-4">Description</h2><div>${componentInfo.description}</div>` : null;
 		const attributes = componentInfo.attributes ? _getTable(componentInfo.attributes, 'Attributes', true) : null;
 		const events = componentInfo.events ? _getTable(componentInfo.events, 'Events') : null;
 		const slots = componentInfo.slots ? _getTable(componentInfo.slots, 'Slots') : null;

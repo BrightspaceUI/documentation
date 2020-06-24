@@ -1,0 +1,634 @@
+{
+	"version": "experimental",
+	"tags": [
+	  {
+		"name": "d2l-applied-filters",
+		"path": "./components/d2l-applied-filters/d2l-applied-filters.js",
+		"attributes": [
+		  {
+			"name": "for",
+			"type": "string"
+		  }
+		],
+		"properties": [
+		  {
+			"name": "for",
+			"attribute": "for",
+			"type": "string"
+		  }
+		]
+	  },
+	  {
+		"name": "d2l-filter-dropdown-category",
+		"path": "./components/d2l-filter-dropdown/d2l-filter-dropdown-category.js",
+		"attributes": [
+		  {
+			"name": "search-value",
+			"type": "string"
+		  },
+		  {
+			"name": "category-text",
+			"type": "string",
+			"default": "\"\""
+		  },
+		  {
+			"name": "disable-search",
+			"type": "boolean",
+			"default": "false"
+		  },
+		  {
+			"name": "key",
+			"type": "string",
+			"default": "\"\""
+		  },
+		  {
+			"name": "selected-option-count",
+			"type": "number",
+			"default": "0"
+		  }
+		],
+		"properties": [
+		  {
+			"name": "searchValue",
+			"attribute": "search-value",
+			"type": "string"
+		  },
+		  {
+			"name": "categoryText",
+			"attribute": "category-text",
+			"type": "string",
+			"default": "\"\""
+		  },
+		  {
+			"name": "disableSearch",
+			"attribute": "disable-search",
+			"type": "boolean",
+			"default": "false"
+		  },
+		  {
+			"name": "key",
+			"attribute": "key",
+			"type": "string",
+			"default": "\"\""
+		  },
+		  {
+			"name": "selectedOptionCount",
+			"attribute": "selected-option-count",
+			"type": "number",
+			"default": "0"
+		  }
+		],
+		"events": [
+		  {
+			"name": "d2l-filter-dropdown-category-slotchange"
+		  },
+		  {
+			"name": "d2l-filter-dropdown-category-selected"
+		  },
+		  {
+			"name": "d2l-filter-dropdown-option-change"
+		  },
+		  {
+			"name": "d2l-filter-dropdown-category-searched"
+		  }
+		]
+	  },
+	  {
+		"name": "d2l-filter-dropdown-option",
+		"path": "./components/d2l-filter-dropdown/d2l-filter-dropdown-option.js",
+		"properties": [
+		  {
+			"name": "role",
+			"type": "string",
+			"default": "\"menuitemcheckbox\""
+		  }
+		],
+		"events": [
+		  {
+			"name": "d2l-menu-item-select"
+		  }
+		]
+	  },
+	  {
+		"name": "d2l-filter-dropdown",
+		"path": "./components/d2l-filter-dropdown/d2l-filter-dropdown.js",
+		"attributes": [
+		  {
+			"name": "min-width",
+			"type": "number",
+			"default": "25"
+		  },
+		  {
+			"name": "max-width",
+			"type": "number",
+			"default": "400"
+		  },
+		  {
+			"name": "total-selected-option-count",
+			"type": "number",
+			"default": "0"
+		  },
+		  {
+			"name": "header-text",
+			"type": "string",
+			"default": "\"\""
+		  },
+		  {
+			"name": "opener-text",
+			"type": "string",
+			"default": "\"\""
+		  },
+		  {
+			"name": "opener-text-single",
+			"type": "string",
+			"default": "\"\""
+		  },
+		  {
+			"name": "opener-text-multiple",
+			"type": "string",
+			"default": "\"\""
+		  },
+		  {
+			"name": "disable-opener-text-variation",
+			"type": "boolean",
+			"default": "false"
+		  },
+		  {
+			"name": "disabled",
+			"type": "boolean",
+			"default": "false"
+		  },
+		  {
+			"name": "no-padding-footer",
+			"type": "boolean",
+			"default": "false"
+		  }
+		],
+		"properties": [
+		  {
+			"name": "minWidth",
+			"attribute": "min-width",
+			"type": "number",
+			"default": "25"
+		  },
+		  {
+			"name": "maxWidth",
+			"attribute": "max-width",
+			"type": "number",
+			"default": "400"
+		  },
+		  {
+			"name": "totalSelectedOptionCount",
+			"attribute": "total-selected-option-count",
+			"type": "number",
+			"default": "0"
+		  },
+		  {
+			"name": "headerText",
+			"attribute": "header-text",
+			"type": "string",
+			"default": "\"\""
+		  },
+		  {
+			"name": "openerText",
+			"attribute": "opener-text",
+			"type": "string",
+			"default": "\"\""
+		  },
+		  {
+			"name": "openerTextSingle",
+			"attribute": "opener-text-single",
+			"type": "string",
+			"default": "\"\""
+		  },
+		  {
+			"name": "openerTextMultiple",
+			"attribute": "opener-text-multiple",
+			"type": "string",
+			"default": "\"\""
+		  },
+		  {
+			"name": "disableOpenerTextVariation",
+			"attribute": "disable-opener-text-variation",
+			"type": "boolean",
+			"default": "false"
+		  },
+		  {
+			"name": "disabled",
+			"attribute": "disabled",
+			"type": "boolean",
+			"default": "false"
+		  },
+		  {
+			"name": "noPaddingFooter",
+			"attribute": "no-padding-footer",
+			"type": "boolean",
+			"default": "false"
+		  },
+		  {
+			"name": "rootPath",
+			"type": "string"
+		  },
+		  {
+			"name": "importPath",
+			"type": "string"
+		  },
+		  {
+			"name": "root",
+			"type": "HTMLElement | StampedTemplate | ShadowRoot | null"
+		  },
+		  {
+			"name": "$",
+			"type": "{ [key: string]: Element; }"
+		  },
+		  {
+			"name": "PROPERTY_EFFECT_TYPES"
+		  }
+		],
+		"events": [
+		  {
+			"name": "d2l-filter-dropdown-cleared"
+		  },
+		  {
+			"name": "d2l-filter-dropdown-close"
+		  }
+		]
+	  },
+	  {
+		"name": "d2l-search-facets-grouping",
+		"path": "./components/d2l-search-facets/d2l-search-facets-grouping.js",
+		"description": "`<d2l-search-facets-grouping>`\nA grouping of search facet options that keeps tracks of selected options",
+		"attributes": [
+		  {
+			"name": "has-more",
+			"description": "Indicates whether this grouping has more options to be added later. Controls\nthe visibility of the 'More' button",
+			"type": "boolean",
+			"default": "false"
+		  },
+		  {
+			"name": "text",
+			"description": "The name of the grouping",
+			"type": "string",
+			"default": "\"\""
+		  },
+		  {
+			"name": "value",
+			"description": "The value of the grouping name",
+			"type": "string",
+			"default": "\"\""
+		  }
+		],
+		"properties": [
+		  {
+			"name": "hasMore",
+			"attribute": "has-more",
+			"description": "Indicates whether this grouping has more options to be added later. Controls\nthe visibility of the 'More' button",
+			"type": "boolean",
+			"default": "false"
+		  },
+		  {
+			"name": "text",
+			"attribute": "text",
+			"description": "The name of the grouping",
+			"type": "string",
+			"default": "\"\""
+		  },
+		  {
+			"name": "value",
+			"attribute": "value",
+			"description": "The value of the grouping name",
+			"type": "string",
+			"default": "\"\""
+		  },
+		  {
+			"name": "rootPath",
+			"type": "string"
+		  },
+		  {
+			"name": "importPath",
+			"type": "string"
+		  },
+		  {
+			"name": "root",
+			"type": "HTMLElement | StampedTemplate | ShadowRoot | null"
+		  },
+		  {
+			"name": "$",
+			"type": "{ [key: string]: Element; }"
+		  },
+		  {
+			"name": "PROPERTY_EFFECT_TYPES"
+		  }
+		],
+		"events": [
+		  {
+			"name": "d2l-search-facets-grouping-change"
+		  },
+		  {
+			"name": "d2l-search-facets-grouping-has-more"
+		  }
+		]
+	  },
+	  {
+		"name": "d2l-search-facets-option",
+		"path": "./components/d2l-search-facets/d2l-search-facets-option.js",
+		"description": "`<d2l-search-facets-option>`\nSearch facet option, with a count to display the number of results",
+		"attributes": [
+		  {
+			"name": "checked",
+			"description": "Whether the option is selected or not. This property matches the value of\nthe d2l-input-checkbox",
+			"type": "boolean"
+		  },
+		  {
+			"name": "count",
+			"description": "The number of search results for this option",
+			"type": "number"
+		  },
+		  {
+			"name": "disabled",
+			"description": "Whether this option should be disabled",
+			"type": "boolean",
+			"default": "false"
+		  },
+		  {
+			"name": "text",
+			"description": "The text for this option",
+			"type": "string",
+			"default": "\"\""
+		  },
+		  {
+			"name": "value",
+			"description": "The value of this option",
+			"type": "string",
+			"default": "\"\""
+		  }
+		],
+		"properties": [
+		  {
+			"name": "checked",
+			"attribute": "checked",
+			"description": "Whether the option is selected or not. This property matches the value of\nthe d2l-input-checkbox",
+			"type": "boolean"
+		  },
+		  {
+			"name": "count",
+			"attribute": "count",
+			"description": "The number of search results for this option",
+			"type": "number"
+		  },
+		  {
+			"name": "disabled",
+			"attribute": "disabled",
+			"description": "Whether this option should be disabled",
+			"type": "boolean",
+			"default": "false"
+		  },
+		  {
+			"name": "text",
+			"attribute": "text",
+			"description": "The text for this option",
+			"type": "string",
+			"default": "\"\""
+		  },
+		  {
+			"name": "value",
+			"attribute": "value",
+			"description": "The value of this option",
+			"type": "string",
+			"default": "\"\""
+		  },
+		  {
+			"name": "rootPath",
+			"type": "string"
+		  },
+		  {
+			"name": "importPath",
+			"type": "string"
+		  },
+		  {
+			"name": "root",
+			"type": "HTMLElement | StampedTemplate | ShadowRoot | null"
+		  },
+		  {
+			"name": "$",
+			"type": "{ [key: string]: Element; }"
+		  },
+		  {
+			"name": "PROPERTY_EFFECT_TYPES"
+		  }
+		],
+		"events": [
+		  {
+			"name": "d2l-search-facets-option-change"
+		  }
+		]
+	  },
+	  {
+		"name": "d2l-search-facets",
+		"path": "./components/d2l-search-facets/d2l-search-facets.js",
+		"description": "`<d2l-search-facets>`\nPolymer-based web component for D2L search facets.",
+		"properties": [
+		  {
+			"name": "rootPath",
+			"type": "string"
+		  },
+		  {
+			"name": "importPath",
+			"type": "string"
+		  },
+		  {
+			"name": "root",
+			"type": "HTMLElement | StampedTemplate | ShadowRoot | null"
+		  },
+		  {
+			"name": "$",
+			"type": "{ [key: string]: Element; }"
+		  },
+		  {
+			"name": "PROPERTY_EFFECT_TYPES"
+		  }
+		],
+		"events": [
+		  {
+			"name": "d2l-search-facets-change"
+		  }
+		]
+	  },
+	  {
+		"name": "d2l-search-results-count",
+		"path": "./components/d2l-search-results-count/d2l-search-results-count.js",
+		"description": "`<d2l-search-results-count>`\nPolymer-based web component for D2L search result",
+		"attributes": [
+		  {
+			"name": "range-start",
+			"description": "Range start",
+			"type": "number"
+		  },
+		  {
+			"name": "range-end",
+			"description": "Range end",
+			"type": "number"
+		  },
+		  {
+			"name": "total-count",
+			"description": "Total count",
+			"type": "number",
+			"default": "0"
+		  },
+		  {
+			"name": "query",
+			"description": "Search query",
+			"type": "string",
+			"default": "\"\""
+		  }
+		],
+		"properties": [
+		  {
+			"name": "rangeStart",
+			"attribute": "range-start",
+			"description": "Range start",
+			"type": "number"
+		  },
+		  {
+			"name": "rangeEnd",
+			"attribute": "range-end",
+			"description": "Range end",
+			"type": "number"
+		  },
+		  {
+			"name": "totalCount",
+			"attribute": "total-count",
+			"description": "Total count",
+			"type": "number",
+			"default": "0"
+		  },
+		  {
+			"name": "query",
+			"attribute": "query",
+			"description": "Search query",
+			"type": "string",
+			"default": "\"\""
+		  },
+		  {
+			"name": "rootPath",
+			"type": "string"
+		  },
+		  {
+			"name": "importPath",
+			"type": "string"
+		  },
+		  {
+			"name": "root",
+			"type": "HTMLElement | StampedTemplate | ShadowRoot | null"
+		  },
+		  {
+			"name": "$",
+			"type": "{ [key: string]: Element; }"
+		  },
+		  {
+			"name": "PROPERTY_EFFECT_TYPES"
+		  }
+		]
+	  },
+	  {
+		"name": "d2l-sort-by-dropdown-option",
+		"path": "./components/d2l-sort-by-dropdown/d2l-sort-by-dropdown-option.js"
+	  },
+	  {
+		"name": "d2l-sort-by-dropdown",
+		"path": "./components/d2l-sort-by-dropdown/d2l-sort-by-dropdown.js",
+		"description": "`<d2l-sort-by-dropdown>`\nPolymer-based web component for D2L sort by dropdown component",
+		"attributes": [
+		  {
+			"name": "disabled",
+			"description": "Whether this dropdown should be disabled",
+			"type": "boolean",
+			"default": "false"
+		  },
+		  {
+			"name": "compact",
+			"description": "Indicates whether the dropdown is in compact mode or not. The selection text\nwill not be visible when compact is true",
+			"type": "boolean",
+			"default": "false"
+		  },
+		  {
+			"name": "align",
+			"description": "Alignment of dropdown menu",
+			"type": "string",
+			"default": "\"start\""
+		  },
+		  {
+			"name": "label",
+			"description": "Label for the dropdown-menu",
+			"type": "string",
+			"default": "\"\""
+		  },
+		  {
+			"name": "value",
+			"description": "The value of the currently selected option",
+			"type": "string"
+		  }
+		],
+		"properties": [
+		  {
+			"name": "disabled",
+			"attribute": "disabled",
+			"description": "Whether this dropdown should be disabled",
+			"type": "boolean",
+			"default": "false"
+		  },
+		  {
+			"name": "compact",
+			"attribute": "compact",
+			"description": "Indicates whether the dropdown is in compact mode or not. The selection text\nwill not be visible when compact is true",
+			"type": "boolean",
+			"default": "false"
+		  },
+		  {
+			"name": "align",
+			"attribute": "align",
+			"description": "Alignment of dropdown menu",
+			"type": "string",
+			"default": "\"start\""
+		  },
+		  {
+			"name": "label",
+			"attribute": "label",
+			"description": "Label for the dropdown-menu",
+			"type": "string",
+			"default": "\"\""
+		  },
+		  {
+			"name": "value",
+			"attribute": "value",
+			"description": "The value of the currently selected option",
+			"type": "string"
+		  },
+		  {
+			"name": "rootPath",
+			"type": "string"
+		  },
+		  {
+			"name": "importPath",
+			"type": "string"
+		  },
+		  {
+			"name": "root",
+			"type": "HTMLElement | StampedTemplate | ShadowRoot | null"
+		  },
+		  {
+			"name": "$",
+			"type": "{ [key: string]: Element; }"
+		  },
+		  {
+			"name": "PROPERTY_EFFECT_TYPES"
+		  }
+		],
+		"events": [
+		  {
+			"name": "d2l-sort-by-dropdown-change"
+		  }
+		]
+	  }
+	]
+  }

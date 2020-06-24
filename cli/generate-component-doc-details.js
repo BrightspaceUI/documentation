@@ -8,10 +8,18 @@ function _parseFile(fileName) {
 }
 
 function copyComponents() {
-	const customElementsFilePath = path.join(__dirname, '../node_modules/@brightspace-ui/core/custom-elements.json');
-	if (!fs.existsSync(customElementsFilePath)) return;
-	const parsed = _parseFile(customElementsFilePath);
-	const json = JSON.stringify(parsed.tags, null, '\t');
+	const filePaths = [
+		'../node_modules/@brightspace-ui/core/custom-elements.json',
+		'../data/custom-elements-facet-filter-sort.json'
+	];
+	let tags = [];
+	filePaths.forEach((filePath) => {
+		const customElementsFilePath = path.join(__dirname, filePath);
+		if (!fs.existsSync(customElementsFilePath)) return;
+		const parsed = _parseFile(customElementsFilePath);
+		tags = tags.concat(parsed.tags);
+	});
+	const json = JSON.stringify(tags, null, '\t');
 	const fileContent = `/* eslint quotes: 0 */
 
 export default ${json};
