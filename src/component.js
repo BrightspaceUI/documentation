@@ -42,9 +42,7 @@ function _getTable(componentInformation, title, hasTypeAndDefault) {
 export class DesignSystemComponent extends LitElement {
 	static get properties() {
 		return {
-			component: { type: String },
-			_componentInfo: { type: Object },
-			_componentName: { type: String }
+			tagName: { type: String, attribute: 'tag-name', reflect: true }
 		};
 	}
 
@@ -68,23 +66,22 @@ export class DesignSystemComponent extends LitElement {
 		`];
 	}
 
-	constructor() {
-		super();
-
-		this.component = '';
-		this._componentInfo = {};
-	}
-
 	render() {
-		if (!this._componentInfo) return html`<h1 class="d2l-heading-2">${this._componentName}</h1>`;
 
-		const description = this._componentInfo.description ? html`<h2 class="d2l-heading-4">Description:</h2><div>${this._componentInfo.description}</div>` : null;
-		const attributes = this._componentInfo.attributes ? _getTable(this._componentInfo.attributes, 'Attributes', true) : null;
-		const events = this._componentInfo.events ? _getTable(this._componentInfo.events, 'Events') : null;
-		const slots = this._componentInfo.slots ? _getTable(this._componentInfo.slots, 'Slots') : null;
+		const componentInfo = components.find((component) =>  component.name === this.tagName);
+		if (!componentInfo) {
+			// TODO: create a 404 view that we can return
+			console.error(`Could not find component ${this.tagName}`);
+			return;
+		}
+
+		const description = componentInfo.description ? html`<h2 class="d2l-heading-4">Description:</h2><div>${componentInfo.description}</div>` : null;
+		const attributes = componentInfo.attributes ? _getTable(componentInfo.attributes, 'Attributes', true) : null;
+		const events = componentInfo.events ? _getTable(componentInfo.events, 'Events') : null;
+		const slots = componentInfo.slots ? _getTable(componentInfo.slots, 'Slots') : null;
 
 		return html`
-			<h1 class="d2l-heading-2">${this._componentName}</h1>
+			<h1 class="d2l-heading-2">${componentInfo.name}</h1>
 			${description}
 			${attributes}
 			${events}
@@ -92,17 +89,5 @@ export class DesignSystemComponent extends LitElement {
 		`;
 	}
 
-	updated(changedProperties) {
-		super.updated(changedProperties);
-
-		changedProperties.forEach((_, prop) => {
-			if (prop === 'component') {
-				const parsed = JSON.parse(this.component);
-				this._componentName = parsed.name;
-				const filtered = components.filter((component) =>  component.name === parsed.tag);
-				this._componentInfo = filtered[0];
-			}
-		});
-	}
 }
 customElements.define('d2l-design-system-component', DesignSystemComponent);
