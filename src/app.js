@@ -20,6 +20,10 @@ function buildSidebarItem(item, parents, currentPath) {
 
 	const itemPath = getItemPath(item);
 	const selected = `${currentPath}/`.indexOf(`${itemPath.realPath}/`) === 0;
+	const hasChildren = (item.children && item.children.length > 0);
+	const listItemClasses = {
+		'd2l-design-system-nested': (hasChildren && parents.length === 2)
+	};
 
 	let link = null;
 	if (parents.length === 1) {
@@ -34,7 +38,7 @@ function buildSidebarItem(item, parents, currentPath) {
 	}
 
 	let children = null;
-	if (item.children && item.children.length > 0) {
+	if (hasChildren) {
 		if (parents.length === 1) {
 			children = html`<ul ?hidden="${!selected}">
 				${item.children.map(child => buildSidebarItem(child, parents, currentPath))}
@@ -54,7 +58,7 @@ function buildSidebarItem(item, parents, currentPath) {
 	parents.pop();
 
 	return html`
-		<li>${link}${children}</li>
+		<li class="${classMap(listItemClasses)}">${link}${children}</li>
 	`;
 }
 
