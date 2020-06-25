@@ -1,6 +1,9 @@
-const chalk = require('chalk'),
-	fs = require('fs'),
-	path = require('path');
+import chalk from 'chalk';
+import { fileURLToPath } from 'url';
+import fs from 'fs';
+import path from 'path';
+
+const __dirname = path.dirname(fileURLToPath(import.meta.url));
 
 function _parseFile(fileName) {
 	const file = fs.readFileSync(fileName).toString();
