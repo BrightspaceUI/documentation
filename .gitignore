@@ -1,6 +1,6 @@
+.generated
 coverage
 custom-elements.json
-data/component-doc-details.js
 dist
 node_modules/
 package-lock.json

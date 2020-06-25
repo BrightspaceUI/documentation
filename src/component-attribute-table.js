@@ -2,7 +2,7 @@ import '@brightspace-ui/core/components/inputs/input-text.js';
 import '@brightspace-ui/core/components/switch/switch.js';
 import 'd2l-table/d2l-table.js';
 import { css, html, LitElement } from 'lit-element';
-import { default as components } from '../data/component-doc-details.js';
+import { default as components } from '../.generated/component-doc-details.js';
 import { ifDefined } from 'lit-html/directives/if-defined.js';
 import { selectStyles } from '@brightspace-ui/core/components/inputs/input-select-styles.js';
 import { tableStyles } from './table-styles.js';

@@ -4,6 +4,7 @@ import fs from 'fs';
 import path from 'path';
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
+const outputDir = path.join(__dirname, '../.generated');
 
 function _parseFile(fileName) {
 	const file = fs.readFileSync(fileName).toString();
@@ -27,11 +28,12 @@ function copyComponents() {
 
 export default ${json};
 `;
-	const pathName = path.join(__dirname, '../data');
-	fs.writeFileSync(`${pathName}/component-doc-details.js`, fileContent, 'utf8');
+	const outputPath = path.join(outputDir, 'component-doc-details.js');
+	fs.writeFileSync(outputPath, fileContent, 'utf8');
 }
 
 try {
+	fs.mkdirSync(outputDir, {recursive: true});
 	copyComponents();
 	process.exit(0);
 } catch (err) {

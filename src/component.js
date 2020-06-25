@@ -2,7 +2,7 @@ import './component-attribute-table.js';
 import 'd2l-table/d2l-table.js';
 import { css, html, LitElement } from 'lit-element';
 import { heading2Styles, heading4Styles } from '@brightspace-ui/core/components/typography/styles.js';
-import { default as components } from '../data/component-doc-details.js';
+import { default as components } from '../.generated/component-doc-details.js';
 import { tableStyles } from './table-styles.js';
 
 function _getTable(componentInformation, title) {
