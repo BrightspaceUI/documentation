@@ -18,7 +18,7 @@ const validTypes = [
 export class DesignSystemComponentAttributeTable extends LitElement {
 	static get properties() {
 		return {
-			attributes: { type: Array, reflect: true }
+			attributes: { type: String, reflect: true }
 		};
 	}
 
@@ -45,7 +45,8 @@ export class DesignSystemComponentAttributeTable extends LitElement {
 
 	render() {
 		if (!this.attributes) return;
-		const rows = this.attributes.map((info) => {
+		const attributes = JSON.parse(this.attributes);
+		const rows = attributes.map((info) => {
 			const infoDefault = info.default ? info.default.replace(/\\"/g, '') : null;
 			let demoType = info.type;
 			let demoValue = null;
@@ -136,8 +137,7 @@ export class DesignSystemComponentAttributeTable extends LitElement {
 						aria-label="Valid values"
 						@change="${this._onSelectChange}"
 						class="d2l-input-select"
-						data-name="${attributeName}"
-						type="select">
+						data-name="${attributeName}">
 						${optsHtml}
 					</select>
 				`;
