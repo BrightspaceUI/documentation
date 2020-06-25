@@ -1,9 +1,10 @@
 import { default as components } from '../data/components.js';
 
-const siteStructure = [
+export const siteStructure = [
 	{
 		name: 'Welcome',
-		type: 'custom'
+		type: 'markdown',
+		path: 'pages/welcome.md'
 	},
 	{
 		name: 'Component Status',
@@ -127,5 +128,3 @@ export function getItemPath(searchItem) {
 	}
 	return search(siteStructure, []);
 }
-
-export { siteStructure };

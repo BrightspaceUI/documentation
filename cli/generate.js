@@ -1,7 +1,9 @@
 import chalk from 'chalk';
 import { fileURLToPath } from 'url';
 import fs from 'fs';
+import marked from 'marked';
 import path from 'path';
+import { siteStructure } from '../data/structure.js';
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const outputDir = path.join(__dirname, '../.generated');
@@ -32,9 +34,66 @@ export default ${json};
 	fs.writeFileSync(outputPath, fileContent, 'utf8');
 }
 
+function renderMarkdownPage(item) {
+
+	const inputPath = path.join(__dirname, '../', item.path);
+	const relativePath = `${item.path.substring(0, item.path.length - 3)}.js`;
+	const outputPath = path.join(outputDir, relativePath);
+
+	const dirname = path.dirname(outputPath);
+	fs.mkdirSync(dirname, {recursive: true});
+
+	const markdownString = fs.readFileSync(inputPath).toString();
+	const htmlContent = marked(markdownString);
+	const output = `import { html } from 'lit-html';
+export const val = html\`
+		${htmlContent}\`;
+`;
+
+	fs.writeFileSync(outputPath, output, 'utf8');
+
+	return relativePath;
+
+}
+
+function renderMarkdownPages(items) {
+
+	const paths = [];
+
+	items.forEach((item) => {
+		if (item.type === 'markdown' && item.path) {
+			paths.push(renderMarkdownPage(item));
+		}
+		if (item.children) {
+			paths.push(...renderMarkdownPages(item.children));
+		}
+	});
+
+	return paths;
+
+}
+
+function createStaticPageLoader(paths) {
+	const outputPath = path.join(outputDir, 'pages', 'pageLoader.js');
+	const output = `
+export function loadPage(path) {
+	switch (path) {
+		${paths.map((p) => `case '/${p}':
+			return import('./${p.substring(6)}');
+		`).join('')}
+	}
+}
+`;
+	const dirname = path.dirname(outputPath);
+	fs.mkdirSync(dirname, {recursive: true});
+	fs.writeFileSync(outputPath, output, 'utf8');
+}
+
 try {
 	fs.mkdirSync(outputDir, {recursive: true});
 	copyComponents();
+	const paths = renderMarkdownPages(siteStructure);
+	createStaticPageLoader(paths);
 	process.exit(0);
 } catch (err) {
 	console.error(chalk.red(err));
