@@ -68,7 +68,6 @@ export class DesignSystemComponent extends LitElement {
 			console.error(`Could not find component ${this.tagName}`);
 			return;
 		}
-		const attributes = JSON.stringify(componentInfo.attributes);
 		const description = componentInfo.description ? html`<h2 class="d2l-heading-4">Description</h2><div>${componentInfo.description}</div>` : null;
 		const events = componentInfo.events ? _getTable(componentInfo.events, 'Events') : null;
 		const slots = componentInfo.slots ? _getTable(componentInfo.slots, 'Slots') : null;
@@ -77,7 +76,7 @@ export class DesignSystemComponent extends LitElement {
 			<h1 class="d2l-heading-2">${componentInfo.name}</h1>
 			${description}
 			<h2 class="d2l-heading-4">Attributes</h2>
-			<d2l-design-system-component-attribute-table attributes="${attributes}"></d2l-design-system-component-attribute-table>
+			<d2l-design-system-component-attribute-table tag-name="${this.tagName}"></d2l-design-system-component-attribute-table>
 			${events}
 			${slots}
 		`;

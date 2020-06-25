@@ -2,6 +2,7 @@ import '@brightspace-ui/core/components/inputs/input-text.js';
 import '@brightspace-ui/core/components/switch/switch.js';
 import 'd2l-table/d2l-table.js';
 import { css, html, LitElement } from 'lit-element';
+import { default as components } from '../data/component-doc-details.js';
 import { ifDefined } from 'lit-html/directives/if-defined.js';
 import { selectStyles } from '@brightspace-ui/core/components/inputs/input-select-styles.js';
 import { tableStyles } from './table-styles.js';
@@ -18,7 +19,7 @@ const validTypes = [
 export class DesignSystemComponentAttributeTable extends LitElement {
 	static get properties() {
 		return {
-			attributes: { type: String, reflect: true }
+			tagName: { type: String, attribute: 'tag-name', reflect: true }
 		};
 	}
 
@@ -44,9 +45,10 @@ export class DesignSystemComponentAttributeTable extends LitElement {
 	}
 
 	render() {
-		if (!this.attributes) return;
-		const attributes = JSON.parse(this.attributes);
-		const rows = attributes.map((info) => {
+		const componentInfo = components.find((component) =>  component.name === this.tagName);
+		if (!componentInfo) return;
+
+		const rows = componentInfo.attributes.map((info) => {
 			const infoDefault = info.default ? info.default.replace(/\\"/g, '') : null;
 			let demoType = info.type;
 			let demoValue = null;
