@@ -12,7 +12,18 @@ export const siteStructure = [
 	},
 	{
 		name: 'Actions',
-		type: 'container'
+		type: 'container',
+		children: [
+			{
+				name: 'Button 2',
+				type: 'markdown',
+				subtype: 'component',
+				path: 'pages/components/button2.md',
+				data: {
+					tagName: 'd2l-button'
+				}
+			}
+		]
 	},
 	{
 		name: 'Feedback',

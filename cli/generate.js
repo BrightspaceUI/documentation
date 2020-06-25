@@ -8,6 +8,28 @@ import { siteStructure } from '../data/structure.js';
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const outputDir = path.join(__dirname, '../.generated');
 
+function createComponentRenderer(tagName) {
+	let isExampleBlock = false;
+	const defaultRenderer = new marked.Renderer();
+	const componentRenderer = {
+		code(code, infostring, escaped) {
+			if (isExampleBlock) {
+				isExampleBlock = false;
+				return `${defaultRenderer.code(code, infostring, escaped)}
+					<d2l-design-system-component-attribute-table tag-name="${tagName}"></d2l-design-system-component-attribute-table>`;
+			}
+			return defaultRenderer.code(code, infostring, escaped);
+		},
+		heading(text, level, raw, slugger) {
+			if (text === 'Examples') {
+				isExampleBlock = true;
+			}
+			return defaultRenderer.heading(text, level, raw, slugger);
+		}
+	};
+	return componentRenderer;
+}
+
 function _parseFile(fileName) {
 	const file = fs.readFileSync(fileName).toString();
 	return JSON.parse(file);
@@ -43,13 +65,17 @@ function renderMarkdownPage(item) {
 	const dirname = path.dirname(outputPath);
 	fs.mkdirSync(dirname, {recursive: true});
 
+	const isComponent = item.subtype === 'component';
+	marked.use({
+		renderer: isComponent ? createComponentRenderer(item.data.tagName) : null
+	});
 	const markdownString = fs.readFileSync(inputPath).toString();
 	const htmlContent = marked(markdownString);
+
 	const output = `import { html } from 'lit-html';
 export const val = html\`
 		${htmlContent}\`;
 `;
-
 	fs.writeFileSync(outputPath, output, 'utf8');
 
 	return relativePath;
