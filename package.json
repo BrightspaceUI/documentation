@@ -9,7 +9,7 @@
     "lint:lit": "lit-analyzer src/*.js --strict --rules.no-unknown-tag-name off",
     "start:build": "npm run generate && npm run build && es-dev-server --root-dir dist --app-index index.html --open --compatibility none",
     "start": "npm run generate && es-dev-server --app-index index.html --node-resolve --open --watch",
-    "test": "npm run lint && karma start --coverage",
+    "test": "npm run lint",
     "test:watch": "karma start --auto-watch=true --single-run=false"
   },
   "author": "D2L Corporation",
