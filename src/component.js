@@ -75,8 +75,7 @@ export class DesignSystemComponent extends LitElement {
 		return html`
 			<h1 class="d2l-heading-2">${componentInfo.name}</h1>
 			${description}
-			<h2 class="d2l-heading-4">Attributes</h2>
-			<d2l-design-system-component-attribute-table tag-name="${this.tagName}"></d2l-design-system-component-attribute-table>
+			<d2l-design-system-component-attribute-table hide-demo tag-name="${this.tagName}"></d2l-design-system-component-attribute-table>
 			${events}
 			${slots}
 		`;
