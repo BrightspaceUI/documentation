@@ -15,13 +15,10 @@ export const siteStructure = [
 		type: 'container',
 		children: [
 			{
-				name: 'Button 2',
+				name: 'Buttons',
 				type: 'markdown',
 				subtype: 'component',
-				path: 'pages/components/button2.md',
-				data: {
-					tagName: 'd2l-button'
-				}
+				path: 'pages/components/buttons.md'
 			}
 		]
 	},

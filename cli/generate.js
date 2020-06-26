@@ -1,4 +1,5 @@
 import chalk from 'chalk';
+import { createComponentRenderer } from './componentMarkdownRenderer.js';
 import { fileURLToPath } from 'url';
 import fs from 'fs';
 import marked from 'marked';
@@ -7,28 +8,6 @@ import { siteStructure } from '../data/structure.js';
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const outputDir = path.join(__dirname, '../.generated');
-
-function createComponentRenderer(tagName) {
-	let isExampleBlock = false;
-	const defaultRenderer = new marked.Renderer();
-	const componentRenderer = {
-		code(code, infostring, escaped) {
-			if (isExampleBlock) {
-				isExampleBlock = false;
-				return `${defaultRenderer.code(code, infostring, escaped)}
-					<d2l-design-system-component-attribute-table tag-name="${tagName}"></d2l-design-system-component-attribute-table>`;
-			}
-			return defaultRenderer.code(code, infostring, escaped);
-		},
-		heading(text, level, raw, slugger) {
-			if (text === 'Examples') {
-				isExampleBlock = true;
-			}
-			return defaultRenderer.heading(text, level, raw, slugger);
-		}
-	};
-	return componentRenderer;
-}
 
 function _parseFile(fileName) {
 	const file = fs.readFileSync(fileName).toString();
@@ -67,7 +46,7 @@ function renderMarkdownPage(item) {
 
 	const isComponent = item.subtype === 'component';
 	marked.use({
-		renderer: isComponent ? createComponentRenderer(item.data.tagName) : null
+		renderer: isComponent ? createComponentRenderer() : null
 	});
 	const markdownString = fs.readFileSync(inputPath).toString();
 	const htmlContent = marked(markdownString);
