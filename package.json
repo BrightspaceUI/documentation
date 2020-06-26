@@ -29,6 +29,7 @@
     "eslint-plugin-sort-class-members": "^1",
     "d2l-facet-filter-sort": "BrightspaceUI/facet-filter-sort#semver:^3",
     "lit-analyzer": "^1",
+    "marked": "^1",
     "rimraf": "^3",
     "rollup": "^2"
   },

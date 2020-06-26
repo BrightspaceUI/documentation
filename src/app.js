@@ -1,6 +1,6 @@
 import './component.js';
 import './component-list.js';
-import './welcome.js';
+import './markdown-page.js';
 import '@brightspace-ui/core/components/colors/colors.js';
 import '@brightspace-ui/core/components/icons/icon.js';
 import { css, html, LitElement } from 'lit-element';
@@ -179,14 +179,20 @@ export class DesignSystem extends LitElement {
 	}
 
 	_renderCurrentView() {
+		const notFound = html`<h1>Not Found</h1>`;
 		const currentItem = findItemFromPath(this._currentPath);
+		if (!currentItem) {
+			return notFound;
+		}
 		if (currentItem.type === 'component') {
 			return html`<d2l-design-system-component tag-name="${currentItem.data.tagName}"></d2l-design-system-component>`;
+		} else if (currentItem.type === 'markdown') {
+			return html`<d2l-design-system-markdown-page path="${currentItem.path}"></d2l-design-system-markdown-page>`;
 		}
 		if (this._currentPath === '/components/component-status') {
 			return html`<d2l-design-system-component-list></d2l-design-system-component-list>`;
 		}
-		return html`<d2l-design-system-welcome></d2l-design-system-welcome>`;
+		return notFound;
 	}
 
 }
