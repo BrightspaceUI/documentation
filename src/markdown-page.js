@@ -1,3 +1,4 @@
+import './component-attribute-table.js';
 import { css, html, LitElement } from 'lit-element';
 import {loadPage} from '../.generated/pages/pageLoader.js';
 
