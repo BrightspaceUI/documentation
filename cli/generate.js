@@ -15,8 +15,7 @@ function createComponentRenderer(tagName) {
 		code(code, infostring, escaped) {
 			if (isExampleBlock) {
 				isExampleBlock = false;
-				return `${defaultRenderer.code(code, infostring, escaped)}
-					<d2l-design-system-component-attribute-table tag-name="${tagName}"></d2l-design-system-component-attribute-table>`;
+				return `<d2l-design-system-component-attribute-table tag-name="${tagName}" code="${escape(code)}"></d2l-design-system-component-attribute-table>`;
 			}
 			return defaultRenderer.code(code, infostring, escaped);
 		},

@@ -1,8 +1,10 @@
 import '@brightspace-ui/core/components/inputs/input-text.js';
 import '@brightspace-ui/core/components/switch/switch.js';
+import './interactive-demo.js';
 import 'd2l-table/d2l-table.js';
 import { css, html, LitElement } from 'lit-element';
 import { default as components } from '../.generated/component-doc-details.js';
+import { heading4Styles } from '@brightspace-ui/core/components/typography/styles.js';
 import { ifDefined } from 'lit-html/directives/if-defined.js';
 import { selectStyles } from '@brightspace-ui/core/components/inputs/input-select-styles.js';
 import { tableStyles } from './table-styles.js';
@@ -19,12 +21,15 @@ const validTypes = [
 export class DesignSystemComponentAttributeTable extends LitElement {
 	static get properties() {
 		return {
-			tagName: { type: String, attribute: 'tag-name', reflect: true }
+			code: { type: String, reflect: true },
+			hideDemo: { type: Boolean, attribute: 'hide-demo', reflect: true },
+			tagName: { type: String, attribute: 'tag-name', reflect: true },
+			_changedAttributes: { type: Object }
 		};
 	}
 
 	static get styles() {
-		return [selectStyles, tableStyles, css`
+		return [heading4Styles, selectStyles, tableStyles, css`
 			:host {
 				display: block;
 			}
@@ -41,7 +46,17 @@ export class DesignSystemComponentAttributeTable extends LitElement {
 			d2l-td d2l-input-text {
 				min-width: 200px;
 			}
+
+			h2.d2l-heading-4 {
+				margin-bottom: 0.5rem;
+			}
 		`];
+	}
+
+	constructor() {
+		super();
+		this._changedAttributes = {};
+		this.hideDemo = false;
 	}
 
 	render() {
@@ -69,7 +84,14 @@ export class DesignSystemComponentAttributeTable extends LitElement {
 				</d2l-tr>
 			`;
 		});
+		const demo = !this.hideDemo ? html`
+			<d2l-design-system-interactive-demo
+				attributes="${JSON.stringify(this._changedAttributes)}"
+				code="${this.code}">
+			</d2l-design-system-interactive-demo>` : null;
 		return html`
+			${demo}
+			<h2 class="d2l-heading-4">Attributes</h2>
 			<d2l-table class="d2l-table">
 				<d2l-thead>
 					<d2l-tr>
@@ -88,11 +110,13 @@ export class DesignSystemComponentAttributeTable extends LitElement {
 	}
 
 	_dispatchChangeEvent(details) {
-		this.dispatchEvent(new CustomEvent(
-			'change',
-			{ bubbles: true, composed: false, detail: details }
-		));
-		console.warn(`ATTRIBUTE CHANGE: ${JSON.stringify(details)}`);
+		const tempAttributes = this._changedAttributes;
+		this._changedAttributes = {};
+		tempAttributes[details.name] = {
+			value: details.value,
+			type: details.type
+		};
+		this._changedAttributes = tempAttributes;
 	}
 
 	_getDemoValueOptions(type, attributeName, defaultVal) {
