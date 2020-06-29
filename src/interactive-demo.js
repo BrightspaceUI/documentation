@@ -1,3 +1,4 @@
+import './component-attribute-table.js';
 import '@brightspace-ui/core/components/demo/demo-snippet.js';
 import { css, html, LitElement } from 'lit-element';
 
@@ -5,7 +6,8 @@ export class DesignSystemInteractiveDemo extends LitElement {
 	static get properties() {
 		return {
 			attributes: { type: String, reflect: true },
-			code: { type: String, reflect: true }
+			code: { type: String, reflect: true },
+			tagName: { type: String, attribute: 'tag-name', reflect: true }
 		};
 	}
 
@@ -35,29 +37,12 @@ export class DesignSystemInteractiveDemo extends LitElement {
 
 	render() {
 		return html`
-			<d2l-demo-snippet>
-			</d2l-demo-snippet>
+			<d2l-demo-snippet></d2l-demo-snippet>
+			<d2l-design-system-component-attribute-table
+				@change="${this._onChange}"
+				tag-name="${this.tagName}">
+			</d2l-design-system-component-attribute-table>
 		`;
-	}
-
-	updated(changedProperties) {
-		super.firstUpdated(changedProperties);
-
-		changedProperties.forEach((_, prop) => {
-			if (prop === 'attributes' && this.attributes !== '{}') {
-				const attributes = JSON.parse(this.attributes);
-				const component = this.shadowRoot.querySelector('d2l-demo-snippet').children[0];
-				Object.keys(attributes).forEach((key) => {
-					if (attributes[key].type === 'Boolean') {
-						if (attributes[key].value === false && component.hasAttribute(key)) component.removeAttribute(key);
-						else if (attributes[key].value === true && !component.hasAttribute(key)) component.setAttribute(key, '');
-					} else {
-						component.setAttribute(key, attributes[key].value);
-					}
-				});
-				this.shadowRoot.querySelector('d2l-demo-snippet').forceCodeUpdate();
-			}
-		});
 	}
 
 	async _getCode() {
@@ -80,6 +65,18 @@ export class DesignSystemInteractiveDemo extends LitElement {
 
 		demoSnippet.appendChild(script);
 		demoSnippet.innerHTML = code;
+	}
+
+	_onChange(e) {
+		const component = this.shadowRoot.querySelector('d2l-demo-snippet').children[0];
+		const details = e.detail;
+		if (details.type === 'Boolean') {
+			if (details.value === false && component.hasAttribute(details.name)) component.removeAttribute(details.name);
+			else if (details.value && !component.hasAttribute(details.name)) component.setAttribute(details.name, '');
+		} else {
+			component.setAttribute(details.name, details.value);
+		}
+		this.shadowRoot.querySelector('d2l-demo-snippet').forceCodeUpdate();
 	}
 
 }

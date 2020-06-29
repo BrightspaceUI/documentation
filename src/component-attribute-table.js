@@ -1,6 +1,5 @@
 import '@brightspace-ui/core/components/inputs/input-text.js';
 import '@brightspace-ui/core/components/switch/switch.js';
-import './interactive-demo.js';
 import 'd2l-table/d2l-table.js';
 import { css, html, LitElement } from 'lit-element';
 import { default as components } from '../.generated/component-doc-details.js';
@@ -21,10 +20,8 @@ const validTypes = [
 export class DesignSystemComponentAttributeTable extends LitElement {
 	static get properties() {
 		return {
-			code: { type: String, reflect: true },
 			hideDemo: { type: Boolean, attribute: 'hide-demo', reflect: true },
-			tagName: { type: String, attribute: 'tag-name', reflect: true },
-			_changedAttributes: { type: Object }
+			tagName: { type: String, attribute: 'tag-name', reflect: true }
 		};
 	}
 
@@ -55,7 +52,6 @@ export class DesignSystemComponentAttributeTable extends LitElement {
 
 	constructor() {
 		super();
-		this._changedAttributes = {};
 		this.hideDemo = false;
 	}
 
@@ -74,23 +70,19 @@ export class DesignSystemComponentAttributeTable extends LitElement {
 			} else {
 				demoValue = validTypes.includes(demoType) ? this._getDemoValueOptions(demoType, info.name, infoDefault) : null;
 			}
+			const demoValueRow = !this.hideDemo ? html`<d2l-td>${demoValue}</d2l-td>` : null;
 			return html`
 				<d2l-tr>
 					<d2l-td>${info.name}</d2l-td>
 					<d2l-td>${info.description}</d2l-td>
 					<d2l-td class="d2l-design-system-component-type">${demoType}</d2l-td>
 					<d2l-td>${infoDefault}</d2l-td>
-					<d2l-td>${demoValue}</d2l-td>
+					${demoValueRow}
 				</d2l-tr>
 			`;
 		});
-		const demo = !this.hideDemo ? html`
-			<d2l-design-system-interactive-demo
-				attributes="${JSON.stringify(this._changedAttributes)}"
-				code="${this.code}">
-			</d2l-design-system-interactive-demo>` : null;
+		const demoValueHeading = !this.hideDemo ? html`<d2l-th>Demo Value</d2l-th>` : null;
 		return html`
-			${demo}
 			<h2 class="d2l-heading-4">Attributes</h2>
 			<d2l-table class="d2l-table">
 				<d2l-thead>
@@ -99,7 +91,7 @@ export class DesignSystemComponentAttributeTable extends LitElement {
 						<d2l-th>Description</d2l-th>
 						<d2l-th>Type</d2l-th>
 						<d2l-th>Default</d2l-th>
-						<d2l-th>Demo Value</d2l-th>
+						${demoValueHeading}
 					</d2l-tr>
 				</d2l-thead>
 				<d2l-tbody>
@@ -110,13 +102,10 @@ export class DesignSystemComponentAttributeTable extends LitElement {
 	}
 
 	_dispatchChangeEvent(details) {
-		const tempAttributes = this._changedAttributes;
-		this._changedAttributes = {};
-		tempAttributes[details.name] = {
-			value: details.value,
-			type: details.type
-		};
-		this._changedAttributes = tempAttributes;
+		this.dispatchEvent(new CustomEvent(
+			'change',
+			{ bubbles: true, composed: false, detail: details }
+		));
 	}
 
 	_getDemoValueOptions(type, attributeName, defaultVal) {
