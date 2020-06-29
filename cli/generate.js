@@ -24,6 +24,12 @@ function createComponentRenderer(tagName) {
 				isExampleBlock = true;
 			}
 			return defaultRenderer.heading(text, level, raw, slugger);
+		},
+		table(header, body) {
+			const d2lBody = body.replace(/tr>/g, 'd2l-tr>').replace(/td>/g, 'd2l-td>');
+			const d2lHeader = header.replace(/tr>/g, 'd2l-tr>').replace(/th>/g, 'd2l-th>');
+
+			return `<d2l-table><d2l-thead>${d2lHeader}</d2l-thead><d2l-tbody>${d2lBody}</d2l-tbody></d2l-table>`;
 		}
 	};
 	return componentRenderer;

@@ -1,6 +1,7 @@
 import './component-attribute-table.js';
 import { css, html, LitElement } from 'lit-element';
 import {loadPage} from '../.generated/pages/pageLoader.js';
+import { tableStyles } from './table-styles.js';
 
 export class DesignSystemMarkdownPage extends LitElement {
 
@@ -18,14 +19,14 @@ export class DesignSystemMarkdownPage extends LitElement {
 	}
 
 	static get styles() {
-		return css`
+		return [tableStyles, css`
 			:host {
 				display: block;
 			}
 			:host([hidden]) {
 				display: none;
 			}
-		`;
+		`];
 	}
 
 	render() {
