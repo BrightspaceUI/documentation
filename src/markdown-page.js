@@ -1,4 +1,4 @@
-import './component-attribute-table.js';
+import './interactive-demo.js';
 import { css, html, LitElement } from 'lit-element';
 import {loadPage} from '../.generated/pages/pageLoader.js';
 import { tableStyles } from './table-styles.js';
