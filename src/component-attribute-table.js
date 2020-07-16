@@ -8,7 +8,6 @@ import { ifDefined } from 'lit-html/directives/if-defined.js';
 import { selectStyles } from '@brightspace-ui/core/components/inputs/input-select-styles.js';
 import { tableStyles } from './table-styles.js';
 
-const stringValidValuesRe = /\(('.*?'\|?)\)/;
 const validTypes = [
 	'array',
 	'boolean',
@@ -63,9 +62,9 @@ export class DesignSystemComponentAttributeTable extends LitElement {
 			const infoDefault = info.default ? info.default.replace(/\\"/g, '') : null;
 			let demoType = info.type;
 			let demoValue = null;
-			const match = info.type ? info.type.match(stringValidValuesRe) : null;
-			if (match && match.length === 2) {
-				demoType = match[1].replace(/\|/g, ' | ');
+
+			if (info.type && info.type.includes('|')) {
+				demoType = info.type.replace(/\|/g, ' | ');
 				demoValue = this._getDemoValueOptions(demoType, info.name, infoDefault);
 			} else {
 				demoValue = validTypes.includes(demoType) ? this._getDemoValueOptions(demoType, info.name, infoDefault) : null;
