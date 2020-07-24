@@ -19,7 +19,7 @@
     "@open-wc/building-rollup": "^1",
     "@open-wc/eslint-config": "^2",
     "@open-wc/testing": "^2",
-    "@open-wc/testing-karma": "^3",
+    "@open-wc/testing-karma": "^4",
     "deepmerge": "^4",
     "es-dev-server": "^1",
     "eslint": "^7",
