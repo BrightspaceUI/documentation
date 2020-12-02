@@ -21,7 +21,7 @@
     "@open-wc/testing": "^2",
     "@open-wc/testing-karma": "^4",
     "deepmerge": "^4",
-    "es-dev-server": "^1",
+    "es-dev-server": "^2",
     "eslint": "^7",
     "eslint-config-brightspace": "^0.9.0",
     "eslint-plugin-html": "^6",
