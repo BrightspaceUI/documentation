@@ -648,7 +648,7 @@ export default [
 		'type': 'Actions',
 		'childComponents': [{
 			'name': 'Filter Dropdown',
-			'readme': 'https://github.com/BrightspaceUI/facet-filter-sort#d2l-filter-dropdown',
+			'readme': 'https://github.com/BrightspaceUILabs/facet-filter-sort#d2l-labs-filter-dropdown',
 			'development': {
 				'state': 'success',
 				'text': 'Complete'
@@ -657,11 +657,11 @@ export default [
 				'state': 'alert',
 				'text': 'No design'
 			},
-			'tag': 'd2l-filter-dropdown',
+			'tag': 'd2l-labs-filter-dropdown',
 			'type': 'Actions'
 		}, {
 			'name': 'Filter Dropdown Category',
-			'readme': 'https://github.com/BrightspaceUI/facet-filter-sort#d2l-filter-dropdown',
+			'readme': 'https://github.com/BrightspaceUILabs/facet-filter-sort#d2l-labs-filter-dropdown',
 			'development': {
 				'state': 'success',
 				'text': 'Complete'
@@ -670,11 +670,11 @@ export default [
 				'state': 'alert',
 				'text': 'No design'
 			},
-			'tag': 'd2l-filter-dropdown-category',
+			'tag': 'd2l-labs-filter-dropdown-category',
 			'type': 'Actions'
 		}, {
 			'name': 'Filter Dropdown Option',
-			'readme': 'https://github.com/BrightspaceUI/facet-filter-sort#d2l-filter-dropdown',
+			'readme': 'https://github.com/BrightspaceUILabs/facet-filter-sort#d2l-labs-filter-dropdown',
 			'development': {
 				'state': 'success',
 				'text': 'Complete'
@@ -683,11 +683,11 @@ export default [
 				'state': 'alert',
 				'text': 'No design'
 			},
-			'tag': 'd2l-filter-dropdown-option',
+			'tag': 'd2l-labs-filter-dropdown-option',
 			'type': 'Actions'
 		}, {
 			'name': 'Applied Filters',
-			'readme': 'https://github.com/BrightspaceUI/facet-filter-sort#d2l-applied-filters',
+			'readme': 'https://github.com/BrightspaceUILabs/facet-filter-sort#d2l-labs-applied-filters',
 			'development': {
 				'state': 'success',
 				'text': 'Complete'
@@ -696,7 +696,7 @@ export default [
 				'state': 'alert',
 				'text': 'No design'
 			},
-			'tag': 'd2l-applied-filters',
+			'tag': 'd2l-labs-applied-filters',
 			'type': 'Actions'
 		}]
 	}, {
@@ -704,7 +704,7 @@ export default [
 		'type': 'Actions',
 		'childComponents': [{
 			'name': 'Sort-By Dropdown',
-			'readme': 'https://github.com/BrightspaceUI/facet-filter-sort#d2l-sort-by-dropdown',
+			'readme': 'https://github.com/BrightspaceUILabs/facet-filter-sort#d2l-labs-sort-by-dropdown',
 			'development': {
 				'state': 'action',
 				'text': 'Out of date'
@@ -713,11 +713,11 @@ export default [
 				'state': 'success',
 				'text': 'Complete'
 			},
-			'tag': 'd2l-sort-by-dropdown',
+			'tag': 'd2l-labs-sort-by-dropdown',
 			'type': 'Actions'
 		}, {
 			'name': 'Sort-By Dropdown Option',
-			'readme': 'https://github.com/BrightspaceUI/facet-filter-sort#d2l-sort-by-dropdown',
+			'readme': 'https://github.com/BrightspaceUILabs/facet-filter-sort#d2l-labs-sort-by-dropdown',
 			'development': {
 				'state': 'action',
 				'text': 'Out of date'
@@ -726,7 +726,7 @@ export default [
 				'state': 'success',
 				'text': 'Complete'
 			},
-			'tag': 'd2l-sort-by-dropdown-option',
+			'tag': 'd2l-labs-sort-by-dropdown-option',
 			'type': 'Actions'
 		}]
 	}, {
@@ -734,7 +734,7 @@ export default [
 		'type': 'Actions',
 		'childComponents': [{
 			'name': 'Search Facets',
-			'readme': 'https://github.com/BrightspaceUI/facet-filter-sort#d2l-search-facets',
+			'readme': 'https://github.com/BrightspaceUILabs/facet-filter-sort#d2l-labs-search-facets',
 			'development': {
 				'state': 'action',
 				'text': 'Out of date'
@@ -743,11 +743,11 @@ export default [
 				'state': 'alert',
 				'text': 'No design'
 			},
-			'tag': 'd2l-search-facets',
+			'tag': 'd2l-labs-search-facets',
 			'type': 'Actions'
 		}, {
 			'name': 'Search Facets Grouping',
-			'readme': 'https://github.com/BrightspaceUI/facet-filter-sort#d2l-search-facets',
+			'readme': 'https://github.com/BrightspaceUILabs/facet-filter-sort#d2l-labs-search-facets',
 			'development': {
 				'state': 'action',
 				'text': 'Out of date'
@@ -756,11 +756,11 @@ export default [
 				'state': 'alert',
 				'text': 'No design'
 			},
-			'tag': 'd2l-search-facets-grouping',
+			'tag': 'd2l-labs-search-facets-grouping',
 			'type': 'Actions'
 		}, {
 			'name': 'Search Facets Option',
-			'readme': 'https://github.com/BrightspaceUI/facet-filter-sort#d2l-search-facets',
+			'readme': 'https://github.com/BrightspaceUILabs/facet-filter-sort#d2l-labs-search-facets',
 			'development': {
 				'state': 'action',
 				'text': 'Out of date'
@@ -769,12 +769,12 @@ export default [
 				'state': 'alert',
 				'text': 'No design'
 			},
-			'tag': 'd2l-search-facets-option',
+			'tag': 'd2l-labs-search-facets-option',
 			'type': 'Actions'
 		}]
 	}, {
 		'name': 'Search Results Count',
-		'readme': 'https://github.com/BrightspaceUI/facet-filter-sort#d2l-search-results-count',
+		'readme': 'https://github.com/BrightspaceUILabs/facet-filter-sort#d2l-labs-search-results-count',
 		'development': {
 			'state': 'action',
 			'text': 'Out of date'
@@ -783,7 +783,7 @@ export default [
 			'state': 'alert',
 			'text': 'No design'
 		},
-		'tag': 'd2l-search-results-count',
+		'tag': 'd2l-labs-search-results-count',
 		'type': 'Actions'
 	}, {
 		'name': 'Status Indicator',
