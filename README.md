@@ -10,7 +10,7 @@ After cloning the repo, run `npm install` to install dependencies.
 To regenerate the `component-doc-details.js` file, which contains the custom-elements.json details from included components:
 
 ```shell
-npm run generate-component-doc-details
+npm run generate
 ```
 
 ### Running the demos

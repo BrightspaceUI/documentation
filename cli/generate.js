@@ -43,7 +43,7 @@ function _parseFile(fileName) {
 function copyComponents() {
 	const filePaths = [
 		'../node_modules/@brightspace-ui/core/custom-elements.json',
-		'../node_modules/d2l-facet-filter-sort/custom-elements.json'
+		'../node_modules/@brightspace-ui-labs/facet-filter-sort/custom-elements.json'
 	];
 	let tags = [];
 	filePaths.forEach((filePath) => {
