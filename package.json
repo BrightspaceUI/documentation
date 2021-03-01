@@ -29,7 +29,7 @@
     "eslint-plugin-lit": "^1",
     "eslint-plugin-sort-class-members": "^1",
     "lit-analyzer": "^1",
-    "marked": "^1",
+    "marked": "^2",
     "rimraf": "^3",
     "rollup": "^2"
   },
