@@ -5,9 +5,7 @@ import { css, html, LitElement } from 'lit-element';
 export class DesignSystemInteractiveDemo extends LitElement {
 	static get properties() {
 		return {
-			attributes: { type: String, reflect: true },
-			code: { type: String, reflect: true },
-			tagName: { type: String, attribute: 'tag-name', reflect: true }
+			_tagName: { type: String }
 		};
 	}
 
@@ -16,65 +14,42 @@ export class DesignSystemInteractiveDemo extends LitElement {
 			:host {
 				display: block;
 			}
-
 			:host([hidden]) {
 				display: none;
 			}
 		`;
 	}
 
-	constructor() {
-		super();
-		this.attributes = '';
-		this.code = '';
-	}
-
-	async firstUpdated(changedProperties) {
-		super.firstUpdated(changedProperties);
-		await this._getCode();
-		this.shadowRoot.querySelector('d2l-demo-snippet').forceCodeUpdate();
-	}
-
 	render() {
 		return html`
-			<d2l-demo-snippet></d2l-demo-snippet>
+			<d2l-demo-snippet><slot @slotchange="${this._getCode}"></slot></d2l-demo-snippet>
 			<d2l-design-system-component-attribute-table
 				@change="${this._onChange}"
-				tag-name="${this.tagName}">
+				tag-name="${this._tagName}">
 			</d2l-design-system-component-attribute-table>
 		`;
 	}
 
-	async _getCode() {
-		const unescaped = unescape(this.code);
-		let code = '';
-		let imports = '';
-		let script = '';
+	async _getCode(e) {
+		if (!e.target) return;
+		const slotContent = e.target.assignedNodes({ flatten: true })[0];
+		if (!slotContent) return;
+		const code = slotContent.data;
+		const unescaped = unescape(code);
 		const demoSnippet = this.shadowRoot.querySelector('d2l-demo-snippet');
-		if (unescaped.includes('script')) {
-			const scriptBeforeAfter = unescaped.split('</script>\n');
-			imports = scriptBeforeAfter[0].split('<script type="module">\n')[1].replace(/import '/g, 'import \'../node_modules/');
-			code = scriptBeforeAfter[1];
-			script = document.createElement('script');
-			script.setAttribute('type', 'module');
-			const inlineScript = document.createTextNode(imports);
-			script.appendChild(inlineScript);
-		} else {
-			code = unescaped;
-		}
 
-		demoSnippet.appendChild(script);
-		demoSnippet.innerHTML = code;
+		demoSnippet.innerHTML = unescaped;
+		this._component = demoSnippet.children[0].tagName === 'SCRIPT' ? demoSnippet.children[1] : demoSnippet.children[0];
+		this._tagName = this._component.tagName.toLowerCase();
 	}
 
 	_onChange(e) {
-		const component = this.shadowRoot.querySelector('d2l-demo-snippet').children[0];
 		const details = e.detail;
 		if (details.type === 'Boolean') {
-			if (details.value === false && component.hasAttribute(details.name)) component.removeAttribute(details.name);
-			else if (details.value && !component.hasAttribute(details.name)) component.setAttribute(details.name, '');
+			if (details.value === false && this._component.hasAttribute(details.name)) this._component.removeAttribute(details.name);
+			else if (details.value && !this._component.hasAttribute(details.name)) this._component.setAttribute(details.name, '');
 		} else {
-			component.setAttribute(details.name, details.value);
+			this._component.setAttribute(details.name, details.value);
 		}
 		this.shadowRoot.querySelector('d2l-demo-snippet').forceCodeUpdate();
 	}

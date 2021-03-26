@@ -2,7 +2,7 @@ import '@brightspace-ui/core/components/inputs/input-text.js';
 import '@brightspace-ui/core/components/switch/switch.js';
 import 'd2l-table/d2l-table.js';
 import { css, html, LitElement } from 'lit-element';
-import { default as components } from '../.generated/component-doc-details.js';
+import { default as components } from './.generated/component-doc-details.js';
 import { heading4Styles } from '@brightspace-ui/core/components/typography/styles.js';
 import { ifDefined } from 'lit-html/directives/if-defined.js';
 import { selectStyles } from '@brightspace-ui/core/components/inputs/input-select-styles.js';
@@ -29,20 +29,16 @@ export class DesignSystemComponentAttributeTable extends LitElement {
 			:host {
 				display: block;
 			}
-
 			:host([hidden]) {
 				display: none;
 			}
-
 			d2l-td.d2l-table-cell-first,
 			d2l-td.d2l-design-system-component-type {
 				white-space: nowrap;
 			}
-
 			d2l-td d2l-input-text {
 				min-width: 200px;
 			}
-
 			h2.d2l-heading-4 {
 				margin-bottom: 0.5rem;
 			}

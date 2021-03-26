@@ -1,0 +1,61 @@
+header {
+	align-items: center;
+	background-color: white;
+	box-shadow: rgba(0, 0, 0, 0.22) 0px 0px 3px 0px;
+	display: flex;
+	height: 4.5rem;
+	padding-left: 4rem;
+	position: sticky;
+	top: 0;
+	z-index: 1000;
+}
+body {
+	margin: 0;
+}
+main {
+	display: flex;
+	min-height: calc(100vh - 4.5rem);
+}
+.d2l-design-system-side-nav {
+	background: linear-gradient(to right, #FFFFFF, #F9FAFB);
+	border-right: 1px solid #e6eaf0;
+	flex: 0 0 22%;
+	padding-top: 1.5rem;
+}
+nav {
+	height: calc(100vh - 4.5rem);
+	overflow-y: scroll;
+}
+.d2l-design-system-main {
+	background-color: white;
+	flex: 1 1 auto;
+	padding: 2rem 1.5rem;
+}
+ul {
+	padding-left: 4rem;
+}
+li {
+	list-style-type: none;
+	padding-bottom: 1rem;
+}
+.d2l-link.d2l-design-system-link-selected {
+	border-left: 4px solid var(--d2l-color-celestine-minus-1);
+	color: var(--d2l-color-celestine-minus-1);
+	padding: 0.15rem 0 0.15rem 0.3rem;
+}
+ul ul {
+	padding-left: 0.8rem;
+}
+ul ul li {
+	padding-bottom: 0.2rem;
+}
+ul ul li.d2l-design-system-nested {
+	margin-left: -1.1rem;
+}
+ul ul li ul {
+	padding-left: 1.6rem;
+}
+d2l-link d2l-icon {
+	color: var(--d2l-color-celestine);
+	margin-bottom: 0.25rem;
+}
