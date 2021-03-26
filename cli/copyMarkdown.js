@@ -3,8 +3,9 @@ const glob = require("glob");
 const pathJS = require("path");
 const docsSource = require("./components-source");
 
-if (!fs.existsSync('src/components')) {
-	fs.mkdirSync('src/components');
+const baseDir = 'pages/components/imported';
+if (!fs.existsSync(baseDir)) {
+	fs.mkdirSync(baseDir);
 }
 
 // TODO: import screenshots
@@ -19,7 +20,7 @@ docsSource.componentDocs.forEach((path) => {
 			if (name === 'README.md') {
 				// TODO: change name to be repo.md or component.md
 			}
-			fs.copyFileSync(file, `src/components/imported/${name}`);
+			fs.copyFileSync(file, `${baseDir}/${name}`);
 		});
 	});
 });
