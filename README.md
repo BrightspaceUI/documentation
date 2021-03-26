@@ -117,5 +117,5 @@ In this repo do the following:
 ```
 npm i [component] --save-dev
 ```
-2. Add markdown file(s) to `componentDocs` array in components-source.js and `custom-elements.json` location to `customElements` array in components-source.js.
+2. Add markdown file(s) to `componentDocs` array in `cli/components-source.js` and `custom-elements.json` location to `customElements` array in the same file.
 3. Add component import to `componentFiles` array in rollup.config.js
