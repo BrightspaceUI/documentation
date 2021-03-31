@@ -1,10 +1,10 @@
 ---
 layout: layouts/base
 eleventyNavigation:
-  title: Actions
-  key: actions
+  title: Forms
+  key: forms
   parent: components
 ---
 
-# Actions Components
+# Forms Components
 
