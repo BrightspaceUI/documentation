@@ -4,7 +4,7 @@
   "scripts": {
     "build": "run-s clean build:*",
     "build:eleventy": "cross-env ELEVENTY_ENV=production eleventy",
-    "build:files": "rimraf pages/components/imported && node ./cli/generate-content.js",
+    "build:files": "rimraf src/.generated && rimraf pages/components/imported && node ./cli/generate-content.js",
     "build:rollup": "rimraf assets/js && rollup -c rollup.config.js",
     "clean": "rimraf _site",
     "serve": "npm-run-all clean build:files build:rollup serve:eleventy",
@@ -17,7 +17,7 @@
     "@11ty/eleventy-navigation": "^0.1.6",
     "@babel/core": "^7.13.10",
     "@babel/preset-env": "^7.13.12",
-    "@brightspace-ui/core": "^1.125.0",
+    "@brightspace-ui/core": "^1.126.0",
     "@open-wc/building-rollup": "^1",
     "@rollup/plugin-commonjs": "^11",
     "@rollup/plugin-dynamic-import-vars": "^1.1.1",

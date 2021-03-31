@@ -4,6 +4,7 @@ import { createBasicConfig } from '@open-wc/building-rollup';
 const componentFiles = [
 	'./node_modules/@brightspace-ui/core/components/demo/demo-snippet.js',
 	'./src/base-imports.js',
+	'./src/component-status-table.js',
 	'./src/interactive-demo.js'
 ].concat(configFiles);
 
