@@ -5,7 +5,7 @@
 
 ## Running
 
-Development (collects GitHub issues, does rollup build, then serves)
+Development (collects GitHub issues, does rollup build, serves)
 ```
 npm run serve
 ```
@@ -96,7 +96,7 @@ This section should not appear in the component catalog.
 
 ### Component Request
 
-If you have a component idea that you would like to suggest then you can submit a GitHub issues for it.
+If you have a component idea that you would like to suggest then you can submit a GitHub issue for it.
 
 1. Create a GitHub issue with the optional content of `design: [Complete|In Progress|Out of Date|Not Started]`
 2. Label the issue with the `Component Request` label

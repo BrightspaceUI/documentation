@@ -1,4 +1,3 @@
-import '@brightspace-ui/core/components/inputs/input-search.js';
 import '@brightspace-ui/core/components/link/link.js';
 import 'd2l-table/d2l-table.js';
 import { css, html, LitElement } from 'lit-element';
@@ -30,9 +29,6 @@ export class ComponentCatalogStatusTable extends LitElement {
 			h1.d2l-heading-2 {
 				margin-top: 0;
 			}
-			d2l-input-search {
-				max-width: 50%;
-			}
 			d2l-table {
 				padding-top: 1rem;
 			}
@@ -40,20 +36,6 @@ export class ComponentCatalogStatusTable extends LitElement {
 				display: inline-block;
 			}
 		`];
-	}
-
-	constructor() {
-		super();
-
-		this.components = [];
-	}
-
-	firstUpdated(changedProperties) {
-		super.firstUpdated(changedProperties);
-
-		this.shadowRoot.querySelector('d2l-input-search').addEventListener('d2l-input-search-searched', (e) => {
-			this._filter = e.detail.value;
-		});
 	}
 
 	render() {
@@ -69,7 +51,6 @@ export class ComponentCatalogStatusTable extends LitElement {
 			`;
 		});
 		return html`
-			<d2l-input-search label="Search individuals" placeholder="Filter results"></d2l-input-search>
 			<d2l-table class="d2l-table">
 				<d2l-thead>
 					<d2l-tr>
