@@ -96,12 +96,15 @@ This section should not appear in the component catalog.
 
 ### Component Request
 
+If you have a component idea that you would like to suggest then you can submit a GitHub issues for it.
+
 1. Create a GitHub issue with the optional content of `design: [Complete|In Progress|Out of Date|Not Started]`
 2. Label the issue with the `Component Request` label
 
 ### Component In Progress
 
-[TODO: Add more information about the component like the design]
+For a component that is already in progress but is not yet in the catalog and does not have complete documentation please do the following:
+
 1. Create a GitHub issue which contains the following:
 ```
 repo: https://github.com/BrightspaceUI/core
@@ -111,6 +114,8 @@ design: [Complete|In Progress|Out of Date|Not Started]
 2. Label the issue with the `Component In Progress` label
 
 ### Fully Documented Component
+
+For a component that is complete and fully documented (following the "Preparing Component for the Catalog" steps above):
 
 1. Create a GitHub issue (if it does not already have one) which contains the following:
 ```
@@ -138,4 +143,4 @@ The parts of the front matter (the information between the `---`) are:
 	- `title`: Title that appears in the navigation and as the page title. Should correspond to markdown H1.
 	- `parent`: Parent in website hierarychy. Likely corresponds to type. Casing does matter.
 2. Label the issue with the `Component Documented` label
-3. Open the issue then close it if documentation is complete
+3. Open the issue then close it if documentation and development are complete
