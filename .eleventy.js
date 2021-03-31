@@ -23,7 +23,7 @@ module.exports = function(eleventyConfig) {
 	markdownIt.renderer.rules.fence = (tokens, idx, options, env, slf) => {
 		const content = tokens[idx].content;
 
-		if (content.includes('<!-- docs: live demo -->')) return `<d2l-design-system-interactive-demo>${escapeHtml(content)}</d2l-design-system-interactive-demo>`;
+		if (content.includes('<!-- docs: live demo -->')) return `<d2l-design-system-interactive-demo>${content}</d2l-design-system-interactive-demo>`;
 		else if (content.includes('<!-- docs: demo -->')) return `<d2l-demo-snippet>${content}</d2l-demo-snippet>`
 		else return defaultFenceRule(tokens, idx, options, env, slf);
 	}

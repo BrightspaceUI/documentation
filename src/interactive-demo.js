@@ -32,13 +32,12 @@ export class DesignSystemInteractiveDemo extends LitElement {
 
 	async _getCode(e) {
 		if (!e.target) return;
-		const slotContent = e.target.assignedNodes({ flatten: true })[0];
-		if (!slotContent) return;
-		const code = slotContent.data;
-		const unescaped = unescape(code);
+		const children = e.target.assignedNodes().filter((node) => { return node.nodeName !== '#text'; });
+		if (!children || children.length < 2) return;
+		// const componentImport = children[0];
+		const componentDemo = children[1];
 		const demoSnippet = this.shadowRoot.querySelector('d2l-demo-snippet');
-
-		demoSnippet.innerHTML = unescaped;
+		demoSnippet.innerHTML = componentDemo.outerHTML;
 		this._component = demoSnippet.children[0].tagName === 'SCRIPT' ? demoSnippet.children[1] : demoSnippet.children[0];
 		this._tagName = this._component.tagName.toLowerCase();
 	}

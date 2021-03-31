@@ -1,13 +1,7 @@
 _site
 assets
+cli/rollup-config-generated.js
 node_modules/
 package-lock.json
-pages/components/imported/*
+pages/components/imported
 src/.generated
-# rules below are for demo purposes only and can be removed for real site
-!pages/components/imported
-!pages/components/imported/example-component.md
-!pages/components/imported/other-component.md
-!pages/components/imported/screenshots
-pages/components/imported/screenshots/*
-!pages/components/imported/screenshots/percent.png

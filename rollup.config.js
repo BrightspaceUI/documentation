@@ -1,11 +1,11 @@
+import { default as configFiles } from './cli/rollup-config-generated.js';
 import { createBasicConfig } from '@open-wc/building-rollup';
 
 const componentFiles = [
-	'./src/base-imports.js',
-	'./src/interactive-demo.js',
 	'./node_modules/@brightspace-ui/core/components/demo/demo-snippet.js',
-	'./node_modules/@brightspace-ui/core/components/inputs/input-date.js'
-];
+	'./src/base-imports.js',
+	'./src/interactive-demo.js'
+].concat(configFiles);
 
 const config = createBasicConfig({
 	developmentMode: false,
