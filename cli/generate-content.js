@@ -36,7 +36,7 @@ function _generateRollupConfig(files) {
 let installCount = 0;
 function _installDependencies(dependencies) {
 	dependencies.forEach((dep) => {
-		exec(`npm i ${dep}`, (error, stdout, stderr) => {
+		exec(`npm i ${dep} --no-save`, (error, stdout, stderr) => {
 			if (error) {
 				console.log(`error: ${error.message}`);
 			}
@@ -133,12 +133,12 @@ request(__options, (error, response, body) => {
 
 	inProgress.forEach((issue) => {
 		let body = '';
-		if (issue.body.split(/<!--\r?\n/)) body = issue.body.split(/<!--\r?\n/)[1].split('-->')[0];
+		if (issue.body && issue.body.split(/<!--\r?\n/).length === 2) body = issue.body.split(/<!--\r?\n/)[1].split('-->')[0];
 		componentIssues.push(__parseComponentIssueInfo(body, issue.title, issue.html_url))
 	});
 	requested.forEach((issue) => {
 		let body = '';
-		if (issue.body && issue.body.split(/<!--\r?\n/)) body = issue.body.split(/<!--\r?\n/)[1].split('-->')[0];
+		if (issue.body && issue.body.split(/<!--\r?\n/).length === 2) body = issue.body.split(/<!--\r?\n/)[1].split('-->')[0];
 		componentIssues.push(__parseComponentIssueInfo(issue.body, issue.title, issue.html_url))
 	});
 
