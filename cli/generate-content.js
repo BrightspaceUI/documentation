@@ -109,15 +109,19 @@ request(__options, (error, response, body) => {
 
 	documented.forEach((issue) => {
 		try {
-			const frontMatter = issue.body.split(/<!--\r?\n/)[1].split('-->')[0];
-			const issueBody = issue.body.split(/-->\r?\n/)[1];
+			const issueInfo = issue.body.split(/<!--\r?\n/)[1].split('-->')[0].split(/\r?\n\r?\n/);
+			const frontMatter = issueInfo[0];
+			const issueBody = issueInfo[1];
 			const lines = issueBody.split(/\r?\n/);
 			const info = {};
 			lines.forEach((line) => {
 				const lineSplit = line.split(': ');
 				info[lineSplit[0]] = lineSplit[1];
 			});
-			rollupFiles.push(`${info.baseInstallLocation}/${info.component}`);
+			info.components = JSON.parse(info.components);
+			info.components.forEach((component) => {
+				rollupFiles.push(`${info.baseInstallLocation}/${component}`);
+			});
 			markdownFiles.push({ name: issue.title, file: `${info.baseInstallLocation}/${info.markdown}`, frontMatter: frontMatter});
 			if (!repoInstallLocations.includes(info.baseInstallLocation)) repoInstallLocations.push(info.baseInstallLocation);
 
@@ -127,8 +131,16 @@ request(__options, (error, response, body) => {
 		}
 	});
 
-	inProgress.forEach((issue) => componentIssues.push(__parseComponentIssueInfo(issue.body, issue.title, issue.html_url)));
-	requested.forEach((issue) => componentIssues.push(__parseComponentIssueInfo(issue.body, issue.title, issue.html_url)));
+	inProgress.forEach((issue) => {
+		let body = '';
+		if (issue.body.split(/<!--\r?\n/)) body = issue.body.split(/<!--\r?\n/)[1].split('-->')[0];
+		componentIssues.push(__parseComponentIssueInfo(body, issue.title, issue.html_url))
+	});
+	requested.forEach((issue) => {
+		let body = '';
+		if (issue.body && issue.body.split(/<!--\r?\n/)) body = issue.body.split(/<!--\r?\n/)[1].split('-->')[0];
+		componentIssues.push(__parseComponentIssueInfo(issue.body, issue.title, issue.html_url))
+	});
 
 	console.log('INFO: Completed GitHub issue processing')
 
