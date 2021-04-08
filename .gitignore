@@ -1,6 +1,4 @@
-.generated
-coverage
-custom-elements.json
-dist
+_site
+assets/
 node_modules/
 package-lock.json
