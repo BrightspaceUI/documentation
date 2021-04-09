@@ -1,1 +1,0 @@
-Welcome to the Brightspace Component Design System documentation.

@@ -1,0 +1,45 @@
+header {
+	align-items: center;
+	background-color: white;
+	box-shadow: rgba(0, 0, 0, 0.22) 0px 0px 3px 0px;
+	display: flex;
+	height: 4.5rem;
+	padding-left: 4rem;
+	position: sticky;
+	top: 0;
+	z-index: 1000;
+}
+body {
+	margin: 0;
+}
+main {
+	display: flex;
+	min-height: calc(100vh - 4.5rem);
+}
+.d2l-component-catalog-side-nav {
+	background: linear-gradient(to right, #FFFFFF, #F9FAFB);
+	border-right: 1px solid #e6eaf0;
+	flex: 0 0 22%;
+	padding-top: 1.5rem;
+}
+nav {
+	height: calc(100vh - 4.5rem);
+	overflow-y: scroll;
+}
+ul {
+	padding-left: 4rem;
+}
+li {
+	list-style-type: none;
+	padding-bottom: 1rem;
+}
+li.d2l-component-catalog-link-selected .d2l-link {
+	border-left: 4px solid var(--d2l-color-celestine-minus-1);
+	color: var(--d2l-color-celestine-minus-1);
+	padding: 0.15rem 0 0.15rem 0.3rem;
+}
+.d2l-component-catalog-main {
+	background-color: white;
+	flex: 1 1 auto;
+	padding: 2rem 1.5rem;
+}
