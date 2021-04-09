@@ -15,7 +15,7 @@
   "author": "D2L Corporation",
   "license": "Apache-2.0",
   "devDependencies": {
-    "@11ty/eleventy": "^0.11",
+    "@11ty/eleventy": "^0.12",
     "@11ty/eleventy-navigation": "^0.1",
     "@babel/core": "^7",
     "@babel/eslint-parser": "^7",
