@@ -2,8 +2,7 @@ import { createBasicConfig } from '@open-wc/building-rollup';
 import merge from 'deepmerge';
 
 const componentFiles = [
-	'./src/base-imports.js',
-	'./node_modules/@brightspace-ui/core/components/demo/demo-snippet.js'
+	'./src/base-imports.js'
 ];
 
 const baseConfig = createBasicConfig({
