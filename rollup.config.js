@@ -1,18 +1,18 @@
 import { createBasicConfig } from '@open-wc/building-rollup';
+import merge from 'deepmerge';
 
 const componentFiles = [
-	'./src/base-imports.js'
+	'./src/base-imports.js',
+	'./node_modules/@brightspace-ui/core/components/demo/demo-snippet.js'
 ];
 
-const config = createBasicConfig({
-	developmentMode: false,
-	legacyBuild: true,
+const baseConfig = createBasicConfig({
 	outputDir: 'assets/js'
 });
-config.input = componentFiles;
-config.output[0].entryFileNames = '[name].js';
-config.output[0].chunkFileNames = '[name].js';
-config.output[1].entryFileNames = 'nomodule-[name].js';
-config.output[1].chunkFileNames = 'nomodule-[name].js';
 
-export default config;
+export default merge(baseConfig, {
+	input: componentFiles,
+	output: {
+		entryFileNames: '[name].js'
+	}
+});

@@ -7,7 +7,7 @@
     "build:rollup": "rimraf assets/js && rollup -c rollup.config.js",
     "clean": "rimraf _site",
     "lint": "npm run lint:eslint",
-    "lint:eslint": "eslint --ext .js . --ignore-path .gitignore",
+    "lint:eslint": "eslint . --ext .js",
     "serve": "npm-run-all clean build:rollup serve:eleventy",
     "serve:eleventy": "npm run clean && cross-env ELEVENTY_ENV=development eleventy --serve",
     "test": "npm run lint"
@@ -24,6 +24,7 @@
     "@open-wc/building-rollup": "^1",
     "clean-css": "^5",
     "cross-env": "^7",
+    "deepmerge": "^4",
     "eslint": "^7",
     "eslint-config-brightspace": "^0.14",
     "eslint-plugin-html": "^6",
