@@ -1,0 +1,87 @@
+code[class*="language-"],
+pre[class*="language-"] {
+	font-family: "Consolas", "Bitstream Vera Sans Mono", "Courier New", Courier, monospace;
+	font-size: .9em;
+	line-height: 1.2em;
+	word-break: normal;
+}
+
+pre[class*="language-"] {
+	background-color: white;
+	margin: 0;
+	overflow: auto;
+	padding: 0;
+}
+
+:not(pre) > code {
+	padding: .2em;
+	padding-top: 1px;
+	padding-bottom: 1px;
+	background: var(--d2l-color-sylvite);
+}
+
+.token.comment,
+.token.prolog,
+.token.doctype,
+.token.cdata {
+	color: var(--d2l-color-galena);
+}
+
+.token.namespace {
+	opacity: .7;
+}
+
+.token.punctuation,
+.token.operator {
+	color: var(--d2l-color-ferrite);
+}
+
+.token.string,
+.token.attr-value,
+.token.entity,
+.token.url,
+.token.symbol,
+.token.number,
+.token.boolean,
+.token.variable,
+.token.constant,
+.token.property,
+.token.regex,
+.token.inserted {
+	color: var(--d2l-color-celestine-minus-1);
+}
+
+.token.atrule,
+.token.attr-name,
+.language-autohotkey .token.selector {
+	color: var(--d2l-color-celestine);
+}
+
+.token.keyword {
+	color: var(--d2l-color-cinnabar);
+}
+
+.token.function,
+.token.deleted,
+.language-autohotkey .token.tag {
+	color: var(--d2l-color-fluorite-minus-1);
+}
+
+.token.tag,
+.token.selector,
+.language-autohotkey .token.keyword {
+	color: var(--d2l-color-olivine-minus-1)
+}
+
+.token.important,
+.token.bold {
+	font-weight: bold;
+}
+
+.token.italic {
+	font-style: italic;
+}
+
+.token.class-name {
+	color: var(--d2l-color-carnelian);
+}

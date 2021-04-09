@@ -1,3 +1,9 @@
+html {
+	font-size: 20px;
+}
+body {
+	margin: 0;
+}
 header {
 	align-items: center;
 	background-color: white;
@@ -8,9 +14,6 @@ header {
 	position: sticky;
 	top: 0;
 	z-index: 1000;
-}
-body {
-	margin: 0;
 }
 main {
 	display: flex;
@@ -33,7 +36,10 @@ li {
 	list-style-type: none;
 	padding-bottom: 1rem;
 }
-li.d2l-component-catalog-link-selected .d2l-link {
+ul ul {
+	padding-left: 0.8rem;
+}
+li .d2l-link.d2l-component-catalog-link-selected {
 	border-left: 4px solid var(--d2l-color-celestine-minus-1);
 	color: var(--d2l-color-celestine-minus-1);
 	padding: 0.15rem 0 0.15rem 0.3rem;

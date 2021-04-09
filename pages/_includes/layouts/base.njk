@@ -1,6 +1,9 @@
 {% set css %}
 	{% include "css/style.css" %}
 {% endset %}
+{% set codeCss %}
+	{% include "css/prism-ghcolors.css" %}
+{% endset %}
 <!doctype html>
 <html lang="en">
 <head>
@@ -9,6 +12,9 @@
 	<title>{{ eleventyNavigation.title }}</title>
 	<style>
 		{{ css | cssmin | safe }}
+	</style>
+	<style>
+		{{ codeCss | cssmin | safe }}
 	</style>
 	<script src="/assets/js/base-imports.js" type="module"></script>
 </head>
@@ -23,13 +29,13 @@
 			<nav aria-label="Component Information">
 				{% set navPages = collections.all | eleventyNavigation %}
 				{% macro renderNavListItem(entry) -%}
-					<li{% if entry.url == page.url %} class="d2l-component-catalog-link-selected"{% endif %}>
-					<d2l-link href="{{ entry.url | url }}" class="d2l-link">{{ entry.title }}</d2l-link>
-					{%- if entry.children.length -%}
-					<ul>
-						{%- for child in entry.children %}{{ renderNavListItem(child) }}{% endfor -%}
-					</ul>
-					{%- endif -%}
+					<li>
+						<d2l-link href="{{ entry.url | url }}" {% if entry.url == page.url %} class="d2l-component-catalog-link-selected d2l-link"{% endif %} class="d2l-link">{{ entry.title }}</d2l-link>
+						{%- if entry.children.length -%}
+						<ul>
+							{%- for child in entry.children %}{{ renderNavListItem(child) }}{% endfor -%}
+						</ul>
+						{%- endif -%}
 					</li>
 				{%- endmacro %}
 
