@@ -17,7 +17,6 @@
   "devDependencies": {
     "@11ty/eleventy": "^0.12",
     "@11ty/eleventy-navigation": "^0.1",
-    "@11ty/eleventy-plugin-syntaxhighlight": "^3",
     "@babel/core": "^7",
     "@babel/eslint-parser": "^7",
     "@babel/preset-env": "^7",

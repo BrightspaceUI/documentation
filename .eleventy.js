@@ -1,9 +1,8 @@
 /* global require, module */
 const cleanCSS = require('clean-css');
 const eleventyNavigationPlugin = require('@11ty/eleventy-navigation');
-const syntaxHighlight = require('@11ty/eleventy-plugin-syntaxhighlight');
+const { escapeHtml } = require('markdown-it/lib/common/utils');
 
-// TODO: imports
 module.exports = function(eleventyConfig) {
 	eleventyConfig.addPassthroughCopy('assets/js');
 	eleventyConfig.addPassthroughCopy('pages/components/imported/screenshots');
@@ -49,11 +48,23 @@ module.exports = function(eleventyConfig) {
 	const defaultFenceRule = markdownIt.renderer.rules.fence;
 	markdownIt.renderer.rules.fence = (tokens, idx, options, env, slf) => {
 		const content = tokens[idx].content;
-		if (content.includes('<!-- docs: live demo -->'))
-			return `<d2l-design-system-interactive-demo>${content}</d2l-design-system-interactive-demo>`;
-		else if (content.includes('<!-- docs: demo -->'))
-			return `<d2l-demo-snippet>${content}</d2l-demo-snippet>`;
-		else
+		if (content.includes('<!-- docs: live demo -->') || content.includes('<!-- docs: demo -->')) {
+			let script = '';
+			if (content.includes('script')) {
+				const copy = content;
+				const scriptBeforeAfter = copy.split('</script>\n');
+				let imports = '';
+				const importsArray = scriptBeforeAfter[0].split('<script type="module">\n')[1].split('\n');
+				importsArray.forEach((importUrl) => {
+					const importStatement = importUrl.replace(/^(.*[\\/])/g, 'import \'/assets/js/'); // replace everything before final backslash
+					imports += `${importStatement}\n`;
+				});
+				script = `<script type="module">${imports}</script>`;
+			}
+
+			if (content.includes('<!-- docs: live demo -->')) return `${script}<d2l-component-catalog-interactive-demo>${escapeHtml(content)}</d2l-component-catalog-interactive-demo>`;
+			else return `${script}<d2l-component-catalog-demo-snippet-wrapper>${escapeHtml(content)}</d2l-component-catalog-demo-snippet-wrapper>`;
+		} else
 			return defaultFenceRule(tokens, idx, options, env, slf);
 	};
 
@@ -74,7 +85,6 @@ module.exports = function(eleventyConfig) {
 	};
 
 	eleventyConfig.addPlugin(eleventyNavigationPlugin);
-	eleventyConfig.addPlugin(syntaxHighlight);
 	eleventyConfig.setUseGitIgnore(false);
 	eleventyConfig.setLibrary('md', markdownIt);
 
