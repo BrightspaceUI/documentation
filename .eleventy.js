@@ -64,8 +64,7 @@ module.exports = function(eleventyConfig) {
 
 			if (content.includes('<!-- docs: live demo -->')) return `${script}<d2l-component-catalog-interactive-demo>${escapeHtml(content)}</d2l-component-catalog-interactive-demo>`;
 			else return `${script}<d2l-component-catalog-demo-snippet-wrapper>${escapeHtml(content)}</d2l-component-catalog-demo-snippet-wrapper>`;
-		} else
-			return defaultFenceRule(tokens, idx, options, env, slf);
+		} else return defaultFenceRule(tokens, idx, options, env, slf);
 	};
 
 	const defaultTextRule = markdownIt.renderer.rules.text;
@@ -80,8 +79,7 @@ module.exports = function(eleventyConfig) {
 			const splitEnd = splitStart[1].split(' -->');
 			const contentClass = `d2l-cc-${splitEnd[0].replace(/ /g, '-')}`;
 			return `<div class="${contentClass}">`;
-		} else
-			return defaultTextRule(tokens, idx, options, env, slf);
+		} else return defaultTextRule(tokens, idx, options, env, slf);
 	};
 
 	eleventyConfig.addPlugin(eleventyNavigationPlugin);

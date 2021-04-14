@@ -24,10 +24,8 @@ class ComponentCatalogDemoSnippetWrapper extends LitElement {
 		if (!e.target) return;
 		const slotContent = e.target.assignedNodes({ flatten: true })[0];
 		if (!slotContent) return;
-		const code = slotContent.data;
-		const unescaped = unescape(code);
 		const demoSnippet = this.shadowRoot.querySelector('d2l-demo-snippet');
-		demoSnippet.innerHTML = unescaped;
+		demoSnippet.innerHTML = unescape(slotContent.data);
 	}
 
 }
