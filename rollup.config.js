@@ -1,19 +1,23 @@
 import { createBasicConfig } from '@open-wc/building-rollup';
 import merge from 'deepmerge';
+import outputManifest from 'rollup-plugin-output-manifest';
 
 const componentFiles = [
-	'./node_modules/@brightspace-ui/core/components/button/button.js', // TODO: remove once actual component docs are added
-	'./src/base-imports.js',
-	'./src/demo-snippet-wrapper.js'
+	'./pages/assets/base-imports.js',
+	'./pages/assets/demo-snippet-wrapper.js'
 ];
 
 const baseConfig = createBasicConfig({
-	outputDir: 'assets/js'
+	outputDir: 'dist/assets'
 });
 
 export default merge(baseConfig, {
 	input: componentFiles,
 	output: {
 		entryFileNames: '[name].js'
-	}
+	},
+	plugins: [outputManifest({
+		fileName: '../../pages/_includes/manifest.json',
+		publicPath: 'assets/'
+	})]
 });

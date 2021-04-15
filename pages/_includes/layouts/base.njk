@@ -11,7 +11,7 @@
 	<style>
 		{{ css | cssmin | safe }}
 	</style>
-	<script src="/assets/js/base-imports.js" type="module"></script>
+	<script src="{{assets.getPath("base-imports.js")}}" type="module"></script>
 </head>
 <body class="d2l-typography">
 	<header>
