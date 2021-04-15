@@ -77,9 +77,15 @@ function _generateRollupConfig(files) {
 }
 
 function _getIssues(issues, name) {
-	// check if one label is published and one is the status name
-	// return labels && labels.length > 0 && labels[0].name === name;
-	return issues.filter(issue => issue.labels && issue.labels.length > 0 && issue.labels[0].name === name);
+	return issues.filter(issue => {
+		let labelMatch = false;
+		let showComponent = process.env.NODE_ENV !== 'prod'; // if NODE_ENV is production, only show component when published label
+		issue.labels.forEach((label) => {
+			if (label.name === name) labelMatch = true;
+			if (label.name === ISSUE_LABELS.PUBLISHED) showComponent = true;
+		});
+		return issue.labels && issue.labels.length > 0 && labelMatch && showComponent;
+	});
 }
 
 let installCount = 0;
@@ -192,18 +198,15 @@ request(ISSUES_REQUEST, (error, response, body) => {
 
 	console.log('INFO: Completed GitHub issue processing');
 
-	fs.mkdirSync(DIR_GENERATED, { recursive: true });
-
-	_writeJSONToGeneratedFile(componentIssues, FILENAME_ISSUES);
-	console.log('INFO: Completed writing component issue info to file');
-
-	if (documented.length === 0) return;
-
 	_installDependencies(repoInstallLocations);
 	_waitForInstallations(repoInstallLocations.length, () => {
 		console.log('INFO: Completed dependency installation');
 
 		fs.mkdirSync(DIR_IMPORTED_SCREENSHOTS, { recursive: true });
+		fs.mkdirSync(DIR_GENERATED, { recursive: true });
+
+		_writeJSONToGeneratedFile(componentIssues, FILENAME_ISSUES);
+		console.log('INFO: Completed writing component issue info to file');
 
 		_copyMarkdown(markdownFiles);
 		console.log('INFO: Completed markdown file processing');

@@ -12,5 +12,5 @@ npm run serve
 
 Production:
 ```
-npm run build
+export NODE_ENV=prod && npm run build
 ```
