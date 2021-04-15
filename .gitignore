@@ -1,6 +1,4 @@
 _site
-assets/
-dist/
 node_modules/
 package-lock.json
 pages/components/imported/

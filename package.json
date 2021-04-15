@@ -2,12 +2,12 @@
   "name": "d2l-component-catalog",
   "description": "",
   "scripts": {
-    "build": "rimraf dist && NODE_ENV=production rollup -c rollup.config.js && NODE_ENV=production npx eleventy",
+    "build": "rimraf _site && NODE_ENV=production rollup -c rollup.config.js && NODE_ENV=production npx eleventy",
     "lint": "npm run lint:eslint",
     "lint:eslint": "eslint . --ext .js",
-    "test": "npm run lint",
     "start": "rimraf _site && concurrently \"npx eleventy --watch\" \"web-dev-server --node-resolve --open\"",
-    "start:prod": "web-dev-server --config es-dev-server-prod.config.js"
+    "start:prod": "npm run build && web-dev-server --config web-dev-server-prod.config.js",
+    "test": "npm run lint"
   },
   "author": "D2L Corporation",
   "license": "Apache-2.0",

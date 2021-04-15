@@ -8,14 +8,11 @@ const componentFiles = [
 ];
 
 const baseConfig = createBasicConfig({
-	outputDir: 'dist/assets'
+	outputDir: '_site/assets'
 });
 
 export default merge(baseConfig, {
 	input: componentFiles,
-	output: {
-		entryFileNames: '[name].js'
-	},
 	plugins: [outputManifest({
 		fileName: '../../pages/_includes/manifest.json',
 		publicPath: 'assets/'

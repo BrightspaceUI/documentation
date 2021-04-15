@@ -4,9 +4,7 @@ module.exports = {
 	hostname: 'localhost',
 	port: 8080,
 	compatibility: 'none',
-	dedupe: true,
-	nodeResolve: false,
+	nodeResolve: true,
 	rootDir: '_site',
-	start: false,
 	watch: false
 };
