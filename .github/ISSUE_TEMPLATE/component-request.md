@@ -1,21 +1,20 @@
 ---
-name: Component Request
+name: Component - Request
 about: Submit a request for a new component to be built
-title: ''
+title: "Component Request - <Component Name>"
 labels: Component Request
 assignees: ''
-
 ---
 
-## <Component Name> 
+## <Component Name>
 
 ### General Information
 Add a short description that describes the proposed component and one or two potential use cases.
 
-Example: 
+Example:
 <Dropdown Menus> are used to <group similar menu items under one parent container>. With them it’s possible to <add advanced control menu’s without occupying extra screen space> and <allow users to more easily find closely related menu items>.
 
-### Attributes 
+### Attributes
 
 List attributes and type declarations:
 
@@ -30,9 +29,9 @@ Example:
 Here you can include sample code for general component usage or specific use cases that you believe should be outlined.
 
 ### Subcomponents (optional)
-This section should only be included if the suggested component requires creation of new subcomponents. Include example usage, attributes, and most importantly a list of the proposed subcomponents. 
+This section should only be included if the suggested component requires creation of new subcomponents. Include example usage, attributes, and most importantly a list of the proposed subcomponents.
 
-Example: 
+Example:
 The d2l-dropdown-menu component should include a menu-item sub component
 > ```
 > <d2l-dropdown-menu>

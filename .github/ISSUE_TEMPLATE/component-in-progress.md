@@ -1,10 +1,9 @@
 ---
-name: Component in progress
+name: Component - In Progress
 about: If the component is actively being developed or designed use this template
 title: ''
-labels: ''
+labels: Component In Progress
 assignees: ''
-
 ---
 
 <!--
@@ -13,7 +12,7 @@ development: In Progress
 design: <In Progress | Completed>
 -->
 
-## <Component Name> 
+## <Component Name>
 
 ### General Information
 - Repository: <url>
@@ -23,6 +22,5 @@ design: <In Progress | Completed>
 ### Description
 A description of the component and its purposes
 
-
-### Design Documentation 
+### Design Documentation (optional)
 Links to any design documents, discussions or mock ups.
