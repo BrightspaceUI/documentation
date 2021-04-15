@@ -4,11 +4,12 @@
   "scripts": {
     "build": "run-s clean build:*",
     "build:eleventy": "cross-env ELEVENTY_ENV=production eleventy",
+    "build:pages": "rimraf src/.generated && rimraf pages/components/imported && node ./cli/generate-pages.js",
     "build:rollup": "rimraf assets/js && rollup -c rollup.config.js",
     "clean": "rimraf _site",
     "lint": "npm run lint:eslint",
     "lint:eslint": "eslint . --ext .js",
-    "serve": "npm-run-all clean build:rollup serve:eleventy",
+    "serve": "npm-run-all clean build:pages build:rollup serve:eleventy",
     "serve:eleventy": "npm run clean && cross-env ELEVENTY_ENV=development eleventy --serve",
     "test": "npm run lint"
   },

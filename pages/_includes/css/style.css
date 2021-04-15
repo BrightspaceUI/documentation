@@ -39,6 +39,9 @@ li {
 ul ul {
 	padding-left: 0.8rem;
 }
+ul ul li {
+	padding-bottom: 0.2rem;
+}
 li d2l-link.d2l-component-catalog-link-selected {
 	border-left: 4px solid var(--d2l-color-celestine-minus-1);
 	color: var(--d2l-color-celestine-minus-1);
@@ -48,4 +51,7 @@ li d2l-link.d2l-component-catalog-link-selected {
 	background-color: white;
 	flex: 1 1 auto;
 	padding: 2rem 1.5rem;
+}
+img {
+	max-width: 100%;
 }
