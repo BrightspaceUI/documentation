@@ -1,5 +1,5 @@
 _site
 node_modules/
 package-lock.json
-pages/components/imported/
 pages/_includes/manifest.json
+pages/components/imported/

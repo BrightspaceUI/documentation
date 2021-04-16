@@ -1,7 +1,8 @@
-/* global require, module */
+/* global require, module, process */
 const cleanCSS = require('clean-css');
 const eleventyNavigationPlugin = require('@11ty/eleventy-navigation');
 const { escapeHtml } = require('markdown-it/lib/common/utils');
+const { getScript } = require('./util/getScript');
 
 module.exports = function(eleventyConfig) {
 	eleventyConfig.addPassthroughCopy('pages/components/imported/screenshots');
@@ -48,7 +49,7 @@ module.exports = function(eleventyConfig) {
 	markdownIt.renderer.rules.fence = (tokens, idx, options, env, slf) => {
 		const content = tokens[idx].content;
 		if (content.includes('<!-- docs: live demo -->') || content.includes('<!-- docs: demo -->')) {
-			const script = content.match(/<script[\s\S]*<\/script>/g);
+			const script = getScript(content, process.env.NODE_ENV);
 			if (content.includes('<!-- docs: live demo -->')) return `${script}<d2l-component-catalog-interactive-demo>${escapeHtml(content)}</d2l-component-catalog-interactive-demo>`;
 			else return `${script}<d2l-component-catalog-demo-snippet-wrapper>${escapeHtml(content)}</d2l-component-catalog-demo-snippet-wrapper>`;
 		} else return defaultFenceRule(tokens, idx, options, env, slf);

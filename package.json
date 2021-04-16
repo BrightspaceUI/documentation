@@ -2,12 +2,14 @@
   "name": "d2l-component-catalog",
   "description": "",
   "scripts": {
-    "build": "rimraf _site && NODE_ENV=production rollup -c rollup.config.js && NODE_ENV=production npx eleventy",
+    "build": "rimraf _site && npm run build:rollup && NODE_ENV=production npx eleventy",
+    "build:rollup": "rollup -c rollup.config.js",
     "lint": "npm run lint:eslint",
     "lint:eslint": "eslint . --ext .js",
-    "start": "rimraf _site && concurrently \"npx eleventy --watch\" \"web-dev-server --node-resolve --open --watch\"",
+    "start": "rimraf _site && npm run build:rollup && eleventy && concurrently \"npx eleventy --watch\" \"web-dev-server --node-resolve --open --watch\"",
     "start:prod": "npm run build && web-dev-server --config web-dev-server-prod.config.js",
-    "test": "npm run lint"
+    "test": "npm run lint && npm run test:unit",
+    "test:unit": "mocha"
   },
   "author": "D2L Corporation",
   "license": "Apache-2.0",
@@ -31,10 +33,10 @@
     "eslint-plugin-sort-class-members": "^1",
     "lit-analyzer": "^1",
     "markdown-it-modify-token": "^1",
-    "npm-run-all": "^4",
+    "mocha": "^8",
     "rimraf": "^3",
     "rollup": "^2",
-    "rollup-plugin-copy": "^3.4.0",
-    "rollup-plugin-output-manifest": "^1"
+    "rollup-plugin-output-manifest": "^1",
+    "sinon": "^10"
   }
 }

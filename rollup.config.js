@@ -3,6 +3,7 @@ import merge from 'deepmerge';
 import outputManifest from 'rollup-plugin-output-manifest';
 
 const componentFiles = [
+	'./node_modules/@brightspace-ui/core/components/button/button.js',
 	'./pages/assets/base-imports.js',
 	'./pages/assets/demo-snippet-wrapper.js'
 ];
