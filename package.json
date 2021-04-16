@@ -5,7 +5,7 @@
     "build": "rimraf _site && NODE_ENV=production rollup -c rollup.config.js && NODE_ENV=production npx eleventy",
     "lint": "npm run lint:eslint",
     "lint:eslint": "eslint . --ext .js",
-    "start": "rimraf _site && concurrently \"npx eleventy --watch\" \"web-dev-server --node-resolve --open\"",
+    "start": "rimraf _site && concurrently \"npx eleventy --watch\" \"web-dev-server --node-resolve --open --watch\"",
     "start:prod": "npm run build && web-dev-server --config web-dev-server-prod.config.js",
     "test": "npm run lint"
   },
@@ -19,9 +19,9 @@
     "@babel/preset-env": "^7",
     "@brightspace-ui/core": "^1",
     "@open-wc/building-rollup": "^1",
-    "@web/dev-server": "^0.1.11",
+    "@web/dev-server": "^0.1",
     "clean-css": "^5",
-    "concurrently": "^6.0.2",
+    "concurrently": "^6",
     "cross-env": "^7",
     "deepmerge": "^4",
     "eslint": "^7",
@@ -35,6 +35,6 @@
     "rimraf": "^3",
     "rollup": "^2",
     "rollup-plugin-copy": "^3.4.0",
-    "rollup-plugin-output-manifest": "^1.0.2"
+    "rollup-plugin-output-manifest": "^1"
   }
 }
