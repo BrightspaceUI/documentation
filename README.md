@@ -7,10 +7,10 @@
 
 Development:
 ```
-npm run serve
+npm run start
 ```
 
 Production:
 ```
-npm run build
+npm run start:prod
 ```

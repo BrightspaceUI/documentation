@@ -2,15 +2,14 @@
   "name": "d2l-component-catalog",
   "description": "",
   "scripts": {
-    "build": "run-s clean build:*",
-    "build:eleventy": "cross-env ELEVENTY_ENV=production eleventy",
-    "build:rollup": "rimraf assets/js && rollup -c rollup.config.js",
-    "clean": "rimraf _site",
+    "build": "rimraf _site && npm run build:rollup && NODE_ENV=production npx eleventy",
+    "build:rollup": "rollup -c rollup.config.js",
     "lint": "npm run lint:eslint",
     "lint:eslint": "eslint . --ext .js",
-    "serve": "npm-run-all clean build:rollup serve:eleventy",
-    "serve:eleventy": "npm run clean && cross-env ELEVENTY_ENV=development eleventy --serve",
-    "test": "npm run lint"
+    "start": "rimraf _site && npm run build:rollup && eleventy && concurrently \"npx eleventy --watch\" \"web-dev-server --node-resolve --open --watch\"",
+    "start:prod": "npm run build && web-dev-server --config web-dev-server-prod.config.js",
+    "test": "npm run lint && npm run test:unit",
+    "test:unit": "mocha"
   },
   "author": "D2L Corporation",
   "license": "Apache-2.0",
@@ -22,7 +21,9 @@
     "@babel/preset-env": "^7",
     "@brightspace-ui/core": "^1",
     "@open-wc/building-rollup": "^1",
+    "@web/dev-server": "^0.1",
     "clean-css": "^5",
+    "concurrently": "^6",
     "cross-env": "^7",
     "deepmerge": "^4",
     "eslint": "^7",
@@ -32,8 +33,10 @@
     "eslint-plugin-sort-class-members": "^1",
     "lit-analyzer": "^1",
     "markdown-it-modify-token": "^1",
-    "npm-run-all": "^4",
+    "mocha": "^8",
     "rimraf": "^3",
-    "rollup": "^2"
+    "rollup": "^2",
+    "rollup-plugin-output-manifest": "^1",
+    "sinon": "^10"
   }
 }
