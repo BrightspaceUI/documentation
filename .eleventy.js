@@ -1,30 +1,10 @@
-/* global require, module */
+/* global require, module, process */
 const cleanCSS = require('clean-css');
 const eleventyNavigationPlugin = require('@11ty/eleventy-navigation');
 const { escapeHtml } = require('markdown-it/lib/common/utils');
-
-function _getScript(content) {
-	if (!content.includes('<script')) return '';
-
-	const scriptStart = content.split('</script>');
-	if (scriptStart.length !== 2) return '';
-
-	const scriptContent = scriptStart[0].split('<script type="module">\n');
-	if (scriptContent.length !== 2) return '';
-
-	const importsArray = scriptContent[1].split('\n');
-	let imports = '';
-	importsArray.forEach((importUrl) => {
-		if (importUrl.includes('import ')) {
-			const importStatement = importUrl.replace(/^(.*import.*[\\/])/g, 'import \'/assets/js/'); // replace everything before final backslash
-			imports += `${importStatement}\n`;
-		}
-	});
-	return `<script type="module">${imports}</script>`;
-}
+const { getScript } = require('./util/getScript');
 
 module.exports = function(eleventyConfig) {
-	eleventyConfig.addPassthroughCopy('assets/js');
 	eleventyConfig.addPassthroughCopy('pages/components/imported/screenshots');
 
 	const options = {
@@ -69,7 +49,7 @@ module.exports = function(eleventyConfig) {
 	markdownIt.renderer.rules.fence = (tokens, idx, options, env, slf) => {
 		const content = tokens[idx].content;
 		if (content.includes('<!-- docs: live demo -->') || content.includes('<!-- docs: demo -->')) {
-			const script = _getScript(content);
+			const script = getScript(content, process.env.NODE_ENV);
 			if (content.includes('<!-- docs: live demo -->')) return `${script}<d2l-component-catalog-interactive-demo>${escapeHtml(content)}</d2l-component-catalog-interactive-demo>`;
 			else return `${script}<d2l-component-catalog-demo-snippet-wrapper>${escapeHtml(content)}</d2l-component-catalog-demo-snippet-wrapper>`;
 		} else return defaultFenceRule(tokens, idx, options, env, slf);

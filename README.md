@@ -7,10 +7,10 @@
 
 Development:
 ```
-npm run serve
+npm run start
 ```
 
 Production:
 ```
-export NODE_ENV=prod && npm run build
+npm run start:prod
 ```

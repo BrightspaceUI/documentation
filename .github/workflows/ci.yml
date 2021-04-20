@@ -14,3 +14,5 @@ jobs:
         run: npm run build
       - name: Lint (JavaScript)
         run: npm run lint:eslint
+      - name: Unit Tests
+        run: npm run test:unit
