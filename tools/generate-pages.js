@@ -156,11 +156,11 @@ request(ISSUES_REQUEST, (error, response, body) => {
 		return;
 	}
 
-	const rollupFiles = [];
-	const markdownFiles = [];
-	const repoInstallLocations = [];
-	const componentIssues = [];
-	const screenshotLocations = [];
+	const componentIssues = [],
+		markdownFiles = [],
+		repoInstallLocations = [],
+		rollupFiles = [],
+		screenshotLocations = [];
 
 	const issues = JSON.parse(body);
 	const requested = _getIssues(issues, ISSUE_LABELS.REQUEST);
