@@ -32,8 +32,7 @@ module.exports = function(eleventyConfig) {
 					token.tag = 'd2l-link';
 					break;
 				case 'heading_open': {
-					let headingClass = token.attrGet('class');
-					headingClass = headingClass || '';
+					let headingClass = token.attrGet('class') || '';
 					if (token.tag === 'h1') headingClass += 'd2l-heading-1';
 					else if (token.tag === 'h2') headingClass += 'd2l-heading-2';
 					else if (token.tag === 'h3') headingClass += 'd2l-heading-3';
