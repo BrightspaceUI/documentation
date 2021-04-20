@@ -2,13 +2,13 @@
   "name": "d2l-component-catalog",
   "description": "",
   "scripts": {
-    "build": "rimraf _site && npm run build:rollup && npm run build:pages",
-    "build:pages": "rimraf src/.generated && rimraf pages/components/imported && node ./cli/generate-pages.js",
-    "build:prod": "npm run build && NODE_ENV=production npx eleventy",
+    "build:dev": "npm run clean && NODE_ENV=development node ./tools/generate-pages.js",
+    "build:prod": "npm run clean && NODE_ENV=production node ./tools/generate-pages.js && npm run build:rollup && NODE_ENV=production npx eleventy",
     "build:rollup": "rollup -c rollup.config.js",
+    "clean": "rimraf _site && rimraf .generated && rimraf pages/components/imported",
     "lint": "npm run lint:eslint",
     "lint:eslint": "eslint . --ext .js",
-    "start": "npm run build && eleventy && concurrently \"npx eleventy --watch\" \"web-dev-server\"",
+    "start": "npm run build:dev && eleventy && concurrently \"npx eleventy --watch\" \"web-dev-server\"",
     "start:prod": "npm run build:prod && web-dev-server --config web-dev-server-prod.config.js",
     "test": "npm run lint && npm run test:unit",
     "test:unit": "mocha"

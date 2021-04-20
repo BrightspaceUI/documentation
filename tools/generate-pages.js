@@ -3,12 +3,7 @@ const fs = require('fs');
 const path = require('path');
 const request = require('request');
 
-/**
- * TODO:
- * - published state
- */
-
-const DIR_GENERATED = path.join(__dirname, '../src/.generated');
+const DIR_GENERATED = path.join(__dirname, '../.generated');
 const DIR_IMPORTED_COMPONENTS = path.join(__dirname, '../pages/components/imported');
 const DIR_IMPORTED_SCREENSHOTS = path.join(DIR_IMPORTED_COMPONENTS, 'screenshots');
 const FILENAME_CUSTOM_ELEM = 'custom-elements-all.js';
@@ -35,7 +30,10 @@ function _copyCustomElements(repos) {
 	let tags = [];
 	repos.forEach((repo) => {
 		const customElementsFilePath = path.join(__dirname, `../node_modules/${repo}/custom-elements.json`);
-		if (!fs.existsSync(customElementsFilePath)) return;
+		if (!fs.existsSync(customElementsFilePath)) {
+			console.log(`WARNING: custom-elements.json does not exist for ${repo}`);
+			return;
+		}
 		const file = fs.readFileSync(customElementsFilePath).toString();
 		const parsed = JSON.parse(file);
 		tags = tags.concat(parsed.tags);
@@ -46,6 +44,10 @@ function _copyCustomElements(repos) {
 function _copyMarkdown(files) {
 	files.forEach((file) => {
 		const originFile = path.join(__dirname, `../node_modules/${file.file}`);
+		if (!fs.existsSync(originFile)) {
+			console.log(`WARNING: markdown file ${file.file} does not exist`);
+			return;
+		}
 		const newFile = path.join(DIR_IMPORTED_COMPONENTS, `${file.name}.md`);
 		const content = fs.readFileSync(originFile);
 		fs.writeFileSync(newFile, `${file.frontMatter}\n${content}`);
@@ -79,7 +81,7 @@ function _generateRollupConfig(files) {
 function _getIssues(issues, name) {
 	return issues.filter(issue => {
 		let labelMatch = false;
-		let showComponent = process.env.NODE_ENV !== 'prod'; // if NODE_ENV is production, only show component when published label
+		let showComponent = process.env.NODE_ENV !== 'production'; // if NODE_ENV is production, only show component with "Published" label
 		issue.labels.forEach((label) => {
 			if (label.name === name) labelMatch = true;
 			if (label.name === ISSUE_LABELS.PUBLISHED) showComponent = true;
@@ -88,21 +90,31 @@ function _getIssues(issues, name) {
 	});
 }
 
-let installCount = 0;
-function _installDependencies(dependencies) {
-	dependencies.forEach((dep) => {
-		exec(`npm list ${dep}`, (error) => {
-			if (error) {
-				exec(`npm i ${dep} --no-save`, (err, stdout) => {
-					if (err) {
-						console.log(`error: ${err.message}`);
-					}
-					console.log(`stdout: ${stdout}`);
-					installCount++;
-				});
-			} else {
-				installCount++;
-			}
+function _getMissingDependenciesList(dependencies) {
+	const numDependencies = dependencies.length;
+	let dependencyCount = 0;
+	let dependencyString = '';
+	return new Promise((resolve) => {
+		dependencies.forEach((dep) => {
+			exec(`npm list ${dep}`, (error) => {
+				if (error) dependencyString += ` ${dep}`; // dependency is not installed
+				dependencyCount++;
+				if (dependencyCount === numDependencies) resolve(dependencyString);
+			});
+		});
+	});
+}
+
+function _installDependencies(dependencies, callback) {
+	if (!dependencies || dependencies.length === 0) {
+		console.log('INFO: No dependencies to install');
+		return;
+	}
+	_getMissingDependenciesList(dependencies).then((res) => {
+		exec(`npm i ${res} --no-save`, (err, stdout) => {
+			if (err) console.log(`ERROR: Failed to install dependency: ${err.message}`);
+			console.log(`INFO: installation stdout: ${stdout}`);
+			callback();
 		});
 	});
 }
@@ -128,11 +140,6 @@ function _splitIssueInfo(body) {
 	return splitStart[1].split('-->')[0];
 }
 
-function _waitForInstallations(expected, callback) {
-	if (installCount === expected) callback();
-	else setTimeout(() => _waitForInstallations(expected, callback), 3000);
-}
-
 function _writeJSONToGeneratedFile(data, fileName) {
 	const json = JSON.stringify(data, null, '\t');
 	const fileContent = `/* eslint quotes: 0 */
@@ -144,8 +151,10 @@ export default ${json};
 }
 
 request(ISSUES_REQUEST, (error, response, body) => {
-	if (error || response.statusCode !== 200)
-		console.log('Error: Failed to call GitHub issues API');
+	if (error || response.statusCode !== 200) {
+		console.log('ERROR: Failed to call GitHub issues API');
+		return;
+	}
 
 	const rollupFiles = [];
 	const markdownFiles = [];
@@ -198,8 +207,7 @@ request(ISSUES_REQUEST, (error, response, body) => {
 
 	console.log('INFO: Completed GitHub issue processing');
 
-	_installDependencies(repoInstallLocations);
-	_waitForInstallations(repoInstallLocations.length, () => {
+	_installDependencies(repoInstallLocations, () => {
 		console.log('INFO: Completed dependency installation');
 
 		fs.mkdirSync(DIR_IMPORTED_SCREENSHOTS, { recursive: true });

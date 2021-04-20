@@ -2,7 +2,7 @@
 const cleanCSS = require('clean-css');
 const eleventyNavigationPlugin = require('@11ty/eleventy-navigation');
 const { escapeHtml } = require('markdown-it/lib/common/utils');
-const { getScript } = require('./util/getScript');
+const { getScript } = require('./tools/getScript');
 
 module.exports = function(eleventyConfig) {
 	eleventyConfig.addPassthroughCopy('pages/components/imported/screenshots');
@@ -31,6 +31,15 @@ module.exports = function(eleventyConfig) {
 				case 'link_close':
 					token.tag = 'd2l-link';
 					break;
+				case 'heading_open': {
+					let headingClass = token.attrGet('class');
+					headingClass = headingClass || '';
+					if (token.tag === 'h1') headingClass += 'd2l-heading-1';
+					else if (token.tag === 'h2') headingClass += 'd2l-heading-2';
+					else if (token.tag === 'h3') headingClass += 'd2l-heading-3';
+					token.attrSet('class', headingClass);
+					break;
+				}
 				// case 'table_open':
 				// 	token.tag = 'd2l-table';
 				// 	break;

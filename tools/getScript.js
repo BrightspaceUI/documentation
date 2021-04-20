@@ -1,4 +1,3 @@
-/* global require, module */
 const assets = require('../pages/_data/assets');
 
 module.exports = {
