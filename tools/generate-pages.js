@@ -78,15 +78,15 @@ function _generateRollupConfig(files) {
 	fs.writeFileSync(outputPath, content, 'utf8');
 }
 
-function _getIssues(issues, name) {
+function _getIssues(issues, expectedLabelName) {
 	return issues.filter(issue => {
 		let labelMatch = false;
 		let showComponent = process.env.NODE_ENV !== 'production'; // if NODE_ENV is production, only show component with "Published" label
 		issue.labels.forEach((label) => {
-			if (label.name === name) labelMatch = true;
+			if (label.name === expectedLabelName) labelMatch = true;
 			if (label.name === ISSUE_LABELS.PUBLISHED) showComponent = true;
 		});
-		return issue.labels && issue.labels.length > 0 && labelMatch && showComponent;
+		return labelMatch && showComponent;
 	});
 }
 
