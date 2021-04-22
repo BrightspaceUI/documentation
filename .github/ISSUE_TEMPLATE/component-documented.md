@@ -17,12 +17,12 @@ eleventyNavigation:
   parent: <component type>
 ---
 
-repo: <url>
+repo: "<url>"
+baseInstallLocation: "<npm install location (e.g., @brightspace-ui/core)>"
+components: ["<component file path (e.g., src/my-component.js)>"]
+markdown: "<markdown file path (e.g., README.md)>"
 development: <In Progress | Completed>
 design: <In Progress | Completed>
-baseInstallLocation: <npm install location (e.g., @brightspace-ui/core)>
-components: ["<component file path (e.g., src/my-component.js)>"]
-markdown: <markdown file path (e.g., README.md)>
 -->
 ## <Component Name>
 

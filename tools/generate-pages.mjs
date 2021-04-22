@@ -1,7 +1,10 @@
-const { exec } = require('child_process');
-const fs = require('fs');
-const path = require('path');
-const request = require('request');
+import { exec } from 'child_process';
+import fs from 'fs';
+import matter from 'gray-matter';
+import path from 'path';
+import request from 'request';
+
+const __dirname = path.dirname(process.argv[1]);
 
 const DIR_GENERATED = path.join(__dirname, '../.generated');
 const DIR_IMPORTED_COMPONENTS = path.join(__dirname, '../pages/components/imported');
@@ -31,7 +34,7 @@ function _copyCustomElements(repos) {
 	repos.forEach((repo) => {
 		const customElementsFilePath = path.join(__dirname, `../node_modules/${repo}/custom-elements.json`);
 		if (!fs.existsSync(customElementsFilePath)) {
-			console.log(`WARNING: custom-elements.json does not exist for ${repo}`);
+			console.warn(`WARNING: custom-elements.json does not exist for ${repo}`);
 			return;
 		}
 		const file = fs.readFileSync(customElementsFilePath).toString();
@@ -45,7 +48,7 @@ function _copyMarkdown(files) {
 	files.forEach((file) => {
 		const originFile = path.join(__dirname, `../node_modules/${file.file}`);
 		if (!fs.existsSync(originFile)) {
-			console.log(`WARNING: markdown file ${file.file} does not exist`);
+			console.warn(`WARNING: markdown file ${file.file} does not exist`);
 			return;
 		}
 		const newFile = path.join(DIR_IMPORTED_COMPONENTS, `${file.name}.md`);
@@ -78,6 +81,13 @@ function _generateRollupConfig(files) {
 	fs.writeFileSync(outputPath, content, 'utf8');
 }
 
+function _getCommentContent(body) {
+	if (!body) return '';
+	const splitStart = body.split(/<!--\r?\n/);
+	if (splitStart.length !== 2) return '';
+	return splitStart[1].split('-->')[0];
+}
+
 function _getIssues(issues, expectedLabelName) {
 	return issues.filter(issue => {
 		let labelMatch = false;
@@ -107,37 +117,25 @@ function _getMissingDependenciesList(dependencies) {
 
 function _installDependencies(dependencies, callback) {
 	if (!dependencies || dependencies.length === 0) {
-		console.log('INFO: No dependencies to install');
+		console.info('INFO: No dependencies to install');
 		return;
 	}
 	_getMissingDependenciesList(dependencies).then((res) => {
 		exec(`npm i ${res} --no-save`, (err, stdout) => {
-			if (err) console.log(`ERROR: Failed to install dependency: ${err.message}`);
-			console.log(`INFO: installation stdout: ${stdout}`);
+			if (err) console.error(`ERROR: Failed to install dependency: ${err.message}`);
+			console.info(`INFO: installation stdout: ${stdout}`);
 			callback();
 		});
 	});
 }
 
 function _parseComponentIssueInfo(componentBody, name, url) {
-	const lines = componentBody.split(/\r?\n/);
-	const info = {};
-	lines.forEach((line) => {
-		const lineSplit = line.split(': ');
-		info[lineSplit[0]] = lineSplit[1];
-	});
+	const info = matter(`---\n${componentBody}\n---`).data;
 	if (!info.design) info.design = STATES_COMPONENT.NOT_STARTED;
 	if (!info.development) info.development = STATES_COMPONENT.NOT_STARTED;
 	info.name = name;
 	info.issueUrl = url;
 	return info;
-}
-
-function _splitIssueInfo(body) {
-	if (!body) return '';
-	const splitStart = body.split(/<!--\r?\n/);
-	if (splitStart.length !== 2) return '';
-	return splitStart[1].split('-->')[0];
 }
 
 function _writeJSONToGeneratedFile(data, fileName) {
@@ -152,7 +150,7 @@ export default ${json};
 
 request(ISSUES_REQUEST, (error, response, body) => {
 	if (error || response.statusCode !== 200) {
-		console.log('ERROR: Failed to call GitHub issues API');
+		console.error('ERROR: Failed to call GitHub issues API');
 		return;
 	}
 
@@ -168,64 +166,76 @@ request(ISSUES_REQUEST, (error, response, body) => {
 	const documented = _getIssues(issues, ISSUE_LABELS.DOCUMENTED);
 
 	requested.forEach((issue) => {
-		const body = _splitIssueInfo(issue.body);
-		componentIssues.push(_parseComponentIssueInfo(body, issue.title, issue.html_url));
+		const comment = _getCommentContent(issue.body);
+		componentIssues.push(_parseComponentIssueInfo(comment, issue.title, issue.html_url));
 	});
 
 	inProgress.forEach((issue) => {
-		const body = _splitIssueInfo(issue.body);
-		componentIssues.push(_parseComponentIssueInfo(body, issue.title, issue.html_url));
+		const comment = _getCommentContent(issue.body);
+		componentIssues.push(_parseComponentIssueInfo(comment, issue.title, issue.html_url));
 	});
 
 	documented.forEach((issue) => {
 		try {
-			const issueInfo = _splitIssueInfo(issue.body).split(/\r?\n\r?\n/);
-			const frontMatter = issueInfo[0];
-			const issueBody = issueInfo[1];
-			const info = _parseComponentIssueInfo(issueBody, issue.title, issue.html_url);
+			const comment = _getCommentContent(issue.body);
+			const parsedComment = matter(comment); // parsed.content = repo info, parsed.data = front matter
+			const info = _parseComponentIssueInfo(parsedComment.content, issue.title, issue.html_url);
+			componentIssues.push(info);
 
-			info.components = JSON.parse(info.components);
-			info.components.forEach((component) => {
-				rollupFiles.push(`${info.baseInstallLocation}/${component}`);
-			});
+			if (!info.baseInstallLocation) {
+				console.warn(`WARNING: Component issue for ${issue.title} DOES NOT CONTAIN "baseInstallLocation"`);
+				return;
+			}
 
+			if (!repoInstallLocations.includes(info.baseInstallLocation)) repoInstallLocations.push(info.baseInstallLocation);
+
+			if (!info.components || info.components.length === 0)
+				console.warn(`WARNING: Component issue for ${issue.title} DOES NOT CONTAIN "components" array`);
+			else {
+				info.components.forEach((component) => {
+					rollupFiles.push(`${info.baseInstallLocation}/${component}`);
+				});
+			}
+
+			if (!info.markdown) {
+				console.warn(`WARNING: Component issue for ${issue.title} DOES NOT CONTAIN "markdown"`);
+				return;
+			}
 			const dirname = path.dirname(`${info.baseInstallLocation}/${info.markdown}`);
 			const screenshotPath1 = path.join(dirname, 'screenshots');
 			const screenshotPath2 = path.join(dirname, '../screenshots'); // some repos have screenshots in a sibling directory to docs
 			if (!screenshotLocations.includes(screenshotPath1)) screenshotLocations.push(screenshotPath1);
 			if (!screenshotLocations.includes(screenshotPath2)) screenshotLocations.push(screenshotPath2);
 
-			markdownFiles.push({ name: issue.title, file: `${info.baseInstallLocation}/${info.markdown}`, frontMatter: frontMatter });
-
-			if (!repoInstallLocations.includes(info.baseInstallLocation)) repoInstallLocations.push(info.baseInstallLocation);
-
-			componentIssues.push(info);
+			const newFilename = (parsedComment.data.eleventyNavigation && parsedComment.data.eleventyNavigation.key) || issue.title;
+			const frontMatterString = matter.stringify('', parsedComment.data);
+			markdownFiles.push({ name: newFilename, file: `${info.baseInstallLocation}/${info.markdown}`, frontMatter: frontMatterString });
 		} catch (e) {
-			console.error(`Error: component issue for ${issue.title} is incorrectly formatted`);
+			console.error(`ERROR: component issue for ${issue.title} is incorrectly formatted`);
 		}
 	});
 
-	console.log('INFO: Completed GitHub issue processing');
+	console.info('INFO: Completed GitHub issue processing');
 
 	_installDependencies(repoInstallLocations, () => {
-		console.log('INFO: Completed dependency installation');
+		console.info('INFO: Completed dependency installation');
 
 		fs.mkdirSync(DIR_IMPORTED_SCREENSHOTS, { recursive: true });
 		fs.mkdirSync(DIR_GENERATED, { recursive: true });
 
 		_writeJSONToGeneratedFile(componentIssues, FILENAME_ISSUES);
-		console.log('INFO: Completed writing component issue info to file');
+		console.info('INFO: Completed writing component issue info to file');
 
 		_copyMarkdown(markdownFiles);
-		console.log('INFO: Completed markdown file processing');
+		console.info('INFO: Completed markdown file processing');
 
 		_copyScreenshots(screenshotLocations);
-		console.log('INFO: Completed screenshot file processing');
+		console.info('INFO: Completed screenshot file processing');
 
 		_copyCustomElements(repoInstallLocations);
-		console.log('INFO: Completed custom-elements.json file processing');
+		console.info('INFO: Completed custom-elements.json file processing');
 
 		_generateRollupConfig(rollupFiles);
-		console.log('INFO: Completed generating rollup config');
+		console.info('INFO: Completed generating rollup config');
 	});
 });
