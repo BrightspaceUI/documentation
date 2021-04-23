@@ -1,4 +1,5 @@
 _site
+.generated
 node_modules/
 package-lock.json
 pages/_includes/manifest.json

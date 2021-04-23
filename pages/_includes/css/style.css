@@ -23,6 +23,7 @@ main {
 	background: linear-gradient(to right, #FFFFFF, #F9FAFB);
 	border-right: 1px solid #e6eaf0;
 	flex: 0 0 22%;
+	padding-right: 1rem;
 	padding-top: 1.5rem;
 }
 nav {
@@ -39,6 +40,9 @@ li {
 ul ul {
 	padding-left: 0.8rem;
 }
+ul ul li {
+	padding-bottom: 0.2rem;
+}
 li d2l-link.d2l-component-catalog-link-selected {
 	border-left: 4px solid var(--d2l-color-celestine-minus-1);
 	color: var(--d2l-color-celestine-minus-1);
@@ -47,5 +51,9 @@ li d2l-link.d2l-component-catalog-link-selected {
 .d2l-component-catalog-main {
 	background-color: white;
 	flex: 1 1 auto;
+	max-width: calc(78% - 5rem);
 	padding: 2rem 1.5rem;
+}
+img {
+	max-width: 100%;
 }

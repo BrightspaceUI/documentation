@@ -1,4 +1,4 @@
-const { getScript } = require('../util/getScript');
+const { getScript } = require('../tools/getScript');
 const assets = require('../pages/_data/assets');
 const assert = require('assert');
 const sinon = require('sinon');

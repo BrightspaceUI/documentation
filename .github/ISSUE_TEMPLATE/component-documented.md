@@ -7,9 +7,22 @@ assignees: ''
 ---
 
 <!--
-repo: <url>
+---
+layout: layouts/component
+keywords:
+  - <possible search terms>
+eleventyNavigation:
+  key: <component name, lower case and hyphenated (e.g., menu-item)>
+  title: <component name, capitalized (e.g., Menu Item)>
+  parent: <component type>
+---
+
+repo: "<url>"
+baseInstallLocation: "<npm install location (e.g., @brightspace-ui/core)>"
+components: ["<component file path (e.g., src/my-component.js)>"]
+markdown: "<markdown file path (e.g., README.md)>"
 development: <In Progress | Completed>
-design: < In Progress | Completed>
+design: <In Progress | Completed>
 -->
 ## <Component Name>
 

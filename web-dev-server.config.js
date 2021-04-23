@@ -22,11 +22,12 @@ const serve11tyAssets = ({ dist = '_site' } = {}) => {
 };
 
 module.exports = {
-	port: 8000,
-	watch: true,
-	rootDir: '.',
 	middleware: [
 		serve11tyAssets({ dist: '_site' })
 	],
-	nodeResolve: true
+	nodeResolve: true,
+	open: true,
+	port: 8000,
+	rootDir: '.',
+	watch: true
 };

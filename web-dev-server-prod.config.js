@@ -2,9 +2,8 @@
 
 module.exports = {
 	hostname: 'localhost',
-	port: 8080,
-	compatibility: 'none',
 	nodeResolve: false,
+	port: 8080,
 	rootDir: '_site',
 	watch: false
 };

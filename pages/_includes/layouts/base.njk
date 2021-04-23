@@ -20,7 +20,7 @@
 		</div>
 	</header>
 	<main>
-		<div class="d2l-component-catalog-side-nav">
+		<div class="d2l-component-catalog-side-nav d2l-body-compact">
 			<nav aria-label="Component Information">
 				{% set navPages = collections.all | eleventyNavigation %}
 				{% macro renderNavListItem(entry) -%}
@@ -41,7 +41,7 @@
 				</ul>
 			</nav>
 		</div>
-		<div class="d2l-component-catalog-main">
+		<div class="d2l-component-catalog-main d2l-body-standard">
 			{{ content | safe }}
 		</div>
 	</main>

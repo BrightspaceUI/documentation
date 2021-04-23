@@ -10,8 +10,6 @@ jobs:
       - uses: Brightspace/third-party-actions@actions/setup-node
       - name: Install dependencies
         run: npm install
-      - name: Build
-        run: npm run build
       - name: Lint (JavaScript)
         run: npm run lint:eslint
       - name: Unit Tests
