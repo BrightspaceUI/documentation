@@ -11,12 +11,20 @@ class ComponentCatalogDemoSnippetWrapper extends LitElement {
 			:host([hidden]) {
 				display: none;
 			}
+			.d2l-component-catalog-demo-snippet-wrapper-content {
+				display:flex;
+				justify-content: space-evenly;
+			}
 		`;
 	}
 
 	render() {
 		return html`
-			<d2l-demo-snippet code-view-hidden><slot @slotchange="${this._getCode}"></slot></d2l-demo-snippet>
+			<d2l-demo-snippet code-view-hidden>
+				<div class="d2l-component-catalog-demo-snippet-wrapper-content">
+					<slot @slotchange="${this._getCode}"></slot>
+				</div>
+			</d2l-demo-snippet>
 		`;
 	}
 
@@ -24,7 +32,7 @@ class ComponentCatalogDemoSnippetWrapper extends LitElement {
 		if (!e.target) return;
 		const slotContent = e.target.assignedNodes({ flatten: true })[0];
 		if (!slotContent) return;
-		const demoSnippet = this.shadowRoot.querySelector('d2l-demo-snippet');
+		const demoSnippet = this.shadowRoot.querySelector('div.d2l-component-catalog-demo-snippet-wrapper-content');
 		demoSnippet.innerHTML = unescape(slotContent.data);
 	}
 

@@ -14,32 +14,58 @@
 	<script src="{{assets.getPath("base-imports.js")}}" type="module"></script>
 </head>
 <body class="d2l-typography">
-	<main>
+	<main class="d2l-component-catalog-main">
 		<div class="d2l-component-catalog-side-nav d2l-body-standard">
+			<div class="d2l-component-catalog-band"></div>
 			<div class="d2l-component-catalog-title">
 				<img src="/img/logo_slim.png"></img>
 			</div>
 			<nav aria-label="Component Information">
 				{% set navPages = collections.all | eleventyNavigation %}
-				{% macro renderNavListItem(entry) -%}
-					<li>
-						<d2l-link href="{{ entry.url | url }}" {% if entry.url == page.url %} class="d2l-component-catalog-link-selected"{% endif %}>{{ entry.title }}</d2l-link>
+				{% macro renderNavListItem(entry, size) -%}
+					<li {% if entry.url == page.url %} class='d2l-component-catalog-li-selected' {% endif %}>
+						<a
+							href="{{ entry.url | url }}"
+							{% if entry.url == page.url %}
+								{% if size == 'main' %}
+									class="d2l-link d2l-link-main d2l-component-catalog-link-selected"
+								{% elif size === 'small' %}
+									class="d2l-link d2l-link-small d2l-component-catalog-link-selected"
+								{% else %}
+									class="d2l-link d2l-component-catalog-link-selected"
+								{% endif %}
+							{% else %}
+								{% if size == 'main' %}
+									class="d2l-link d2l-link-main"
+								{% elif size === 'small' %}
+									class="d2l-link d2l-link-small"
+								{% else %}
+									class="d2l-link"
+								{% endif %}
+							{% endif %}
+						>{{ entry.title }}</a>
 						{%- if entry.children.length -%}
-						<ul>
-							{%- for child in entry.children %}{{ renderNavListItem(child) }}{% endfor -%}
-						</ul>
+							<ul>
+								{%- for child in entry.children %}
+									{% if size == 'main' %}
+										{{ renderNavListItem(child) }}
+									{% else %}
+										{{ renderNavListItem(child, 'small') }}
+									{% endif %}
+								{% endfor -%}
+							</ul>
 						{%- endif -%}
 					</li>
 				{%- endmacro %}
 
 				<ul>
 					{%- for entry in navPages %}
-						{{ renderNavListItem(entry) }}
+						{{ renderNavListItem(entry, 'main') }}
 					{%- endfor -%}
 				</ul>
 			</nav>
 		</div>
-		<div class="d2l-component-catalog-main d2l-body-standard">
+		<div class="d2l-component-catalog-content d2l-body-compact">
 			{{ content | safe }}
 		</div>
 	</main>

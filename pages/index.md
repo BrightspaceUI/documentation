@@ -1,7 +1,7 @@
 ---
 layout: layouts/base
 eleventyNavigation:
-  title: Home
+  title: Get Started
   key: home
   order: 1
 ---
