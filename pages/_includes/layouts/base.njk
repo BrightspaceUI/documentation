@@ -3,11 +3,16 @@
 	{% include "css/prism-ghcolors.css" %}
 {% endset %}
 <!doctype html>
-<html lang="en">
+<html class="initial-hide" lang="en">
 <head>
 	<meta charset="utf-8">
 	<meta name="viewport" content="width=device-width, initial-scale=1.0">
 	<title>{{ eleventyNavigation.title }}</title>
+	<style>
+		.initial-hide {
+			display: none;
+		}
+	</style>
 	<style>
 		{{ css | cssmin | safe }}
 	</style>

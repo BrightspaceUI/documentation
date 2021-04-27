@@ -6,3 +6,7 @@ const styleSheet = document.createElement('style');
 styleSheet.type = 'text/css';
 styleSheet.innerText = linkStyles;
 document.head.appendChild(styleSheet);
+
+document.fonts.ready.then(() => {
+	document.documentElement.classList.remove('initial-hide'); // prevent FOUC
+});
