@@ -34,12 +34,12 @@ main {
 	max-width: 85%;
 }
 
+/** Side Panel - Navigation */
 .d2l-component-catalog-side-nav nav {
 	margin-top: 1.5rem;
 	padding-right: 1rem;
 }
 .d2l-component-catalog-side-nav li {
-	/* font-size: 1rem; */
 	list-style-type: none;
 	padding-top: 0.75rem;
 }
@@ -50,12 +50,6 @@ main {
 	padding-left: 1.25rem;
 }
 .d2l-component-catalog-side-nav ul ul {
-	padding-left: 1rem;
-}
-.d2l-component-catalog-side-nav ul ul li {
-	padding-top: 0.5rem;
-}
-.d2l-component-catalog-side-nav ul ul ul {
 	padding-left: 0.75rem;
 }
 .d2l-component-catalog-side-nav ul ul li {
@@ -92,12 +86,6 @@ d2l-component-catalog-interactive-demo {
 }
 .d2l-component-catalog-best-practices {
 	display: flex;
-}
-.d2l-component-catalog-dos {
-	padding-right: 2rem;
-}
-.d2l-component-catalog-donts {
-	padding-left: 0.75rem;
 }
 .d2l-component-catalog-dos,
 .d2l-component-catalog-donts {
