@@ -25,7 +25,7 @@ main {
 	padding-bottom: 0.75rem;
 }
 .d2l-component-catalog-band {
-	background: linear-gradient(180deg, var(--d2l-branding-primary-color, var(--d2l-color-celestine)) var(--d2l-navigation-band-slot-height, 1.5rem), #ffffff 0%);
+	background: linear-gradient(180deg, var(--d2l-color-celestine) 1.5rem, #ffffff 0%);
 	display: block;
 	min-height: 4px;
 	position: relative; /* Needed for Firefox */
