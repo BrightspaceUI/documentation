@@ -208,6 +208,7 @@ request(ISSUES_REQUEST, (error, response, body) => {
 			if (!screenshotLocations.includes(screenshotPath2)) screenshotLocations.push(screenshotPath2);
 
 			const newFilename = (parsedComment.data.eleventyNavigation && parsedComment.data.eleventyNavigation.key) || issue.title;
+			parsedComment.data.repo = info.repo;
 			const frontMatterString = matter.stringify('', parsedComment.data);
 			markdownFiles.push({ name: newFilename, file: `${info.baseInstallLocation}/${info.markdown}`, frontMatter: frontMatterString });
 		} catch (e) {

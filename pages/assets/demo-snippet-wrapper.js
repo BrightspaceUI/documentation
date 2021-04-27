@@ -16,7 +16,7 @@ class ComponentCatalogDemoSnippetWrapper extends LitElement {
 
 	render() {
 		return html`
-			<d2l-demo-snippet><slot @slotchange="${this._getCode}"></slot></d2l-demo-snippet>
+			<d2l-demo-snippet code-view-hidden><slot @slotchange="${this._getCode}"></slot></d2l-demo-snippet>
 		`;
 	}
 

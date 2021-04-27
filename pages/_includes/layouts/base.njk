@@ -14,13 +14,11 @@
 	<script src="{{assets.getPath("base-imports.js")}}" type="module"></script>
 </head>
 <body class="d2l-typography">
-	<header>
-		<div>
-			Brightspace Component Catalog
-		</div>
-	</header>
 	<main>
-		<div class="d2l-component-catalog-side-nav d2l-body-compact">
+		<div class="d2l-component-catalog-side-nav d2l-body-standard">
+			<div class="d2l-component-catalog-title">
+				<img src="/img/logo_slim.png"></img>
+			</div>
 			<nav aria-label="Component Information">
 				{% set navPages = collections.all | eleventyNavigation %}
 				{% macro renderNavListItem(entry) -%}
