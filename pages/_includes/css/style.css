@@ -3,6 +3,10 @@ html {
 }
 body {
 	margin: 0;
+	transition: opacity ease-in 0.2s;
+}
+body.d2l-component-catalog-body-unresolved {
+	opacity: 0;
 }
 main {
 	display: flex;

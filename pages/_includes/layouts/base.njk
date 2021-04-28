@@ -3,27 +3,22 @@
 	{% include "css/prism-ghcolors.css" %}
 {% endset %}
 <!doctype html>
-<html class="initial-hide" lang="en">
+<html lang="en">
 <head>
 	<meta charset="utf-8">
 	<meta name="viewport" content="width=device-width, initial-scale=1.0">
 	<title>{{ eleventyNavigation.title }}</title>
 	<style>
-		.initial-hide {
-			display: none;
-		}
-	</style>
-	<style>
 		{{ css | cssmin | safe }}
 	</style>
 	<script src="{{assets.getPath("base-imports.js")}}" type="module"></script>
 </head>
-<body class="d2l-typography">
+<body class="d2l-typography d2l-component-catalog-body-unresolved">
 	<main>
 		<div class="d2l-component-catalog-side-nav d2l-body-standard">
 			<div class="d2l-component-catalog-band"></div>
 			<div class="d2l-component-catalog-title">
-				<img src="/img/logo_slim.png"></img>
+				<img src="/img/logo_slim.png" alt="Brightspace Logo" />
 			</div>
 			<nav aria-label="Component Information">
 				{% set navPages = collections.all | eleventyNavigation %}

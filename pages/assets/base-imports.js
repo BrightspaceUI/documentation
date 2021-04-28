@@ -8,5 +8,5 @@ styleSheet.innerText = linkStyles;
 document.head.appendChild(styleSheet);
 
 document.fonts.ready.then(() => {
-	document.documentElement.classList.remove('initial-hide'); // prevent FOUC
+	document.body.classList.remove('d2l-component-catalog-body-unresolved'); // prevent FOUC
 });
