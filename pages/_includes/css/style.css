@@ -38,31 +38,6 @@ main {
 	max-width: 85%;
 }
 
-/** Side Panel - Navigation */
-.d2l-component-catalog-side-nav nav {
-	margin-top: 1.5rem;
-	padding-right: 1rem;
-}
-.d2l-component-catalog-side-nav li {
-	list-style-type: none;
-	padding-top: 0.75rem;
-}
-.d2l-component-catalog-side-nav li a.d2l-link {
-	color: var(--d2l-color-tungsten);
-}
-.d2l-component-catalog-side-nav ul {
-	padding-left: 1.25rem;
-}
-.d2l-component-catalog-side-nav ul ul {
-	padding-left: 0.75rem;
-}
-.d2l-component-catalog-side-nav ul ul li {
-	padding-top: 0;
-}
-.d2l-component-catalog-side-nav ul a.d2l-component-catalog-link-selected {
-	color: var(--d2l-color-celestine);
-}
-
 /** Main Panel */
 .d2l-component-catalog-content {
 	background: var(--d2l-color-regolith);
