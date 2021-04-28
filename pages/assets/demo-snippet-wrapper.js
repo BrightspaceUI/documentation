@@ -12,7 +12,7 @@ class ComponentCatalogDemoSnippetWrapper extends LitElement {
 				display: none;
 			}
 			.d2l-component-catalog-demo-snippet-wrapper-content {
-				display:flex;
+				display: flex;
 				justify-content: space-evenly;
 			}
 		`;
