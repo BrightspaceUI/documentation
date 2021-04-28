@@ -11,18 +11,18 @@ main {
 
 /** Side Panel */
 .d2l-component-catalog-side-nav {
+	align-items: stretch;
 	background-color: white;
 	border-right: 1px solid #e6eaf0;
 	flex: 0 0 21%;
-	align-items: stretch;
 	overflow-y: scroll;
 }
 .d2l-component-catalog-title {
 	border-bottom: 1px solid #e6eaf0;
 	display: flex;
 	justify-content: center;
-	padding-top: 0.75rem;
 	padding-bottom: 0.75rem;
+	padding-top: 0.75rem;
 }
 .d2l-component-catalog-band {
 	background: linear-gradient(180deg, var(--d2l-color-celestine) 1.5rem, #ffffff 0%);

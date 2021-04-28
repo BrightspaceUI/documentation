@@ -28,34 +28,29 @@
 			<nav aria-label="Component Information">
 				{% set navPages = collections.all | eleventyNavigation %}
 				{% macro renderNavListItem(entry, size) -%}
-					<li {% if entry.url == page.url %} class='d2l-component-catalog-li-selected' {% endif %}>
+					<li>
+						{% set link_base_class = "d2l-link" %}
+						{% set link_size = "" %}
+						{% if size == "main" %}
+							{% set link_size = " d2l-link-main" %}
+						{% elif size == "small" %}
+							{% set link_size = " d2l-link-small" %}
+						{% endif %}
+						{% set link_class = link_base_class + link_size %}
+						{% if entry.url == page.url %}
+							{% set link_class = link_class + " d2l-component-catalog-link-selected" %}
+						{% endif %}
 						<a
 							href="{{ entry.url | url }}"
-							{% if entry.url == page.url %}
-								{% if size == 'main' %}
-									class="d2l-link d2l-link-main d2l-component-catalog-link-selected"
-								{% elif size === 'small' %}
-									class="d2l-link d2l-link-small d2l-component-catalog-link-selected"
-								{% else %}
-									class="d2l-link d2l-component-catalog-link-selected"
-								{% endif %}
-							{% else %}
-								{% if size == 'main' %}
-									class="d2l-link d2l-link-main"
-								{% elif size === 'small' %}
-									class="d2l-link d2l-link-small"
-								{% else %}
-									class="d2l-link"
-								{% endif %}
-							{% endif %}
+							class="{{ link_class }}"
 						>{{ entry.title }}</a>
 						{%- if entry.children.length -%}
 							<ul>
 								{%- for child in entry.children %}
-									{% if size == 'main' %}
+									{% if size == "main" %}
 										{{ renderNavListItem(child) }}
 									{% else %}
-										{{ renderNavListItem(child, 'small') }}
+										{{ renderNavListItem(child, "small") }}
 									{% endif %}
 								{% endfor -%}
 							</ul>
@@ -65,7 +60,7 @@
 
 				<ul>
 					{%- for entry in navPages %}
-						{{ renderNavListItem(entry, 'main') }}
+						{{ renderNavListItem(entry, "main") }}
 					{%- endfor -%}
 				</ul>
 			</nav>
