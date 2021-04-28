@@ -116,10 +116,6 @@ function _getMissingDependenciesList(dependencies) {
 }
 
 function _installDependencies(dependencies, callback) {
-	if (!dependencies || dependencies.length === 0) {
-		console.info('INFO: No dependencies to install');
-		return;
-	}
 	_getMissingDependenciesList(dependencies).then((res) => {
 		exec(`npm i ${res} --no-save`, (err, stdout) => {
 			if (err) console.error(`ERROR: Failed to install dependency: ${err.message}`);
@@ -218,14 +214,23 @@ request(ISSUES_REQUEST, (error, response, body) => {
 
 	console.info('INFO: Completed GitHub issue processing');
 
+	fs.mkdirSync(DIR_GENERATED, { recursive: true });
+
+	_writeJSONToGeneratedFile(componentIssues, FILENAME_ISSUES);
+	console.info('INFO: Completed writing component issue info to file');
+
+	_generateRollupConfig(rollupFiles);
+	console.info('INFO: Completed generating rollup config');
+
+	if (!repoInstallLocations || repoInstallLocations.length === 0) {
+		console.info('INFO: No dependencies to install');
+		return;
+	}
+
 	_installDependencies(repoInstallLocations, () => {
 		console.info('INFO: Completed dependency installation');
 
 		fs.mkdirSync(DIR_IMPORTED_SCREENSHOTS, { recursive: true });
-		fs.mkdirSync(DIR_GENERATED, { recursive: true });
-
-		_writeJSONToGeneratedFile(componentIssues, FILENAME_ISSUES);
-		console.info('INFO: Completed writing component issue info to file');
 
 		_copyMarkdown(markdownFiles);
 		console.info('INFO: Completed markdown file processing');
@@ -235,8 +240,5 @@ request(ISSUES_REQUEST, (error, response, body) => {
 
 		_copyCustomElements(repoInstallLocations);
 		console.info('INFO: Completed custom-elements.json file processing');
-
-		_generateRollupConfig(rollupFiles);
-		console.info('INFO: Completed generating rollup config');
 	});
 });
