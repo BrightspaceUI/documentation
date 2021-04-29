@@ -9,7 +9,8 @@ class ComponentCatalogNavigation extends LitElement {
 		return {
 			navItems: { type: String, attribute: 'nav-items' },
 			pageUrl: { type: String, attribute: 'page-url' },
-			_navItems: { type: Object }
+			_navItems: { type: Object },
+			_page: { type: Object }
 		};
 	}
 
@@ -41,8 +42,14 @@ class ComponentCatalogNavigation extends LitElement {
 			ul ul {
 				padding-left: 0.75rem;
 			}
-			ul ul li {
+			ul li {
+				padding-top: 0.5rem;
+			}
+			ul ul ul li {
 				padding-top: 0;
+			}
+			.d2l-component-catalog-hidden {
+				display: none;
 			}
 		`];
 	}
@@ -54,7 +61,7 @@ class ComponentCatalogNavigation extends LitElement {
 
 	render() {
 		const listContent = this._navItems ? this._navItems.map((item) => {
-			return this._generateList(item, 'main');
+			return this._generateList(item, 'main', true);
 		}) : null;
 		return html`
 			<nav aria-label="Main">
@@ -65,12 +72,14 @@ class ComponentCatalogNavigation extends LitElement {
 
 	_generateList(entry, size) {
 		let children = null;
+		let isVisible = this.pageUrl.includes(entry.url);
 		if (entry.children && entry.children.length > 0) {
 			const childLists = entry.children.map((child) => {
+				if (child.url === this.pageUrl) isVisible = true;
 				const newSize = size === 'main' ? '' : 'small';
 				return this._generateList(child, newSize);
 			});
-			children = html`<ul>${childLists}</ul>`;
+			children = html`<ul ?hidden="${!isVisible}">${childLists}</ul>`;
 		}
 
 		const linkClasses = {
