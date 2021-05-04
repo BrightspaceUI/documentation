@@ -20,7 +20,8 @@ eleventyNavigation:
 repo: "<url>"
 baseInstallLocation: "<npm install location (e.g., @brightspace-ui/core)>"
 components: ["<component file path (e.g., src/my-component.js)>"]
-markdown: "<markdown file path (e.g., README.md)>"
+devMarkdown: "<markdown file path (e.g., README.md)>"
+designMarkdown: "<markdown file path (e.g., design/button.md)>"
 development: <In Progress | Completed>
 design: <In Progress | Completed>
 -->

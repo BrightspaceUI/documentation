@@ -80,6 +80,12 @@ module.exports = function(eleventyConfig) {
 			const splitEnd = splitStart[1].split(' -->');
 			const contentClass = `d2l-component-catalog-${splitEnd[0].replace(/ /g, '-')}`;
 			return `<div class="${contentClass}">`;
+		} else if (content.includes(':x:')) {
+			tokens[idx].content = tokens[idx].content.replace(':x:', '');
+			return defaultTextRule(tokens, idx, options, env, slf);
+		} else if (content.includes(':white_check_mark:')) {
+			tokens[idx].content = tokens[idx].content.replace(':white_check_mark:', '');
+			return defaultTextRule(tokens, idx, options, env, slf);
 		} else return defaultTextRule(tokens, idx, options, env, slf);
 	};
 

@@ -70,8 +70,20 @@ d2l-component-catalog-interactive-demo {
 .d2l-component-catalog-donts {
 	flex: 1 1 0px;
 }
-.d2l-component-catalog-dos ul,
-.d2l-component-catalog-donts ul {
-	margin: 0;
-	padding-left: 1rem;
+.d2l-component-catalog-best-practices ul {
+	list-style: none;
+}
+.d2l-component-catalog-best-practices li::before {
+	font-weight: bold;
+	display: inline-block;
+	margin-left: -1.3em;
+	width: 1em;
+}
+.d2l-component-catalog-dos li::before {
+	color: var(--d2l-color-olivine);
+	content: "\2713";
+}
+.d2l-component-catalog-donts li::before {
+	color: var(--d2l-color-cinnabar);
+	content: "\00D7";
 }
