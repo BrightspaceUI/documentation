@@ -6,6 +6,11 @@ const { getScript } = require('./tools/getScript');
 
 module.exports = function(eleventyConfig) {
 	eleventyConfig.addPassthroughCopy('pages/components/imported/screenshots');
+	eleventyConfig.addPassthroughCopy('pages/favicon.ico');
+	eleventyConfig.addPassthroughCopy('pages/img');
+	eleventyConfig.addNunjucksShortcode('enhancements', (repo) => {
+		return `Looking for an enhancement not listed here? <d2l-link href="${repo}/issues">Create a GitHub issue!</d2l-link>`;
+	});
 
 	const options = {
 		html: false,

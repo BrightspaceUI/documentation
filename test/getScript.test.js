@@ -47,29 +47,9 @@ describe('getScript', () => {
 				output_development: `<script type="module">\nimport '/${fileName}';\n</script>`,
 				output_production: `<script src="${expectedFile}" type="module"></script>\n`
 			}, {
-				name: 'script with two imports on single line',
-				input: `<script type="module">\nimport '/${fileName}'; import '/other/other-file.js';</script>`,
-				output_development: '<script type="module">\n</script>',
-				output_production: ''
-			}, {
-				name: 'script with file not in manifest',
-				input: '<script type="module">\nimport \'/filepath/other-file.js\';\n</script>',
-				output_development: '<script type="module">\n</script>',
-				output_production: ''
-			}, {
 				name: 'script with import starting with @',
 				input: `<script type="module">\nimport '@brightspace-ui/core/${fileName}';\n</script>`,
 				output_development: `<script type="module">\nimport '@brightspace-ui/core/${fileName}';\n</script>`,
-				output_production: `<script src="${expectedFile}" type="module"></script>\n`
-			}, {
-				name: 'script with import with no backslash',
-				input: `<script type="module">\nimport '${fileName}';\n</script>`,
-				output_development: '<script type="module">\n</script>',
-				output_production: ''
-			}, {
-				name: 'script with one file in manifest and one not',
-				input: `<script type="module">\nimport '/long/file/path/${fileName}';\n   import '/other-file.js';</script>`,
-				output_development: `<script type="module">\nimport '/long/file/path/${fileName}';\n</script>`,
 				output_production: `<script src="${expectedFile}" type="module"></script>\n`
 			}, {
 				name: 'script with one valid file and some other text',
@@ -80,6 +60,30 @@ describe('getScript', () => {
 		].forEach((testCase) => {
 			it(`${env} - should return correct result for ${testCase.name}`, () => {
 				assert.equal((getScript(testCase.input, env)), testCase[`output_${env}`]);
+			});
+		});
+
+		[
+			{
+				name: 'script with two imports on single line',
+				input: `<script type="module">\nimport '/${fileName}'; import '/other/other-file.js';</script>`
+			}, {
+				name: 'script with file not in manifest',
+				input: '<script type="module">\nimport \'/filepath/other-file.js\';\n</script>'
+			}, {
+				name: 'script with import with no backslash',
+				input: `<script type="module">\nimport '${fileName}';\n</script>`,
+				output_development: '<script type="module">\n</script>',
+				output_production: ''
+			}, {
+				name: 'script with one file in manifest and one not',
+				input: `<script type="module">\nimport '/long/file/path/${fileName}';\n   import '/other-file.js';</script>`,
+				output_development: `<script type="module">\nimport '/long/file/path/${fileName}';\n</script>`,
+				output_production: `<script src="${expectedFile}" type="module"></script>\n`
+			}
+		].forEach((testCase) => {
+			it(`${env} - should throw for ${testCase.name}`, () => {
+				assert.throws(() => getScript(testCase.input, env));
 			});
 		});
 	});

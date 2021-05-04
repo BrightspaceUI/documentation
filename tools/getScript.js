@@ -17,7 +17,7 @@ module.exports = {
 				const path = assets.getPath(fileName);
 				imports += env === 'production' ? `<script src="${path}" type="module"></script>\n` : `${importUrl}\n`;
 			} catch (e) {
-				// no path in manifest
+				throw new Error(`ERROR: ${fileName} does not exist in manifest and may be missing from the components list in a component issue.`);
 			}
 		});
 		return env === 'production' ? imports : `${imports}</script>`;

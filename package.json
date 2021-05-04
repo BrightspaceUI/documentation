@@ -2,8 +2,8 @@
   "name": "d2l-component-catalog",
   "description": "",
   "scripts": {
-    "build": "npm run clean && node ./tools/generate-pages.mjs",
-    "build:prod": "cross-env NODE_ENV=production npm run build && npm run build:rollup && cross-env NODE_ENV=production npx eleventy",
+    "build": "npm run clean && node ./tools/generate-pages.mjs && npm run build:rollup",
+    "build:prod": "cross-env NODE_ENV=production npm run build && cross-env NODE_ENV=production npx eleventy",
     "build:rollup": "rollup -c rollup.config.js",
     "clean": "rimraf _site && rimraf .generated && rimraf pages/components/imported",
     "lint": "npm run lint:eslint",
