@@ -86,6 +86,9 @@ module.exports = function(eleventyConfig) {
 		} else if (content.includes(':white_check_mark:')) {
 			tokens[idx].content = tokens[idx].content.replace(':white_check_mark:', '');
 			return defaultTextRule(tokens, idx, options, env, slf);
+		} else if (env.tags && Object.keys(env.tags[0]).includes(content)) {
+			const tag = env.tags[0][content];
+			return `${defaultTextRule(tokens, idx, options, env, slf)}<div class="tag d2l-body-compact">&nbsp;&nbsp;<<div class="tag-inner">${tag}</div>></div>`;
 		} else return defaultTextRule(tokens, idx, options, env, slf);
 	};
 

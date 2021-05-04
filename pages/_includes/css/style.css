@@ -58,6 +58,17 @@ main {
 	max-width: 100%;
 }
 
+h2 {
+	display: flex;
+}
+.tag {
+	display:flex;
+	align-self: flex-end;
+}
+.tag-inner {
+	color: var(--d2l-color-malachite-minus-1);
+}
+
 /** Specialty Content Sections */
 d2l-component-catalog-demo-snippet-wrapper,
 d2l-component-catalog-interactive-demo {
