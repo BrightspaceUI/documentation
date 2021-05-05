@@ -3,14 +3,16 @@ html {
 }
 body {
 	margin: 0;
-	transition: opacity ease-in 0.2s;
-}
-body.d2l-component-catalog-body-unresolved {
-	opacity: 0;
 }
 main {
 	display: flex;
 	min-height: 100vh;
+}
+div.d2l-component-catalog-content.d2l-component-catalog-content-unresolved {
+	opacity: 0;
+}
+div.d2l-component-catalog-content {
+	transition: opacity ease-in 0.2s;
 }
 
 /** Side Panel */

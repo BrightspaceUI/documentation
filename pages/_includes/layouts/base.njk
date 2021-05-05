@@ -13,7 +13,7 @@
 	<script src="{{assets.getPath("base-imports.js")}}" type="module"></script>
 	<script src="{{assets.getPath("navigation.js")}}" type="module"></script>
 </head>
-<body class="d2l-typography d2l-component-catalog-body-unresolved">
+<body class="d2l-typography">
 	<main>
 		<div class="d2l-component-catalog-side-panel d2l-body-standard">
 			<div class="d2l-component-catalog-band"></div>
@@ -25,7 +25,7 @@
             {% set navPages = collections.all | eleventyNavigation %}
 			<d2l-component-catalog-navigation nav-items="{{ navPages | dump }}" page-url="{{ page.url }}"></d2l-component-catalog-navigation>
 		</div>
-		<div class="d2l-component-catalog-content d2l-body-compact">
+		<div class="d2l-component-catalog-content d2l-body-compact d2l-component-catalog-content-unresolved">
 			{{ content | safe }}
 		</div>
 	</main>
