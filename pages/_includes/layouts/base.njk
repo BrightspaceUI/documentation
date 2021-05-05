@@ -17,9 +17,11 @@
 	<main>
 		<div class="d2l-component-catalog-side-panel d2l-body-standard">
 			<div class="d2l-component-catalog-band"></div>
-			<div class="d2l-component-catalog-title">
-				<img src="/img/logo_slim.png" alt="Brightspace Logo" />
-			</div>
+			<a href="/" title="Home">
+				<div class="d2l-component-catalog-title">
+					<img src="/img/logo_slim.png" alt="Brightspace Logo" />
+				</div>
+			</a>
             {% set navPages = collections.all | eleventyNavigation %}
 			<d2l-component-catalog-navigation nav-items="{{ navPages | dump }}" page-url="{{ page.url }}"></d2l-component-catalog-navigation>
 		</div>

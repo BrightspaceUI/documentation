@@ -67,6 +67,7 @@ h2 {
 .tag {
 	display:flex;
 	align-self: flex-end;
+	padding-left: 1rem;
 }
 .tag-inner {
 	color: var(--d2l-color-malachite-minus-1);
