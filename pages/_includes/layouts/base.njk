@@ -22,7 +22,7 @@
 				<img src="/img/logo_slim.png" alt="Brightspace Logo" />
 			</div>
             {% set navPages = collections.all | eleventyNavigation %}
-			<d2l-component-catalog-navigation nav-items="{{ navPages | dump }}"" page-url="{{ page.url }}"></d2l-component-catalog-navigation>
+			<d2l-component-catalog-navigation nav-items="{{ navPages | dump }}" page-url="{{ page.url }}"></d2l-component-catalog-navigation>
 		</div>
 		<div class="d2l-component-catalog-content d2l-body-compact">
 			{{ content | safe }}

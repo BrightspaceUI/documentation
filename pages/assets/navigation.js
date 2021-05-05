@@ -22,34 +22,49 @@ class ComponentCatalogNavigation extends LitElement {
 			:host([hidden]) {
 				display: none;
 			}
+			.d2l-component-catalog-hidden {
+				display: none;
+			}
 			nav {
 				margin-top: 1.5rem;
 				padding-right: 1rem;
 			}
+			ul {
+				padding-left: 0;
+			}
+			ul ul li {
+				margin-left: 1.25rem;
+				padding-left: 0;
+			}
+			ul ul li {
+				padding-top: 0.5rem;
+			}
+			ul ul ul li {
+				margin-left: 0.5rem;
+			}
 			li {
 				list-style-type: none;
-				padding-top: 0.75rem;
+				padding-top: 1rem;
+			}
+			li a {
+				display: block;
+				padding-left: 1.25rem;
+			}
+			a.d2l-component-catalog-link-large {
+				font-size: 1.1rem;
+			}
+			a.d2l-component-catalog-child-selected.d2l-component-catalog-link-large:not(.d2l-component-catalog-link-selected) {
+				font-weight: 700;
+			}
+			a.d2l-component-catalog-child-selected.d2l-component-catalog-link-medium:not(.d2l-component-catalog-link-selected) {
+				background-color: var(--d2l-color-celestine-plus-2);
+				color: var(--d2l-color-celestine-minus-1);
 			}
 			a.d2l-link:not(.d2l-component-catalog-link-selected) {
 				color: var(--d2l-color-tungsten);
 			}
 			a.d2l-component-catalog-link-selected {
 				color: var(--d2l-color-celestine);
-			}
-			ul {
-				padding-left: 1.25rem;
-			}
-			ul ul {
-				padding-left: 0.75rem;
-			}
-			ul li {
-				padding-top: 0.5rem;
-			}
-			ul ul ul li {
-				padding-top: 0;
-			}
-			.d2l-component-catalog-hidden {
-				display: none;
 			}
 		`];
 	}
@@ -61,7 +76,7 @@ class ComponentCatalogNavigation extends LitElement {
 
 	render() {
 		const listContent = this._navItems ? this._navItems.map((item) => {
-			return this._generateList(item, 'main', true);
+			return this._generateList(item, 'large');
 		}) : null;
 		return html`
 			<nav aria-label="Main">
@@ -72,11 +87,11 @@ class ComponentCatalogNavigation extends LitElement {
 
 	_generateList(entry, size) {
 		let children = null;
-		let isVisible = this.pageUrl.includes(entry.url);
+		let isVisible = entry.url !== '/' && this.pageUrl.includes(entry.url);
 		if (entry.children && entry.children.length > 0) {
 			const childLists = entry.children.map((child) => {
 				if (child.url === this.pageUrl) isVisible = true;
-				const newSize = size === 'main' ? '' : 'small';
+				const newSize = size === 'large' ? 'medium' : 'small';
 				return this._generateList(child, newSize);
 			});
 			children = html`<ul ?hidden="${!isVisible}">${childLists}</ul>`;
@@ -84,8 +99,10 @@ class ComponentCatalogNavigation extends LitElement {
 
 		const linkClasses = {
 			'd2l-link': true,
-			'd2l-link-main': size === 'main',
 			'd2l-link-small': size === 'small',
+			'd2l-component-catalog-child-selected': isVisible,
+			'd2l-component-catalog-link-medium': size === 'medium',
+			'd2l-component-catalog-link-large': size === 'large',
 			'd2l-component-catalog-link-selected': entry.url === this.pageUrl
 		};
 		return html`

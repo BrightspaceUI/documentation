@@ -57,6 +57,9 @@ main {
 .d2l-component-catalog-content img {
 	max-width: 100%;
 }
+.d2l-component-catalog-content p:empty {
+	margin: 0;
+}
 
 h2 {
 	display: flex;
@@ -83,6 +86,7 @@ d2l-component-catalog-interactive-demo {
 }
 .d2l-component-catalog-best-practices ul {
 	list-style: none;
+	margin: 0;
 }
 .d2l-component-catalog-best-practices li::before {
 	font-weight: bold;
