@@ -6,7 +6,7 @@
 <head>
 	<meta charset="utf-8">
 	<meta name="viewport" content="width=device-width, initial-scale=1.0">
-	<title>{{ eleventyNavigation.title }}</title>
+	<title>{%- if eleventyNavigation.title -%}{{ eleventyNavigation.title }}{% else %}{{ title }}{%- endif %}</title>
 	<style>
 		{{ css | cssmin | safe }}
 	</style>
