@@ -76,7 +76,7 @@ class ComponentCatalogNavigation extends LitElement {
 
 	render() {
 		const listContent = this._navItems ? this._navItems.map((item) => {
-			return item.url === '/' ? null : this._generateList(item, 'large');
+			return this._generateList(item, 'large');
 		}) : null;
 		return html`
 			<nav aria-label="Main">

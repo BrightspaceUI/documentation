@@ -1,8 +1,5 @@
 ---
 layout: layouts/base
-eleventyNavigation:
-  title: Home
-  key: home
 ---
 
 # D2L Component Catalog
