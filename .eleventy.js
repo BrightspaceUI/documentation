@@ -87,7 +87,7 @@ module.exports = function(eleventyConfig) {
 			return defaultTextRule(tokens, idx, options, env, slf);
 		} else if (env.tags && Object.keys(env.tags[0]).includes(content)) {
 			const tag = env.tags[0][content];
-			return `${defaultTextRule(tokens, idx, options, env, slf)}<div class="tag d2l-body-standard"><<div class="tag-inner">${tag}</div>></div>`;
+			return `${defaultTextRule(tokens, idx, options, env, slf)}<div class="d2l-component-catalog-tag d2l-body-standard"><<div class="d2l-component-catalog-tag-inner">${tag}</div>></div>`;
 		} else return defaultTextRule(tokens, idx, options, env, slf);
 	};
 

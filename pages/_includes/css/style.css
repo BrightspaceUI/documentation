@@ -66,12 +66,12 @@ div.d2l-component-catalog-content {
 h2 {
 	display: flex;
 }
-.tag {
+.d2l-component-catalog-tag {
 	display:flex;
 	align-self: flex-end;
 	padding-left: 1rem;
 }
-.tag-inner {
+.d2l-component-catalog-tag-inner {
 	color: var(--d2l-color-malachite-minus-1);
 }
 

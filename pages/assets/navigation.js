@@ -9,8 +9,7 @@ class ComponentCatalogNavigation extends LitElement {
 		return {
 			navItems: { type: String, attribute: 'nav-items' },
 			pageUrl: { type: String, attribute: 'page-url' },
-			_navItems: { type: Object },
-			_page: { type: Object }
+			_navItems: { type: Object }
 		};
 	}
 

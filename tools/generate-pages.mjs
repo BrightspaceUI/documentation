@@ -60,10 +60,10 @@ function _copyMarkdown(files) {
 			const designOriginFile = path.join(__dirname, `../node_modules/${file.designFile}`);
 			if (!fs.existsSync(designOriginFile)) {
 				console.warn(`WARNING: markdown file ${file.designFile} does not exist`);
-				return;
+			} else {
+				const designContent = fs.readFileSync(designOriginFile);
+				newContent = newContent.replace(DESIGN_COMMENT, designContent);
 			}
-			const designContent = fs.readFileSync(designOriginFile);
-			newContent = newContent.replace(DESIGN_COMMENT, designContent);
 		}
 
 		fs.writeFileSync(newFile, newContent);
