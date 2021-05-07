@@ -13,6 +13,8 @@ const FILENAME_CUSTOM_ELEM = 'custom-elements-all.js';
 const FILENAME_ISSUES = 'component-issue-data.js';
 const FILENAME_ROLLUP = 'rollup-files-generated.js';
 
+const DESIGN_COMMENT = '<!-- docs: design -->';
+
 const ISSUES_REQUEST = {
 	url: 'https://api.github.com/repos/BrightspaceUI/documentation/issues?state=all',
 	headers: {
@@ -46,14 +48,25 @@ function _copyCustomElements(repos) {
 
 function _copyMarkdown(files) {
 	files.forEach((file) => {
-		const originFile = path.join(__dirname, `../node_modules/${file.file}`);
-		if (!fs.existsSync(originFile)) {
-			console.warn(`WARNING: markdown file ${file.file} does not exist`);
+		const devOriginFile = path.join(__dirname, `../node_modules/${file.devFile}`);
+		if (!fs.existsSync(devOriginFile)) {
+			console.warn(`WARNING: markdown file ${file.devFile} does not exist`);
 			return;
 		}
 		const newFile = path.join(DIR_IMPORTED_COMPONENTS, `${file.name}.md`);
-		const content = fs.readFileSync(originFile);
-		fs.writeFileSync(newFile, `${file.frontMatter}\n${content}`);
+		const devContent = fs.readFileSync(devOriginFile);
+		let newContent = `${file.frontMatter}\n${devContent}`;
+		if (file.designFile) {
+			const designOriginFile = path.join(__dirname, `../node_modules/${file.designFile}`);
+			if (!fs.existsSync(designOriginFile)) {
+				console.warn(`WARNING: markdown file ${file.designFile} does not exist`);
+			} else {
+				const designContent = fs.readFileSync(designOriginFile);
+				newContent = newContent.replace(DESIGN_COMMENT, designContent);
+			}
+		}
+
+		fs.writeFileSync(newFile, newContent);
 	});
 }
 
@@ -193,11 +206,12 @@ request(ISSUES_REQUEST, (error, response, body) => {
 				});
 			}
 
-			if (!info.markdown) {
+			if (!info.devMarkdown) {
 				console.warn(`WARNING: Component issue for ${issue.title} DOES NOT CONTAIN "markdown"`);
 				return;
 			}
-			const dirname = path.dirname(`${info.baseInstallLocation}/${info.markdown}`);
+			const devMarkdownPath = path.join(info.baseInstallLocation, info.devMarkdown);
+			const dirname = path.dirname(devMarkdownPath);
 			const screenshotPath1 = path.join(dirname, 'screenshots');
 			const screenshotPath2 = path.join(dirname, '../screenshots'); // some repos have screenshots in a sibling directory to docs
 			if (!screenshotLocations.includes(screenshotPath1)) screenshotLocations.push(screenshotPath1);
@@ -206,7 +220,9 @@ request(ISSUES_REQUEST, (error, response, body) => {
 			const newFilename = (parsedComment.data.eleventyNavigation && parsedComment.data.eleventyNavigation.key) || issue.title;
 			parsedComment.data.repo = info.repo;
 			const frontMatterString = matter.stringify('', parsedComment.data);
-			markdownFiles.push({ name: newFilename, file: `${info.baseInstallLocation}/${info.markdown}`, frontMatter: frontMatterString });
+			const markdownData = { name: newFilename, devFile: devMarkdownPath, frontMatter: frontMatterString };
+			if (info.designMarkdown) markdownData.designFile = path.join(info.baseInstallLocation, info.designMarkdown);
+			markdownFiles.push(markdownData);
 		} catch (e) {
 			console.error(`ERROR: component issue for ${issue.title} is incorrectly formatted`);
 		}

@@ -1,9 +1,6 @@
 ---
 layout: layouts/base
-eleventyNavigation:
-  title: Get Started
-  key: home
-  order: 1
+title: D2L Component Catalog
 ---
 
 # D2L Component Catalog

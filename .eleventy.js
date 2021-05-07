@@ -58,14 +58,27 @@ module.exports = function(eleventyConfig) {
 		return new cleanCSS({}).minify(code).styles;
 	});
 
-	const defaultFenceRule = markdownIt.renderer.rules.fence;
-	markdownIt.renderer.rules.fence = (tokens, idx, options, env, slf) => {
+	markdownIt.renderer.rules.fence = (tokens, idx) => {
 		const content = tokens[idx].content;
 		if (content.includes('<!-- docs: live demo -->') || content.includes('<!-- docs: demo -->')) {
 			const script = getScript(content, process.env.NODE_ENV);
-			if (content.includes('<!-- docs: live demo -->')) return `${script}<d2l-component-catalog-interactive-demo>${escapeHtml(content)}</d2l-component-catalog-interactive-demo>`;
-			else return `${script}<d2l-component-catalog-demo-snippet-wrapper>${escapeHtml(content)}</d2l-component-catalog-demo-snippet-wrapper>`;
-		} else return defaultFenceRule(tokens, idx, options, env, slf);
+			if (content.includes('<!-- docs: live demo -->')) {
+				return `
+					${script}
+					<d2l-component-catalog-interactive-demo>
+						${escapeHtml(content)}
+					</d2l-component-catalog-interactive-demo>
+				`;
+			} else {
+				return `
+					${script}
+					<d2l-component-catalog-demo-snippet-wrapper>
+						${escapeHtml(content)}
+					</d2l-component-catalog-demo-snippet-wrapper>
+				`;
+			}
+		} else
+			return `<d2l-component-catalog-code-view-wrapper>${escapeHtml(content)}</d2l-component-catalog-code-view-wrapper>`;
 	};
 
 	const defaultTextRule = markdownIt.renderer.rules.text;
@@ -80,6 +93,14 @@ module.exports = function(eleventyConfig) {
 			const splitEnd = splitStart[1].split(' -->');
 			const contentClass = `d2l-component-catalog-${splitEnd[0].replace(/ /g, '-')}`;
 			return `<div class="${contentClass}">`;
+		} else if (env.tags && Object.keys(env.tags[0]).includes(content)) {
+			const tag = env.tags[0][content];
+			return `
+				${defaultTextRule(tokens, idx, options, env, slf)}
+				<div class="d2l-component-catalog-tag d2l-body-standard">
+					<<div class="d2l-component-catalog-tag-inner">${tag}</div>>
+				</div>
+			`;
 		} else return defaultTextRule(tokens, idx, options, env, slf);
 	};
 

@@ -15,12 +15,16 @@ eleventyNavigation:
   key: <component name, lower case and hyphenated (e.g., menu-item)>
   title: <component name, capitalized (e.g., Menu Item)>
   parent: <component type>
+tags:
+  - <Document Heading (e.g., Button)>: <tag name (e.g., d2l-button)>
+    <Document Heading 2>: <tag name 2>
 ---
 
 repo: "<url>"
 baseInstallLocation: "<npm install location (e.g., @brightspace-ui/core)>"
 components: ["<component file path (e.g., src/my-component.js)>"]
-markdown: "<markdown file path (e.g., README.md)>"
+devMarkdown: "<markdown file path (e.g., README.md)>"
+designMarkdown: "<markdown file path (e.g., design/button.md)>"
 development: <In Progress | Completed>
 design: <In Progress | Completed>
 -->
