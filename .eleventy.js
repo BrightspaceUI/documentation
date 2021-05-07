@@ -62,9 +62,23 @@ module.exports = function(eleventyConfig) {
 		const content = tokens[idx].content;
 		if (content.includes('<!-- docs: live demo -->') || content.includes('<!-- docs: demo -->')) {
 			const script = getScript(content, process.env.NODE_ENV);
-			if (content.includes('<!-- docs: live demo -->')) return `${script}<d2l-component-catalog-interactive-demo>${escapeHtml(content)}</d2l-component-catalog-interactive-demo>`;
-			else return `${script}<d2l-component-catalog-demo-snippet-wrapper>${escapeHtml(content)}</d2l-component-catalog-demo-snippet-wrapper>`;
-		} else return `<d2l-component-catalog-code-view-wrapper>${escapeHtml(content)}</d2l-component-catalog-code-view-wrapper>`;
+			if (content.includes('<!-- docs: live demo -->')) {
+				return `
+					${script}
+					<d2l-component-catalog-interactive-demo>
+						${escapeHtml(content)}
+					</d2l-component-catalog-interactive-demo>
+				`;
+			} else {
+				return `
+					${script}
+					<d2l-component-catalog-demo-snippet-wrapper>
+						${escapeHtml(content)}
+					</d2l-component-catalog-demo-snippet-wrapper>
+				`;
+			}
+		} else
+			return `<d2l-component-catalog-code-view-wrapper>${escapeHtml(content)}</d2l-component-catalog-code-view-wrapper>`;
 	};
 
 	const defaultTextRule = markdownIt.renderer.rules.text;
@@ -79,15 +93,14 @@ module.exports = function(eleventyConfig) {
 			const splitEnd = splitStart[1].split(' -->');
 			const contentClass = `d2l-component-catalog-${splitEnd[0].replace(/ /g, '-')}`;
 			return `<div class="${contentClass}">`;
-		} else if (content.includes(':x:')) {
-			tokens[idx].content = tokens[idx].content.replace(':x:', '');
-			return defaultTextRule(tokens, idx, options, env, slf);
-		} else if (content.includes(':white_check_mark:')) {
-			tokens[idx].content = tokens[idx].content.replace(':white_check_mark:', '');
-			return defaultTextRule(tokens, idx, options, env, slf);
 		} else if (env.tags && Object.keys(env.tags[0]).includes(content)) {
 			const tag = env.tags[0][content];
-			return `${defaultTextRule(tokens, idx, options, env, slf)}<div class="d2l-component-catalog-tag d2l-body-standard"><<div class="d2l-component-catalog-tag-inner">${tag}</div>></div>`;
+			return `
+				${defaultTextRule(tokens, idx, options, env, slf)}
+				<div class="d2l-component-catalog-tag d2l-body-standard">
+					<<div class="d2l-component-catalog-tag-inner">${tag}</div>>
+				</div>
+			`;
 		} else return defaultTextRule(tokens, idx, options, env, slf);
 	};
 
