@@ -1,0 +1,68 @@
+name: Issue Label
+on:
+	issues:
+		types: [labeled, unlabeled]
+jobs:
+  sync_components:
+    name: Sync Component Pages List
+    timeout-minutes: 5
+    runs-on: ubuntu-latest
+    steps:
+      - uses: Brightspace/third-party-actions@actions/checkout
+      - uses: Brightspace/third-party-actions@actions/setup-node
+      - name: Install Dependencies
+        run: |
+          echo -e "\e[34mInstalling Dependencies"
+          npm i
+          npm install chalk@4 @octokit/rest@18 --prefix ${{ github.action_path }} --no-save --loglevel error
+        shell: bash
+      - name: Update Component Page List
+        run: |
+          echo -e "\e[34mUpdating component page list"
+          node ${{ github.action_path }}/update-component-page-list.js
+        env:
+          GITHUB_ISSUE_NUMBER: ${{ github.event.issue.number }}
+          GITHUB_ISSUE_LABELS: ${{ github.event.issue.labels }}
+          ACTION: ${{ github.event.issue.action }}
+        shell: bash
+      - name: Committing changes
+        id: committing-changes
+        run: |
+          BRANCH_NAME="update-published-pages"
+          PR_EXISTS=false
+
+          echo -e "\e[34mCommitting changes"
+          if [ -n `git show-ref refs/heads/$BRANCH_NAME` ]; then
+            PR_EXISTS=true
+            git checkout $BRANCH_NAME
+          else
+            git checkout -b $BRANCH_NAME
+          fi
+          git config user.name github-actions
+          git config user.email github-actions@github.com
+          git add .
+          git commit -m 'Updating published component pages'
+
+          echo -e "\n\e[34mPushing the update-published-pages branch"
+          git push --force origin $BRANCH_NAME
+
+          echo "::set-output name=branch-name::$(echo "$BRANCH_NAME")"
+          echo "::set-output name=pr-exists::$(echo "$PR_EXISTS")"
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        shell: bash
+      - name: Opening PR (if necessary)
+        run: |
+          if [ PR_EXISTS == true ]
+            echo -e "\n\e[34mPR already exists"
+            exit 0;
+          fi
+
+          echo -e "\n\e[34mOpening PR"
+          node ${{ github.action_path }}/create-pr.js
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          PR_EXISTS: ${{ steps.committing-changes.outputs.pr-exists}}
+          BRANCH_NAME: ${{ steps.committing-changes.outputs.branch-name }}
+        shell: bash
+
