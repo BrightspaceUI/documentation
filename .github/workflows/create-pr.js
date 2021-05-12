@@ -1,7 +1,6 @@
-#!/usr/bin/env node
 
-const chalk = require('chalk');
-const { Octokit } = require('@octokit/rest');
+import chalk from 'chalk';
+import { Octokit } from '@octokit/rest';
 
 const [owner, repo] = process.env['GITHUB_REPOSITORY'].split('/');
 const branchName = process.env['BRANCH_NAME'];

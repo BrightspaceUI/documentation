@@ -2,7 +2,7 @@ import { exec } from 'child_process';
 import fs from 'fs';
 import matter from 'gray-matter';
 import path from 'path';
-import { default as publishedComponents } from './component-page-issues.js';
+import { default as publishedComponents } from './component-page-issues.mjs';
 import request from 'request';
 
 const __dirname = path.dirname(process.argv[1]);

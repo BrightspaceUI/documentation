@@ -1,7 +1,7 @@
-name: Issue Label
+name: Update Published Components on Issue Label
 on:
-	issues:
-		types: [labeled, unlabeled]
+  issues:
+    types: [labeled, unlabeled]
 jobs:
   sync_components:
     name: Sync Component Pages List
