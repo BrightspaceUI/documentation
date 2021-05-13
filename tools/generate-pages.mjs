@@ -2,6 +2,7 @@ import { exec } from 'child_process';
 import fs from 'fs';
 import matter from 'gray-matter';
 import path from 'path';
+import { default as publishedComponents } from './component-page-issues.js';
 import request from 'request';
 
 const __dirname = path.dirname(process.argv[1]);
@@ -102,12 +103,14 @@ function _getCommentContent(body) {
 }
 
 function _getIssues(issues, expectedLabelName) {
+	const isProd = process.env.NODE_ENV === 'production';
 	return issues.filter(issue => {
 		let labelMatch = false;
-		let showComponent = process.env.NODE_ENV !== 'production'; // if NODE_ENV is production, only show component with "Published" label
+		let showComponent = !isProd; // if NODE_ENV is production, only show component with "Published" label
+		const issueNumberPublished = isProd && publishedComponents.includes(issue.number);
 		issue.labels.forEach((label) => {
 			if (label.name === expectedLabelName) labelMatch = true;
-			if (label.name === ISSUE_LABELS.PUBLISHED) showComponent = true;
+			if (label.name === ISSUE_LABELS.PUBLISHED && issueNumberPublished) showComponent = true;
 		});
 		return labelMatch && showComponent;
 	});
