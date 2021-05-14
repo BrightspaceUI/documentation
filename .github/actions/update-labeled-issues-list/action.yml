@@ -4,11 +4,8 @@ inputs:
   GITHUB_TOKEN:
     description: Token
     required: true
-  LABEL_NAME:
-    description: Label to look for
-    required: true
   LIST_PATH:
-    description: Path to file containing list of issue numbers that have LABEL_NAME label on them
+    description: Path to file containing list of issue numbers that have Published label on them
     required: true
 runs:
   using: composite
@@ -21,7 +18,7 @@ runs:
       - name: Check out branch
         id: check-out-branch
         run: |
-          BRANCH_NAME="update-issue-list"
+          BRANCH_NAME="ghworkflow/update-issue-list"
           echo "::set-output name=branch-name::$(echo "$BRANCH_NAME")"
 
           echo -e "\e[34mFetching branch"
@@ -32,10 +29,6 @@ runs:
         shell: bash
       - name: Update issue list
         run: |
-          if [ ${{ github.event.label.name }} != "${{ inputs.LABEL_NAME }}" ]; then
-            echo -e "\e[32mLabel changed is not \"${{ inputs.LABEL_NAME }}\""
-            exit 0;
-          fi
           echo -e "\e[34mUpdating issue list file"
           node ${{ github.action_path }}/update-issue-list.js
         env:
@@ -82,5 +75,4 @@ runs:
           GITHUB_ISSUE_URL: ${{ github.event.issue.html_url }}
           GITHUB_TOKEN: ${{ inputs.GITHUB_TOKEN }}
           LABEL_ACTION: ${{ github.event.action }}
-          LABEL_NAME: ${{ inputs.LABEL_NAME }}
         shell: bash

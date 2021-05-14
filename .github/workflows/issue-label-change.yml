@@ -4,6 +4,7 @@ on:
     types: [labeled, unlabeled]
 jobs:
   sync_components:
+    if: github.event.label.name == 'Published'
     name: Sync Component Pages List
     timeout-minutes: 5
     runs-on: ubuntu-latest
@@ -11,8 +12,7 @@ jobs:
       - uses: Brightspace/third-party-actions@actions/checkout
       - uses: Brightspace/third-party-actions@actions/setup-node
       - name: Update Published Components File
-        uses: ./.github/workflows/update-labeled-issues-list/
+        uses: ./.github/actions/update-labeled-issues-list/
         with:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          LABEL_NAME: "Published"
           LIST_PATH: "../../../tools/component-page-issues.js"

@@ -8,7 +8,7 @@ const action = process.env['LABEL_ACTION'];
 const branchName = process.env['BRANCH_NAME'];
 const issueTitle = process.env['GITHUB_ISSUE_TITLE'];
 const issueUrl = process.env['GITHUB_ISSUE_URL'];
-const labelName = process.env['LABEL_NAME'];
+const labelName = 'Published';
 
 const octokit = new Octokit({
 	auth: process.env['GITHUB_TOKEN'],
