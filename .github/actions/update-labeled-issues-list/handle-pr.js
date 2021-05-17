@@ -8,6 +8,8 @@ const action = process.env['LABEL_ACTION'];
 const branchName = process.env['BRANCH_NAME'];
 const issueTitle = process.env['GITHUB_ISSUE_TITLE'];
 const issueUrl = process.env['GITHUB_ISSUE_URL'];
+
+const baseBranchName = 'master';
 const labelName = 'Published';
 
 const octokit = new Octokit({
@@ -28,7 +30,7 @@ async function handlePR() {
 		owner: owner,
 		repo: repo,
 		head: `${owner}:refs/heads/${branchName}`,
-		base: 'main'
+		base: baseBranchName
 	});
 
 	if (existingPR.data.length === 0) {
@@ -38,7 +40,7 @@ async function handlePR() {
 				repo: repo,
 				title: `Updating list of issues with ${labelName} label`,
 				head: `refs/heads/${branchName}`,
-				base: 'master',
+				base: baseBranchName,
 				body: getPRBody()
 			});
 		} catch (e) {
