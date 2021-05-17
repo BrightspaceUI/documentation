@@ -60,7 +60,7 @@ module.exports = function(eleventyConfig) {
 
 	markdownIt.renderer.rules.fence = (tokens, idx) => {
 		const content = tokens[idx].content;
-		if (content.includes('<!-- docs: live demo -->') || content.includes('<!-- docs: demo -->')) {
+		if (content.includes('<!-- docs: live demo -->') || content.includes('<!-- docs: demo -->') || content.includes('<!-- docs: code demo -->')) {
 			const script = getScript(content, process.env.NODE_ENV);
 			if (content.includes('<!-- docs: live demo -->')) {
 				return `
@@ -69,6 +69,15 @@ module.exports = function(eleventyConfig) {
 						${escapeHtml(content)}
 					</d2l-component-catalog-interactive-demo>
 				`;
+			} else if (content.includes('<!-- docs: code demo -->')) {
+				// console.log('tester')
+				// console.log(script)
+				console.log(content);
+				return `
+					<d2l-component-catalog-code-demo code=${content} script=${content}>
+					</d2l-component-catalog-code-demo>
+				`;
+
 			} else {
 				return `
 					${script}

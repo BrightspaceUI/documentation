@@ -19,12 +19,10 @@ class ComponentCatalogDemoSnippetWrapper extends LitElement {
 	}
 
 	render() {
+		// ${this._getCode}
 		return html`
-			<d2l-demo-snippet code-view-hidden>
-				<div class="d2l-component-catalog-demo-snippet-wrapper-content">
-					<slot @slotchange="${this._getCode}"></slot>
-				</div>
-			</d2l-demo-snippet>
+			<polymer-code-editor reaonly .value=${this._getCode}>
+			</polymer-code-editor>
 		`;
 	}
 
