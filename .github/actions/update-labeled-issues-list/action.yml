@@ -1,0 +1,78 @@
+name: Update Labeled List
+description: Update list of issues that have specified label
+inputs:
+  GITHUB_TOKEN:
+    description: Token
+    required: true
+  LIST_PATH:
+    description: Path to file containing list of issue numbers that have Published label on them
+    required: true
+runs:
+  using: composite
+  steps:
+      - name: Install Dependencies
+        run: |
+          echo -e "\e[34mInstalling Dependencies"
+          npm install chalk@4 @octokit/rest@18 --prefix ${{ github.action_path }} --no-save --loglevel error
+        shell: bash
+      - name: Check out branch
+        id: check-out-branch
+        run: |
+          BRANCH_NAME="ghworkflow/update-issue-list"
+          echo "::set-output name=branch-name::$(echo "$BRANCH_NAME")"
+
+          echo -e "\e[34mFetching branch"
+          git fetch origin +refs/heads/$BRANCH_NAME:refs/heads/$BRANCH_NAME || true
+
+          echo -e "\e[34mChecking out branch"
+          git checkout $BRANCH_NAME || git checkout -b $BRANCH_NAME
+        shell: bash
+      - name: Update issue list
+        run: |
+          echo -e "\e[34mUpdating issue list file"
+          node ${{ github.action_path }}/update-issue-list.js
+        env:
+          FORCE_COLOR: 3
+          GITHUB_ISSUE_NUMBER: ${{ github.event.issue.number }}
+          LABEL_ACTION: ${{ github.event.action }}
+          LIST_PATH: ${{ inputs.LIST_PATH }}
+        shell: bash
+      - name: Committing changes
+        id: committing-changes
+        run: |
+          if [ -z "$(git status --porcelain)" ]; then
+            echo "::set-output name=changes::$(echo false)"
+            echo -e "\e[32mNo changes to commit."
+            exit 0;
+          fi
+          echo "::set-output name=changes::$(echo true)"
+
+          echo -e "\e[34mCommitting changes"
+          git config user.name github-actions
+          git config user.email github-actions@github.com
+          git add .
+          git commit -m "Updating issue list"
+
+          echo -e "\n\e[34mPushing the ${BRANCH_NAME} branch"
+          git push --force origin $BRANCH_NAME
+        env:
+          GITHUB_TOKEN: ${{ inputs.GITHUB_TOKEN }}
+          BRANCH_NAME: ${{ steps.check-out-branch.outputs.branch-name }}
+        shell: bash
+      - name: Opening PR (if necessary)
+        run: |
+          if [ ${{ steps.committing-changes.outputs.changes }} == false ]; then
+            echo -e "\e[32mNo changes to PR."
+            exit 0;
+          fi
+
+          echo -e "\n\e[34mOpening PR"
+          node ${{ github.action_path }}/handle-pr.js
+        env:
+          BRANCH_NAME: ${{ steps.check-out-branch.outputs.branch-name }}
+          FORCE_COLOR: 3
+          GITHUB_ISSUE_TITLE: ${{ github.event.issue.title }}
+          GITHUB_ISSUE_URL: ${{ github.event.issue.html_url }}
+          GITHUB_TOKEN: ${{ inputs.GITHUB_TOKEN }}
+          LABEL_ACTION: ${{ github.event.action }}
+        shell: bash
