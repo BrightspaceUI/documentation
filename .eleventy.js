@@ -70,11 +70,12 @@ module.exports = function(eleventyConfig) {
 					</d2l-component-catalog-interactive-demo>
 				`;
 			} else if (content.includes('<!-- docs: code demo -->')) {
-				// console.log('tester')
-				// console.log(script)
-				console.log(content);
+				// remove comment line from code snippet
+				const lines = content.split('\n');
+				lines.splice(0, 1);
+				const codeSnippet = lines.join('\n');
 				return `
-					<d2l-component-catalog-code-demo code=${content} script=${content}>
+					<d2l-component-catalog-code-demo code="${escapeHtml(codeSnippet)}" >
 					</d2l-component-catalog-code-demo>
 				`;
 

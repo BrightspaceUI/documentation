@@ -46,7 +46,6 @@ function _copyCustomElements(repos) {
 	});
 	_writeJSONToGeneratedFile(tags, FILENAME_CUSTOM_ELEM);
 }
-
 function _copyMarkdown(files) {
 	files.forEach((file) => {
 		const devOriginFile = path.join(__dirname, `../node_modules/${file.devFile}`);
@@ -259,5 +258,6 @@ request(ISSUES_REQUEST, (error, response, body) => {
 
 		_copyCustomElements(repoInstallLocations);
 		console.info('INFO: Completed custom-elements.json file processing');
+
 	});
 });

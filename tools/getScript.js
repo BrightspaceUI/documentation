@@ -13,6 +13,7 @@ module.exports = {
 			if (!importUrl.includes('import')) return;
 			const fileNameEnd = /([^/]+$)/g.exec(importUrl);
 			const fileName = fileNameEnd[1].split('\';')[0];
+			console.log(fileName)
 			try {
 				const path = assets.getPath(fileName);
 				imports += env === 'production' ? `<script src="${path}" type="module"></script>\n` : `${importUrl}\n`;

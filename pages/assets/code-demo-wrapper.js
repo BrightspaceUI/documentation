@@ -1,5 +1,7 @@
 import '@brightspace-ui/core/components/demo/demo-snippet.js';
 import 'playground-elements/playground-code-editor';
+import 'playground-elements/playground-preview';
+import 'playground-elements/playground-project';
 import { css, html, LitElement } from 'lit-element';
 
 class ComponentCatalogDemoSnippetWrapper extends LitElement {
@@ -21,16 +23,13 @@ class ComponentCatalogDemoSnippetWrapper extends LitElement {
 				display: flex;
 				justify-content: space-evenly;
 			}
-			.code-editor {
+			.code-demo-container {
 				width: 100%;
 				height: 100px;
 			}
 		`;
 	}
-	get getcode() {
-		console.log(this.code)
-		console.log('script')
-		console.log(this.script)
+	get getCode() {
 		return `${this.code}`;
 	}
 	render() {
@@ -38,10 +37,18 @@ class ComponentCatalogDemoSnippetWrapper extends LitElement {
 		// ${this._getCode}
 		console.log('test');
 		return html`
-			<playground-preview project="">
-			</playground-preview>
-			<playground-code-editor class="code-editor" type="html" readonly .value=${this.getcode}>
-			</playground-code-editor>
+			<div class="code-demo-container">
+				<playground-project id="p1">
+					<script filename="index.html" type="sample/html"> 
+						${this.getCode}
+					</script>
+				</playground-project>
+
+				<playground-preview project="p1" filename="index.html">
+				</playground-preview>
+				<playground-code-editor  type="html" .value=${this.getCode}>
+				</playground-code-editor>
+			</div>
 		`;
 	}
 	async _getCode(e) {
