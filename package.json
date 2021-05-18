@@ -21,7 +21,7 @@
     "@babel/core": "^7",
     "@babel/eslint-parser": "^7",
     "@babel/preset-env": "^7",
-    "@brightspace-ui/core": "^1",
+    "@brightspace-ui/core": "brightspaceui/core#component-catalog-doc-changes",
     "@open-wc/building-rollup": "^1",
     "@web/dev-server": "^0.1",
     "clean-css": "^5",
