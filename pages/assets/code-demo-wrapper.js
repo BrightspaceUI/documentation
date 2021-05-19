@@ -46,8 +46,8 @@ class ComponentCatalogDemoSnippetWrapper extends LitElement {
 				<script type="sample/importmap">
 					{
 						"imports": {
-						"@brightspace-ui/core": "https://cdn.skypack.dev/@brightspace-ui/core",
-						"@brightspace-ui/core/": "https://cdn.skypack.dev/@brightspace-ui/core/"
+							"@brightspace-ui/core": "https://cdn.skypack.dev/@brightspace-ui/core",
+							"@brightspace-ui/core/": "https://cdn.skypack.dev/@brightspace-ui/core/"
 						}
 					}
 				</script>
