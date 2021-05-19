@@ -31,10 +31,18 @@ class ComponentCatalogDemoSnippetWrapper extends LitElement {
 			#preview::part(preview-toolbar) {
 				display: none;
 			}
+			.editor-wrapper {
+				position: relative;
+			}
 		`;
 	}
 	get getCode() {
-		return this.code;
+		return `
+		<!-- playground-hide -->
+		test
+		<!-- playground-hide-end -->	
+			${this.code}
+		`;
 	}
 	get getModuleImports() {
 		return this.script;
@@ -53,18 +61,26 @@ class ComponentCatalogDemoSnippetWrapper extends LitElement {
 						}
 					</script>
 					<script filename="index.html" type="sample/html"> 
-							<script type="module" src="index.js">&lt;script>
+						<script type="module" src="index.js">&lt;/script>
+						<body class="d2l-typography">
 							${this.getCode}
+						</body>
 					</script>	
 					<script filename="index.js" type="sample/html">
 ${this.getModuleImports}
 					</script>
 				</playground-project>
-
+				
 				<playground-preview id="preview" project="p1" filename="index.html">
 				</playground-preview>
-				<playground-code-editor  type="html" .value=${this.getCode}>
-				</playground-code-editor>
+				<div class="editor-wrapper">
+					<div class="button-container">
+						test
+					</div>
+					<playground-code-editor readonly type="html" pragmas="on" .value=${this.getCode}>
+					</playground-code-editor>
+				</div>
+				
 			</div>
 		`;
 	}

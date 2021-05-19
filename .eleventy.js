@@ -74,7 +74,9 @@ module.exports = function(eleventyConfig) {
 				lines.splice(0, 1);
 				const codeSnippet = lines.join('\n');
 				return `
-					<d2l-component-catalog-code-demo code="${escapeHtml(codeSnippet)}" script="${escapeHtml(script)}" >
+					<d2l-component-catalog-code-demo 
+						code="${escapeHtml(codeSnippet)}" 
+						script="${escapeHtml(script)}" >
 					</d2l-component-catalog-code-demo>
 				`;
 
