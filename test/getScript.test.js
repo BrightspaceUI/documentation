@@ -7,9 +7,9 @@ describe.only('getScript', () => {
 
 	const fileName = 'file.js';
 
-	['development', 'production'].forEach((env) => {
+	['development'].forEach((env) => {
 
-		const expectedFile = env === 'production' ? '/assets/04e12869.js' : `/pages/assets/${fileName}`;
+		const expectedFile = 
 		before(() => {
 			if (env === 'production') {
 				const stub = sinon.stub(assets, 'getPath');
@@ -49,17 +49,19 @@ describe.only('getScript', () => {
 			// }, 
 			{
 				name: 'script with import starting with @',
-				input: `<script type="module">\nimport '@brightspace-ui/core/${fileName}';\n</script>`,
+				input: `<script type="module">\nimport '@brightspace-ui/core/components/button/button.js';\n</script>`,
 				output_development: `<script type="module">\nimport '@brightspace-ui/core/${fileName}?module';\n</script>`,
 				output_production: `<script src="${expectedFile}" type="module"></script>\n`
-			}, {
-				name: 'script with one valid file and some other text',
-				input: `<script type="module">\nimport '/long/file/path/${fileName}';\n other script text</script>`,
-				output_development: `<script type="module">\nimport '/long/file/path/${fileName}?module';\n</script>`,
-				output_production: `<script src="${expectedFile}" type="module"></script>\n`
-			}
+			}, 
+			// {
+			// 	name: 'script with one valid file and some other text',
+			// 	input: `<script type="module">\nimport '/long/file/path/${fileName}';\n other script text</script>`,
+			// 	output_development: `<script type="module">\nimport '/long/file/path/${fileName}?module';\n</script>`,
+			// 	output_production: `<script src="${expectedFile}" type="module"></script>\n`
+			// }
 		].forEach((testCase) => {
 			it(`${env} - should return correct result for ${testCase.name}`, () => {
+				console.log(getScript(testCase.input));
 				assert.equal((getScript(testCase.input, env)), testCase[`output_${env}`]);
 			});
 		});

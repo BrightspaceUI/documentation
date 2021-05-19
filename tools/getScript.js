@@ -8,20 +8,22 @@ module.exports = {
 		if (!content || content.length !== 2 || content[1] === '') return '';
 
 		const importsArray = content[1].split('\n');
-		let imports = '<script type="module">';
+		let imports = '';
 		importsArray.forEach((importUrl) => {
 			if (!importUrl.includes('import')) return;
-			const fileNameEnd = /([^/]+$)/g.exec(importUrl);
-			const fileName = fileNameEnd[1].split('\';')[0];
-			console.log(fileName)
 			try {
-				// const appendedModule = importUrl.slice(0, -2).concat('?module\';');
-				imports += `${importUrl}\n`;
+				// append ?module to resolve imports in playground-demo components
+				const appendedModule = importUrl.slice(0, -2).concat('?module\';');
+				imports += `${appendedModule}\n`;
 			} catch (e) {
-				throw new Error(`ERROR: ${fileName} does not exist in manifest and may be missing from the components list in a component issue.`);
+				// todo: change error
+				throw new Error(`ERROR: ${importUrl} does not exist in manifest and may be missing from the components list in a component issue.`);
 			}
 		});
-		console.log(`${imports}</script>`)
-		return `${imports}</script>`;
+		console.log('test')
+		imports += 'import \'@brightspace-ui/core/components/typography/typography.js?module\';\n';
+
+
+		return imports;
 	}
 };

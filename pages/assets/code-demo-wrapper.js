@@ -37,29 +37,27 @@ class ComponentCatalogDemoSnippetWrapper extends LitElement {
 		return this.code;
 	}
 	get getModuleImports() {
-		return this.imports;
+		return this.script;
 	}
 	render() {
+		console.log(this.script)
 		return html`
 			<div class="code-demo-container">
 				<playground-project id="p1">
-				<script type="sample/importmap">
-					{
-						"imports": {
-							"@brightspace-ui/core": "https://cdn.skypack.dev/@brightspace-ui/core",
-							"@brightspace-ui/core/": "https://cdn.skypack.dev/@brightspace-ui/core/"
+					<script type="sample/importmap">
+						{
+							"imports": {
+								"@brightspace-ui/core": "https://unpkg.com/@brightspace-ui/core",
+								"@brightspace-ui/core/": "https://unpkg.com/@brightspace-ui/core/"
+							}
 						}
-					}
-				</script>
-				<script filename="index.html" type="sample/html"> 
-
-					<script filename="index.html" type="sample/html"> 
-						<script type="module"> 
-							import '@brightspace-ui/core/button/button.js?module';
-						&lt;script>
-						${this.getCode}
 					</script>
-					<script filename="index.js" type="sample/html"> 
+					<script filename="index.html" type="sample/html"> 
+							<script type="module" src="index.js">&lt;script>
+							${this.getCode}
+					</script>	
+					<script filename="index.js" type="sample/html">
+${this.getModuleImports}
 					</script>
 				</playground-project>
 
