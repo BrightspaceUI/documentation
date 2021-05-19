@@ -64,7 +64,6 @@ module.exports = function(eleventyConfig) {
 			const script = getScript(content, process.env.NODE_ENV);
 			if (content.includes('<!-- docs: live demo -->')) {
 				return `
-					${script}
 					<d2l-component-catalog-interactive-demo>
 						${escapeHtml(content)}
 					</d2l-component-catalog-interactive-demo>
@@ -75,13 +74,12 @@ module.exports = function(eleventyConfig) {
 				lines.splice(0, 1);
 				const codeSnippet = lines.join('\n');
 				return `
-					<d2l-component-catalog-code-demo code="${escapeHtml(codeSnippet)}" >
+					<d2l-component-catalog-code-demo code="${escapeHtml(codeSnippet)}" script="${escapeHtml(script)}" >
 					</d2l-component-catalog-code-demo>
 				`;
 
 			} else {
 				return `
-					${script}
 					<d2l-component-catalog-demo-snippet-wrapper>
 						${escapeHtml(content)}
 					</d2l-component-catalog-demo-snippet-wrapper>

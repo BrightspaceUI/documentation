@@ -8,19 +8,20 @@ module.exports = {
 		if (!content || content.length !== 2 || content[1] === '') return '';
 
 		const importsArray = content[1].split('\n');
-		let imports = env === 'production' ? '' : '<script type="module">\n';
+		let imports = '<script type="module">';
 		importsArray.forEach((importUrl) => {
 			if (!importUrl.includes('import')) return;
 			const fileNameEnd = /([^/]+$)/g.exec(importUrl);
 			const fileName = fileNameEnd[1].split('\';')[0];
 			console.log(fileName)
 			try {
-				const path = assets.getPath(fileName);
-				imports += env === 'production' ? `<script src="${path}" type="module"></script>\n` : `${importUrl}\n`;
+				// const appendedModule = importUrl.slice(0, -2).concat('?module\';');
+				imports += `${importUrl}\n`;
 			} catch (e) {
 				throw new Error(`ERROR: ${fileName} does not exist in manifest and may be missing from the components list in a component issue.`);
 			}
 		});
-		return env === 'production' ? imports : `${imports}</script>`;
+		console.log(`${imports}</script>`)
+		return `${imports}</script>`;
 	}
 };

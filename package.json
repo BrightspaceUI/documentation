@@ -37,13 +37,12 @@
     "lit-analyzer": "^1",
     "markdown-it-modify-token": "^1",
     "mocha": "^8",
-    "playground-elements": "^0.9.3",
+    "playground-elements": "^0.9.4",
     "request": "^2",
     "rimraf": "^3",
     "rollup": "^2",
     "rollup-plugin-output-manifest": "^2",
     "sinon": "^10"
   },
-  "dependencies": {
-  }
+  "dependencies": {}
 }
