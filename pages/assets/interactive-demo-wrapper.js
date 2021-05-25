@@ -49,10 +49,17 @@ class ComponentCatalogDemoSnippetWrapper extends LitElement {
 	}
 
 	get getCode() {
+
+		const splitItems = this.code.split('$attributes');
+		if (splitItems.length === 2) {
+			const withAttributes = `${splitItems[0]}$turklenips${splitItems[1]}`;
+			return `\n\n\n${withAttributes}`;
+		}
+
 		// Add 3 line breaks to allow for button-container spacing
 		return `\n\n\n${this.code}`;
-	}
 
+	}
 	get getModuleImports() {
 		return this.imports;
 	}
@@ -60,12 +67,17 @@ class ComponentCatalogDemoSnippetWrapper extends LitElement {
 	render() {
 		return html`
 			<div class="code-demo-container">
+				
 				<d2l-resizable-demo .code=${this.getCode} .imports=${this.imports}></d2l-resizable-demo>
+
 				<div class="editor-wrapper">
 					<div class="button-container">
 						button container overlay
 					</div>
 					${this.showCode ? html`<playground-code-editor readonly type="html" .value=${this.getCode}></playground-code-editor>` : null}
+				</div>
+				<div class="attribute-table-wrapper">
+
 				</div>
 			</div>
 		`;

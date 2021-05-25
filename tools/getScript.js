@@ -1,9 +1,11 @@
-const assets = require('../pages/_data/assets');
+const { DefaultLitAnalyzerContext } = require("lit-analyzer");
 
+// const assets = require('../pages/_data/assets');
+const defaultImports = [
+	'import \'@brightspace-ui/core/components/typography/typography.js?module\';\n',
+];
 module.exports = {
 	getScript: (allContent) => {
-		// dev could use script as is but since that wont work in prod we should
-		// process in dev as well so there aren't missed errors (e.g., file not listed in manifest) when testing
 		const content = /<script.*>([\s\S]*)<\/script>/g.exec(allContent);
 		if (!content || content.length !== 2 || content[1] === '') return '';
 
@@ -17,10 +19,11 @@ module.exports = {
 				imports += `${appendedModule}\n`;
 			} catch (e) {
 				// todo: change error
-				throw new Error(`ERROR: ${importUrl} does not exist in manifest and may be missing from the components list in a component issue.`);
+				throw new Error(`ERROR: Unable to parse import for: ${importUrl}`);
 			}
 		});
-		imports += 'import \'@brightspace-ui/core/components/typography/typography.js?module\';\n';
+		// Append default imports for IFrames
+		defaultImports.forEach((importStatement) => imports += importStatement);
 		return imports;
 	}
 };

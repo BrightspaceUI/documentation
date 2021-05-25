@@ -61,11 +61,10 @@ module.exports = function(eleventyConfig) {
 	markdownIt.renderer.rules.fence = (tokens, idx) => {
 		const content = tokens[idx].content;
 		if (content.includes('<!-- docs: live demo -->') || content.includes('<!-- docs: demo -->') || content.includes('<!-- docs: code demo -->')) {
-			const script = getScript(content, process.env.NODE_ENV);
+			const imports = getScript(content);
 			if (content.includes('<!-- docs: live demo -->')) {
 				return `
-					<d2l-component-catalog-interactive-demo>
-						${escapeHtml(content)}
+					<d2l-component-catalog-interactive-demo code="${escapeHtml(content)}" imports="${escapeHtml(imports)}">
 					</d2l-component-catalog-interactive-demo>
 				`;
 			} else if (content.includes('<!-- docs: code demo -->')) {
@@ -76,15 +75,14 @@ module.exports = function(eleventyConfig) {
 				return `
 					<d2l-component-catalog-code-demo 
 						code="${escapeHtml(codeSnippet)}" 
-						script="${escapeHtml(script)}" >
+						imports="${escapeHtml(imports)}">
 					</d2l-component-catalog-code-demo>
 				`;
 
 			} else {
 				return `
-					<d2l-component-catalog-demo-snippet-wrapper>
-						${escapeHtml(content)}
-					</d2l-component-catalog-demo-snippet-wrapper>
+					<d2l-component-catalog-code-demo showCode="false" code="${escapeHtml(content)}">
+					</d2l-component-catalog-code-demo>
 				`;
 			}
 		} else
