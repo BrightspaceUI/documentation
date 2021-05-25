@@ -84,15 +84,24 @@ class ComponentCatalogNavigation extends LitElement {
 		`;
 	}
 
-	_generateList(entry, size) {
+	_generateList(entry, size, isComponentsSubchildren) {
 		let children = null;
 		let isVisible = this.pageUrl.includes(entry.url);
+		const isComponents = this.pageUrl.includes('components');
 		if (entry.children && entry.children.length > 0) {
+			if (isComponents && isComponentsSubchildren) {
+				entry.children.sort((a, b) => {
+					if (a.title < b.title) return -1;
+					else if (a.title > b.title) return 1;
+					else return 0;
+				});
+			}
 			const childLists = entry.children.map((child) => {
 				if (child.url === this.pageUrl) isVisible = true;
 				const newSize = size === 'large' ? 'medium' : 'small';
-				return this._generateList(child, newSize);
+				return this._generateList(child, newSize, isComponents);
 			});
+
 			children = html`<ul ?hidden="${!isVisible}">${childLists}</ul>`;
 		}
 

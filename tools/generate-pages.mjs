@@ -14,8 +14,6 @@ const FILENAME_CUSTOM_ELEM = 'custom-elements-all.js';
 const FILENAME_ISSUES = 'component-issue-data.js';
 const FILENAME_ROLLUP = 'rollup-files-generated.js';
 
-const DESIGN_COMMENT = '<!-- docs: design -->';
-
 const ISSUES_REQUEST = {
 	url: 'https://api.github.com/repos/BrightspaceUI/documentation/issues?state=all',
 	headers: {
@@ -56,16 +54,7 @@ function _copyMarkdown(files) {
 		}
 		const newFile = path.join(DIR_IMPORTED_COMPONENTS, `${file.name}.md`);
 		const devContent = fs.readFileSync(devOriginFile);
-		let newContent = `${file.frontMatter}\n${devContent}`;
-		if (file.designFile) {
-			const designOriginFile = path.join(__dirname, `../node_modules/${file.designFile}`);
-			if (!fs.existsSync(designOriginFile)) {
-				console.warn(`WARNING: markdown file ${file.designFile} does not exist`);
-			} else {
-				const designContent = fs.readFileSync(designOriginFile);
-				newContent = newContent.replace(DESIGN_COMMENT, designContent);
-			}
-		}
+		const newContent = `${file.frontMatter}\n${devContent}`;
 
 		fs.writeFileSync(newFile, newContent);
 	});
@@ -224,7 +213,6 @@ request(ISSUES_REQUEST, (error, response, body) => {
 			parsedComment.data.repo = info.repo;
 			const frontMatterString = matter.stringify('', parsedComment.data);
 			const markdownData = { name: newFilename, devFile: devMarkdownPath, frontMatter: frontMatterString };
-			if (info.designMarkdown) markdownData.designFile = path.join(info.baseInstallLocation, info.designMarkdown);
 			markdownFiles.push(markdownData);
 		} catch (e) {
 			console.error(`ERROR: component issue for ${issue.title} is incorrectly formatted`);
