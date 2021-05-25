@@ -34,7 +34,7 @@ class ComponentCatalogCodeViewWrapper extends LitElement {
 			}
 			playground-preview {
 				height: 100%;
-				width: calc(100% - SLIDER_WIDTH);
+				width: calc(100% - ${SLIDER_WIDTH}px);
 			}
 			.preview-container {
 				/* todo: allow for height adjustments */
@@ -51,9 +51,12 @@ class ComponentCatalogCodeViewWrapper extends LitElement {
 				width: ${SLIDER_WIDTH}px;
 				height: 100%;
 				background-color: white;
-				border-left: 1px solid var(--d2l-color-gypsum);
+				border-left: 1px solid #eff3fa;
 				z-index: 9;
 				cursor: col-resize;
+				display: flex;
+    			align-items: center;
+    			justify-content: center;
 			}
 			.slider:hover {
 				background-color: var(--d2l-color-gypsum);
@@ -82,6 +85,20 @@ class ComponentCatalogCodeViewWrapper extends LitElement {
 				-webkit-overflow-scrolling: touch;
 				overflow-x: hidden;
 				position: relative;
+			}
+			.d2l-template-primary-secondary-divider-handle-line {
+				display: flex;
+				height: 0.9rem;
+				justify-content: space-between;
+				width: 0.25rem;
+			}
+			.d2l-template-primary-secondary-divider-handle-line::before,
+			.d2l-template-primary-secondary-divider-handle-line::after {
+				background-color: var(--d2l-color-galena);
+				border-radius: 0.05rem;
+				content: '';
+				display: inline-block;
+				width: 0.1rem;
 			}
 		`;
 	}
@@ -112,7 +129,10 @@ class ComponentCatalogCodeViewWrapper extends LitElement {
 					<script filename="index.html" type="sample/html"> 
 						<script type="module" src="index.js">&lt;/script>
 						<style>
-							/* todo: add this to md template and provide configuration for display/justify/align */
+							/* todo?: add this to md template and provide configuration for different item alignments? */
+							html {
+								margin: 20px;
+							}
 							.layout {
 								display: flex;
 								justify-content: space-evenly;
@@ -136,7 +156,15 @@ class ComponentCatalogCodeViewWrapper extends LitElement {
 				</playground-project>
 				<div class="preview-container">
 					<playground-preview id="preview" project="p1" filename="index.html"></playground-preview>
-					<div class="slider" style=${styleMap(sliderStyles)} @pointerdown=${this._onResizeBarPointerdown}> </div>
+					<div class="slider" style=${styleMap(sliderStyles)} @pointerdown=${this._onResizeBarPointerdown}>
+					<svg width="5" height="18" viewBox="0 0 5 18" xmlns="http://www.w3.org/2000/svg">
+						<g fill="#6E7376" fill-rule="evenodd">
+							<rect width="2" height="18" rx="1"/>
+							<rect x="3" width="2" height="18" rx="1"/>
+						</g>
+					</svg>
+
+					</div>
 				</div>
 			</div>
 		`;
