@@ -43,6 +43,5 @@
     "rollup": "^2",
     "rollup-plugin-output-manifest": "^2",
     "sinon": "^10"
-  },
-  "dependencies": {}
+  }
 }

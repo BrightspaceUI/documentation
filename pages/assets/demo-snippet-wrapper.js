@@ -19,7 +19,6 @@ class ComponentCatalogDemoSnippetWrapper extends LitElement {
 	}
 
 	render() {
-		// ${this._getCode}
 		return html`
 			<polymer-code-editor reaonly .value=${this._getCode}>
 			</polymer-code-editor>

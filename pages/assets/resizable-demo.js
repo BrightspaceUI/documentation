@@ -5,13 +5,15 @@ import 'playground-elements/playground-preview';
 import 'playground-elements/playground-project';
 
 import { css, html, LitElement } from 'lit-element';
+import { styleMap } from 'lit-html/directives/style-map.js';
 
+const SLIDER_WIDTH = 35;
 class ComponentCatalogCodeViewWrapper extends LitElement {
 	static get properties() {
 		return {
 			code: { type: String },
 			imports: { type: String },
-			previewStyles: { type: String },
+
 		};
 	}
 	static get styles() {
@@ -32,9 +34,10 @@ class ComponentCatalogCodeViewWrapper extends LitElement {
 			}
 			playground-preview {
 				height: 100%;
-				width:100%;
+				width: calc(100% - SLIDER_WIDTH);
 			}
 			.preview-container {
+				/* todo: allow for height adjustments */
 				height: 200px;
 				width: max(300px, var(--playground-preview-width, 100%));
 				position: relative;
@@ -45,11 +48,15 @@ class ComponentCatalogCodeViewWrapper extends LitElement {
 				position: absolute;
 				top: 0;
 				right: 0px;
-				width: 20px;
+				width: ${SLIDER_WIDTH}px;
 				height: 100%;
-				background-color: red;
+				background-color: white;
+				border-left: 1px solid var(--d2l-color-gypsum);
 				z-index: 9;
 				cursor: col-resize;
+			}
+			.slider:hover {
+				background-color: var(--d2l-color-gypsum);
 			}
 			#resizeOverlay {
 				display: none;
@@ -78,13 +85,6 @@ class ComponentCatalogCodeViewWrapper extends LitElement {
 			}
 		`;
 	}
-	constructor() {
-		super();
-		this.configuredStyles = '';
-	}
-	get configuredStyles() {
-		return this.previewStyles;
-	}
 
 	firstUpdated() {
 		this._previewContainer = this.shadowRoot.querySelector('.preview-container');
@@ -93,6 +93,10 @@ class ComponentCatalogCodeViewWrapper extends LitElement {
 
 	render() {
 		//todo: allow toggle for resizable
+		const bottomRightBorderRadius = this.isAttached ? '20px' : '0';
+		const sliderStyles = {
+			borderRadius: `0 20px ${bottomRightBorderRadius} 0`
+		};
 		return html`
 			<div class="slider-region">
 				<playground-project id="p1">
@@ -112,7 +116,6 @@ class ComponentCatalogCodeViewWrapper extends LitElement {
 							.layout {
 								display: flex;
 								justify-content: space-evenly;
-								${this.getConfiguredStyles}
 								align-items: center;
 								width: 100%;
 								height: 100%;
@@ -133,12 +136,12 @@ class ComponentCatalogCodeViewWrapper extends LitElement {
 				</playground-project>
 				<div class="preview-container">
 					<playground-preview id="preview" project="p1" filename="index.html"></playground-preview>
-					<div class="slider" @pointerdown=${this._onResizeBarPointerdown}> </div>
+					<div class="slider" style=${styleMap(sliderStyles)} @pointerdown=${this._onResizeBarPointerdown}> </div>
 				</div>
 			</div>
 		`;
 	}
-	
+
 	_onResizeBarPointerdown({ pointerId }) {
 		const bar = this._slider;
 		bar.setPointerCapture(pointerId);
@@ -150,7 +153,7 @@ class ComponentCatalogCodeViewWrapper extends LitElement {
 		const rhsMaxWidth = hostWidth;
 
 		const onPointermove = (event) => {
-			const emptySpaceWidth = hostRight - event.clientX;
+			const emptySpaceWidth = hostRight - event.clientX - (SLIDER_WIDTH / 2); // subtract half the slider size to center cursor
 			const rhsWidth = Math.min(
 				rhsMaxWidth,
 				Math.max(rhsMinWidth, emptySpaceWidth) // prevent from expanding past right border
@@ -167,6 +170,5 @@ class ComponentCatalogCodeViewWrapper extends LitElement {
 		};
 		bar.addEventListener('pointerup', onPointerup);
 	}
-
 }
 customElements.define('d2l-resizable-demo', ComponentCatalogCodeViewWrapper);

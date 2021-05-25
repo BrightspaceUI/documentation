@@ -9,8 +9,7 @@ const componentFiles = [
 	'./pages/assets/code-demo-wrapper.js',
 	'./pages/assets/navigation.js',
 	'./pages/assets/resizable-demo.js',
-	'./pages/assets/interactive-demo-wrapper.js',
-	'./pages/assets/component-attribute-table.js'
+	'./pages/assets/interactive-demo-wrapper.js'
 ].concat(files);
 
 const baseConfig = createBasicConfig({
