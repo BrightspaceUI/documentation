@@ -7,4 +7,4 @@ eleventyNavigation:
   order: 6
 ---
 
-# Feedback Components
+# Table & List Components
