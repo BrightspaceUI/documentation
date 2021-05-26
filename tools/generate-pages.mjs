@@ -151,8 +151,8 @@ export default ${json};
 	fs.writeFileSync(outputPath, fileContent, 'utf8');
 }
 
-	const componentIssues = [],
 _requestIssues().then(issues => {
+	const componentIssues = [],
 		markdownFiles = [],
 		repoInstallLocations = [],
 		rollupFiles = [],
