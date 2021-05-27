@@ -75,7 +75,6 @@ module.exports = function(eleventyConfig) {
 			return `<d2l-component-catalog-code-view-wrapper>${escapeHtml(content)}</d2l-component-catalog-code-view-wrapper>`;
 	};
 
-	// table_open must keep <table> so that inner contents are rendered as table components and we can properly use them in our table component
 	markdownIt.renderer.rules.table_open = () => {
 		return '<d2l-table-wrapper><table class="d2l-table">';
 	};
