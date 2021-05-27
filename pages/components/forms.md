@@ -14,6 +14,4 @@ eleventyNavigation:
   import '@brightspace-ui/core/components/button/button.js';
 </script>
 <d2l-button $attributes>Button</d2l-button>
-<d2l-button $attributes>Button1</d2l-button>
-<d2l-button $attributes>Button2</d2l-button>
 ```

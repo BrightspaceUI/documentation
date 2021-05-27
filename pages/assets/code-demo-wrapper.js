@@ -6,6 +6,7 @@ import 'playground-elements/playground-preview';
 import 'playground-elements/playground-project';
 import { css, html, LitElement } from 'lit-element';
 
+const MINIMUM_WIDTH = 300;
 class ComponentCatalogDemoSnippetWrapper extends LitElement {
 	static get properties() {
 		return {
@@ -25,15 +26,27 @@ class ComponentCatalogDemoSnippetWrapper extends LitElement {
 			}
 
 			playground-code-editor {
+				min-width: ${MINIMUM_WIDTH}px;
 				width: 100%;
 				display: inline-block;
+				--playground-code-font-family: 'Lato', 'Lucida Sans Unicode', 'Lucida Grande', sans-serif;
+				--playground-code-background: var(--d2l-color-ferrite);
+				/* todo: do these colors have names?? */
+				--playground-code-tag-color: #2de2c0; 
+				--playground-code-string-color: #FFF9D6;
+				--playground-code-attribute-color: #00D2ED;
+				--playground-code-default-color: var(--d2l-color-gypsum);
+				border-radius: 0 0 10px 10px;
 			}
 
-		
 			.editor-wrapper {
 				position: relative;
 			}
-		
+
+			.CodeMirror {
+				padding: 40px 10px 0px 10px;
+			}
+
 			.button-container {
 				z-index:10;
 				position: absolute;
@@ -48,24 +61,15 @@ class ComponentCatalogDemoSnippetWrapper extends LitElement {
 		this.showCode = true;
 	}
 
-	get getCode() {
-		// Add 3 line breaks to allow for button-container spacing
-		return `\n\n\n${this.code}`;
-	}
-
-	get getModuleImports() {
-		return this.imports;
-	}
-
 	render() {
 		return html`
 			<div class="code-demo-container">
-				<d2l-resizable-demo .code=${this.getCode} .imports=${this.imports}></d2l-resizable-demo>
+				<d2l-resizable-demo .code=${this.code} .imports=${this.imports}></d2l-resizable-demo>
 				<div class="editor-wrapper">
 					<div class="button-container">
 						button container overlay
 					</div>
-					${this.showCode ? html`<playground-code-editor readonly type="html" .value=${this.getCode}></playground-code-editor>` : null}
+					${this.showCode ? html`<playground-code-editor readonly type="html" .value=${this.code}></playground-code-editor>` : null}
 				</div>
 			</div>
 		`;

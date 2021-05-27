@@ -5,15 +5,24 @@ import 'playground-elements/playground-preview';
 import 'playground-elements/playground-project';
 
 import { css, html, LitElement } from 'lit-element';
+import { classMap } from 'lit-html/directives/class-map.js';
 import { styleMap } from 'lit-html/directives/style-map.js';
 
 const SLIDER_WIDTH = 35;
-class ComponentCatalogCodeViewWrapper extends LitElement {
+const MINIMUM_WIDTH = 300;
+class ResizableDemo extends LitElement {
 	static get properties() {
 		return {
+			// Code for the preview IFrame to display
 			code: { type: String },
+			// Necessary imports for the code running in the IFrame
 			imports: { type: String },
-
+			// Is the preview resizable
+			isResizable : { type: Boolean },
+			// Is a code editor attached to the preview
+			isAttached : { type: Boolean },
+			// Size of the IFrame demo portion, one of 'small' | 'medium' | 'large', defaults to small
+			size: { type: String }
 		};
 	}
 	static get styles() {
@@ -32,14 +41,20 @@ class ComponentCatalogCodeViewWrapper extends LitElement {
 			.code-demo-container {
 				width: 100%;
 			}
+			.small {
+				height: 200px;
+			}
+			.medium {
+				height: 300px;
+			}
+			.large {
+				height: 400px;
+			}
 			playground-preview {
 				height: 100%;
-				width: calc(100% - ${SLIDER_WIDTH}px);
 			}
 			.preview-container {
-				/* todo: allow for height adjustments */
-				height: 200px;
-				width: max(300px, var(--playground-preview-width, 100%));
+				width: max(${MINIMUM_WIDTH}px, var(--playground-preview-width, 100%));
 				position: relative;
 				border-radius: inherit;
 			}
@@ -102,17 +117,29 @@ class ComponentCatalogCodeViewWrapper extends LitElement {
 			}
 		`;
 	}
-
+	constructor() {
+		super();
+		this.isResizable = true;
+		this.isAttached = true;
+		this.size = 'small';
+	}
 	firstUpdated() {
 		this._previewContainer = this.shadowRoot.querySelector('.preview-container');
 		this._slider = this.shadowRoot.querySelector('.slider');
 	}
 
 	render() {
-		//todo: allow toggle for resizable
-		const bottomRightBorderRadius = this.isAttached ? '20px' : '0';
+		const sliderBottomRightBorderRadius = this.isAttached ? '0' : '10px';
 		const sliderStyles = {
-			borderRadius: `0 20px ${bottomRightBorderRadius} 0`
+			borderRadius: `0 10px ${sliderBottomRightBorderRadius} 0`
+		};
+		const previewStyles = {
+			width: `calc(100% - ${this.isResizable ? SLIDER_WIDTH : 0}px)`,
+			borderRadius: `10px 0 0 ${this.isAttached ? 0 : '10px'}`,
+		};
+		const previewClasses = {
+			'preview-container': true,
+			[this.size]: true
 		};
 		return html`
 			<div class="slider-region">
@@ -154,22 +181,20 @@ class ComponentCatalogCodeViewWrapper extends LitElement {
 						${this.imports}
 					</script>
 				</playground-project>
-				<div class="preview-container">
-					<playground-preview id="preview" project="p1" filename="index.html"></playground-preview>
-					<div class="slider" style=${styleMap(sliderStyles)} @pointerdown=${this._onResizeBarPointerdown}>
-					<svg width="5" height="18" viewBox="0 0 5 18" xmlns="http://www.w3.org/2000/svg">
-						<g fill="#6E7376" fill-rule="evenodd">
-							<rect width="2" height="18" rx="1"/>
-							<rect x="3" width="2" height="18" rx="1"/>
-						</g>
-					</svg>
-
-					</div>
+				<div class=${classMap(previewClasses)}>
+					<playground-preview id="preview" style=${styleMap(previewStyles)} project="p1" filename="index.html"></playground-preview>
+					${this.isResizable ?  html`<div class="slider" style=${styleMap(sliderStyles)} @pointerdown=${this._onResizeBarPointerdown}>
+						<svg width="5" height="18" viewBox="0 0 5 18" xmlns="http://www.w3.org/2000/svg">
+							<g fill="#6E7376" fill-rule="evenodd">
+								<rect width="2" height="18" rx="1"/>
+								<rect x="3" width="2" height="18" rx="1"/>
+							</g>
+						</svg>
+					</div>` : null}
 				</div>
 			</div>
 		`;
 	}
-
 	_onResizeBarPointerdown({ pointerId }) {
 		const bar = this._slider;
 		bar.setPointerCapture(pointerId);
@@ -199,4 +224,4 @@ class ComponentCatalogCodeViewWrapper extends LitElement {
 		bar.addEventListener('pointerup', onPointerup);
 	}
 }
-customElements.define('d2l-resizable-demo', ComponentCatalogCodeViewWrapper);
+customElements.define('d2l-resizable-demo', ResizableDemo);
