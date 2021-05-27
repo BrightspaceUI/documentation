@@ -52,12 +52,12 @@ class ComponentCatalogDemoSnippetWrapper extends LitElement {
 
 		const splitItems = this.code.split('$attributes');
 		if (splitItems.length === 2) {
-			const withAttributes = `${splitItems[0]}$turklenips${splitItems[1]}`;
-			return `\n\n\n${withAttributes}`;
+			// todo insert attributes
+			const withAttributes = `${splitItems[0]} -- insert attributes -- ${splitItems[1]}`;
+			return `${withAttributes}`;
 		}
 
-		// Add 3 line breaks to allow for button-container spacing
-		return `\n\n\n${this.code}`;
+		return `${this.code}`;
 
 	}
 	get getModuleImports() {
@@ -77,7 +77,7 @@ class ComponentCatalogDemoSnippetWrapper extends LitElement {
 					${this.showCode ? html`<playground-code-editor readonly type="html" .value=${this.getCode}></playground-code-editor>` : null}
 				</div>
 				<div class="attribute-table-wrapper">
-
+				<!-- todo: Add attribute table -->
 				</div>
 			</div>
 		`;

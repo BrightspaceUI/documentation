@@ -31,7 +31,7 @@ class ComponentCatalogDemoSnippetWrapper extends LitElement {
 				display: inline-block;
 				--playground-code-font-family: 'Lato', 'Lucida Sans Unicode', 'Lucida Grande', sans-serif;
 				--playground-code-background: var(--d2l-color-ferrite);
-				/* todo: do these colors have names?? */
+				/* todo: do some of these colors have names?? */
 				--playground-code-tag-color: #2de2c0; 
 				--playground-code-string-color: #FFF9D6;
 				--playground-code-attribute-color: #00D2ED;
@@ -67,7 +67,7 @@ class ComponentCatalogDemoSnippetWrapper extends LitElement {
 				<d2l-resizable-demo .code=${this.code} .imports=${this.imports}></d2l-resizable-demo>
 				<div class="editor-wrapper">
 					<div class="button-container">
-						button container overlay
+						<!-- Add button items to the overlay and pass through props -->
 					</div>
 					${this.showCode ? html`<playground-code-editor readonly type="html" .value=${this.code}></playground-code-editor>` : null}
 				</div>
