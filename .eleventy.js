@@ -44,12 +44,6 @@ module.exports = function(eleventyConfig) {
 					token.attrSet('class', headingClass);
 					break;
 				}
-				// case 'table_open':
-				// 	token.tag = 'd2l-table';
-				// 	break;
-				// case 'table_close':
-				// 	token.tag = 'd2l-table';
-				// 	break;
 			}
 		}
 	};
@@ -79,6 +73,14 @@ module.exports = function(eleventyConfig) {
 			}
 		} else
 			return `<d2l-component-catalog-code-view-wrapper>${escapeHtml(content)}</d2l-component-catalog-code-view-wrapper>`;
+	};
+
+	// table_open must keep <table> so that inner contents are rendered as table components and we can properly use them in d2l-table
+	markdownIt.renderer.rules.table_open = () => {
+		return '<d2l-component-catalog-table><table>';
+	};
+	markdownIt.renderer.rules.table_close = () => {
+		return '</table></d2l-component-catalog-table>';
 	};
 
 	const defaultTextRule = markdownIt.renderer.rules.text;
