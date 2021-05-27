@@ -77,10 +77,10 @@ module.exports = function(eleventyConfig) {
 
 	// table_open must keep <table> so that inner contents are rendered as table components and we can properly use them in our table component
 	markdownIt.renderer.rules.table_open = () => {
-		return '<d2l-component-catalog-table><table>';
+		return '<d2l-table-wrapper><table class="d2l-table">';
 	};
 	markdownIt.renderer.rules.table_close = () => {
-		return '</table></d2l-component-catalog-table>';
+		return '</table></d2l-table-wrapper>';
 	};
 
 	const defaultTextRule = markdownIt.renderer.rules.text;
