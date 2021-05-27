@@ -1,6 +1,4 @@
-const { expectation } = require('sinon');
 const assert = require('assert');
-const sinon = require('sinon');
 const { getScript } = require('../tools/getScript');
 
 const exampleScript1 = `<!-- docs: code demo -->
