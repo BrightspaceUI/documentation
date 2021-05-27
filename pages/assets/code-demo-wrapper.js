@@ -77,5 +77,3 @@ class ComponentCatalogDemoSnippetWrapper extends LitElement {
 
 }
 customElements.define('d2l-component-catalog-code-demo', ComponentCatalogDemoSnippetWrapper);
-
-

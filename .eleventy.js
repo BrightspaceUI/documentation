@@ -1,4 +1,4 @@
-/* global require, module, process */
+/* global require, module */
 const cleanCSS = require('clean-css');
 const eleventyNavigationPlugin = require('@11ty/eleventy-navigation');
 const { escapeHtml } = require('markdown-it/lib/common/utils');
