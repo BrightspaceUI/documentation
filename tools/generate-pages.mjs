@@ -133,11 +133,7 @@ async function _requestIssues() {
 	};
 	if (process.env.NODE_ENV === 'production') props.labels = ISSUE_LABELS.PUBLISHED;
 
-	let issueData = [];
-	for await (const response of octokit.paginate.iterator(octokit.rest.issues.listForRepo, props)) {
-		issueData = issueData.concat(response.data);
-	}
-	return issueData;
+	return await octokit.paginate(octokit.rest.issues.listForRepo, props);
 }
 
 function _writeJSONToGeneratedFile(data, fileName) {
