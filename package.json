@@ -38,7 +38,6 @@
     "lit-analyzer": "^1",
     "markdown-it-modify-token": "^1",
     "mocha": "^8",
-    "request": "^2",
     "rimraf": "^3",
     "rollup": "^2",
     "rollup-plugin-output-manifest": "^2",

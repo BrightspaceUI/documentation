@@ -54,9 +54,8 @@ function _copyMarkdown(files) {
 		}
 		const newFile = path.join(DIR_IMPORTED_COMPONENTS, `${file.name}.md`);
 		const devContent = fs.readFileSync(devOriginFile);
-		const newContent = `${file.frontMatter}\n${devContent}`;
 
-		fs.writeFileSync(newFile, newContent);
+		fs.writeFileSync(newFile, `${file.frontMatter}\n${devContent}`);
 	});
 }
 

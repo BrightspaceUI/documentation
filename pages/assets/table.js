@@ -2,7 +2,7 @@ import { css, html, LitElement } from 'lit-element';
 import { tableStyles } from '@brightspace-ui/core/components/table/table-wrapper.js';
 
 /**
- * @slot - a table (e.g., <table><table contents /></table>)
+ * @slot - a table (e.g., <table><tableContent /></table>)
  */
 class ComponentCatalogTable extends LitElement {
 
