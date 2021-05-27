@@ -1,6 +1,4 @@
-const { DefaultLitAnalyzerContext } = require("lit-analyzer");
 
-// const assets = require('../pages/_data/assets');
 const defaultImports = [
 	'import \'@brightspace-ui/core/components/typography/typography.js?module\';\n',
 ];
