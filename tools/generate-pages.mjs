@@ -14,10 +14,17 @@ const FILENAME_CUSTOM_ELEM = 'custom-elements-all.js';
 const FILENAME_ISSUES = 'component-issue-data.js';
 const FILENAME_ROLLUP = 'rollup-files-generated.js';
 
+const componentIssues = { 'official': [], 'labs':[], 'request': [] },
+	markdownFiles = [],
+	repoInstallLocations = [],
+	rollupFiles = [],
+	screenshotLocations = [];
+
 const ISSUE_LABELS = {
 	REQUEST: 'Component Request',
-	IN_PROGRESS: 'Component In Progress',
+	LABS: 'Component In Progress', // change to 'Labs Component'
 	DOCUMENTED: 'Component Documented',
+	OFFICIAL: 'Component Documented', // change to 'Official Component'
 	PUBLISHED: 'Published'
 };
 const STATES_COMPONENT = {
@@ -146,67 +153,81 @@ export default ${json};
 	fs.writeFileSync(outputPath, fileContent, 'utf8');
 }
 
+function _getDocumentationInfo(issue) {
+	try {
+		const comment = _getCommentContent(issue.body);
+		const parsedComment = matter(comment); // parsed.content = repo info, parsed.data = front matter
+		const info = _parseComponentIssueInfo(parsedComment.content, issue.title, issue.html_url);
+		componentIssues.official.push(info);
+
+		if (!info.baseInstallLocation) {
+			console.warn(`WARNING: Component issue for ${issue.title} DOES NOT CONTAIN "baseInstallLocation"`);
+			return;
+		}
+
+		if (!repoInstallLocations.includes(info.baseInstallLocation)) repoInstallLocations.push(info.baseInstallLocation);
+
+		if (!info.components || info.components.length === 0)
+			console.warn(`WARNING: Component issue for ${issue.title} DOES NOT CONTAIN "components" array`);
+		else {
+			info.components.forEach((component) => {
+				rollupFiles.push(`${info.baseInstallLocation}/${component}`);
+			});
+		}
+
+		if (!info.devMarkdown) {
+			console.warn(`WARNING: Component issue for ${issue.title} DOES NOT CONTAIN "markdown"`);
+			return;
+		}
+		const devMarkdownPath = path.join(info.baseInstallLocation, info.devMarkdown);
+		const dirname = path.dirname(devMarkdownPath);
+		const screenshotPath1 = path.join(dirname, 'screenshots');
+		const screenshotPath2 = path.join(dirname, '../screenshots'); // some repos have screenshots in a sibling directory to docs
+		if (!screenshotLocations.includes(screenshotPath1)) screenshotLocations.push(screenshotPath1);
+		if (!screenshotLocations.includes(screenshotPath2)) screenshotLocations.push(screenshotPath2);
+
+		const newFilename = (parsedComment.data.eleventyNavigation && parsedComment.data.eleventyNavigation.key) || issue.title;
+		parsedComment.data.repo = info.repo;
+		const frontMatterString = matter.stringify('', parsedComment.data);
+		const markdownData = { name: newFilename, devFile: devMarkdownPath, frontMatter: frontMatterString };
+		markdownFiles.push(markdownData);
+	} catch (e) {
+		console.error(`ERROR: component issue for ${issue.title} is incorrectly formatted`);
+	}
+}
+
 _requestIssues().then(issues => {
-	const componentIssues = [],
-		markdownFiles = [],
-		repoInstallLocations = [],
-		rollupFiles = [],
-		screenshotLocations = [];
 
-	const requested = _getIssues(issues, ISSUE_LABELS.REQUEST);
-	const inProgress = _getIssues(issues, ISSUE_LABELS.IN_PROGRESS);
-	const documented = _getIssues(issues, ISSUE_LABELS.DOCUMENTED);
+	const request = _getIssues(issues, ISSUE_LABELS.REQUEST);
+	const labs = _getIssues(issues, ISSUE_LABELS.LABS);
+	const official = _getIssues(issues, ISSUE_LABELS.OFFICIAL);
 
-	requested.forEach((issue) => {
+	request.forEach((issue) => {
 		const comment = _getCommentContent(issue.body);
-		componentIssues.push(_parseComponentIssueInfo(comment, issue.title, issue.html_url));
+		componentIssues.request.push(_parseComponentIssueInfo(comment, issue.title, issue.html_url));
 	});
 
-	inProgress.forEach((issue) => {
-		const comment = _getCommentContent(issue.body);
-		componentIssues.push(_parseComponentIssueInfo(comment, issue.title, issue.html_url));
-	});
-
-	documented.forEach((issue) => {
-		try {
+	labs.forEach((issue) => {
+		let isDocumented = false;
+		issue.labels.forEach((label) => {
+			if (label.name === ISSUE_LABELS.DOCUMENTED) isDocumented = true;
+		});
+		if (isDocumented) _getDocumentationInfo(issue);
+		else {
 			const comment = _getCommentContent(issue.body);
-			const parsedComment = matter(comment); // parsed.content = repo info, parsed.data = front matter
-			const info = _parseComponentIssueInfo(parsedComment.content, issue.title, issue.html_url);
-			componentIssues.push(info);
+			componentIssues.labs.push(_parseComponentIssueInfo(comment, issue.title, issue.html_url));
+		}
+	});
 
-			if (!info.baseInstallLocation) {
-				console.warn(`WARNING: Component issue for ${issue.title} DOES NOT CONTAIN "baseInstallLocation"`);
-				return;
-			}
-
-			if (!repoInstallLocations.includes(info.baseInstallLocation)) repoInstallLocations.push(info.baseInstallLocation);
-
-			if (!info.components || info.components.length === 0)
-				console.warn(`WARNING: Component issue for ${issue.title} DOES NOT CONTAIN "components" array`);
-			else {
-				info.components.forEach((component) => {
-					rollupFiles.push(`${info.baseInstallLocation}/${component}`);
-				});
-			}
-
-			if (!info.devMarkdown) {
-				console.warn(`WARNING: Component issue for ${issue.title} DOES NOT CONTAIN "markdown"`);
-				return;
-			}
-			const devMarkdownPath = path.join(info.baseInstallLocation, info.devMarkdown);
-			const dirname = path.dirname(devMarkdownPath);
-			const screenshotPath1 = path.join(dirname, 'screenshots');
-			const screenshotPath2 = path.join(dirname, '../screenshots'); // some repos have screenshots in a sibling directory to docs
-			if (!screenshotLocations.includes(screenshotPath1)) screenshotLocations.push(screenshotPath1);
-			if (!screenshotLocations.includes(screenshotPath2)) screenshotLocations.push(screenshotPath2);
-
-			const newFilename = (parsedComment.data.eleventyNavigation && parsedComment.data.eleventyNavigation.key) || issue.title;
-			parsedComment.data.repo = info.repo;
-			const frontMatterString = matter.stringify('', parsedComment.data);
-			const markdownData = { name: newFilename, devFile: devMarkdownPath, frontMatter: frontMatterString };
-			markdownFiles.push(markdownData);
-		} catch (e) {
-			console.error(`ERROR: component issue for ${issue.title} is incorrectly formatted`);
+	official.forEach((issue) => {
+		let isDocumented = false;
+		issue.labels.forEach((label) => {
+			if (label.name === ISSUE_LABELS.DOCUMENTED) isDocumented = true;
+		});
+		if (isDocumented) _getDocumentationInfo(issue);
+		else {
+			const comment = _getCommentContent(issue.body);
+			componentIssues.labs.push(_parseComponentIssueInfo(comment, issue.title, issue.html_url));
 		}
 	});
 

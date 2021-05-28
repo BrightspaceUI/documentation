@@ -7,7 +7,8 @@ const componentFiles = [
 	'./pages/assets/base-imports.js',
 	'./pages/assets/code-view-wrapper.js',
 	'./pages/assets/demo-snippet-wrapper.js',
-	'./pages/assets/navigation.js'
+	'./pages/assets/navigation.js',
+	'./pages/assets/status-table.js'
 ].concat(files);
 
 const baseConfig = createBasicConfig({

@@ -11,9 +11,12 @@ module.exports = function(eleventyConfig) {
 	eleventyConfig.addNunjucksShortcode('enhancements', (repo) => {
 		return `Looking for an enhancement not listed here? <d2l-link href="${repo}/issues">Create a GitHub issue!</d2l-link>`;
 	});
+	eleventyConfig.addShortcode('statusTable', (type) => {
+		return `<d2l-component-catalog-status-table type="${type}"></d2l-component-catalog-status-table>`;
+	});
 
 	const options = {
-		html: false,
+		html: true,
 		breaks: false,
 		linkify: true,
 		modifyToken: (token) => {
@@ -85,6 +88,20 @@ module.exports = function(eleventyConfig) {
 	const defaultTextRule = markdownIt.renderer.rules.text;
 	markdownIt.renderer.rules.text = (tokens, idx, options, env, slf) => {
 		const content = tokens[idx].content;
+		if (env.tags && Object.keys(env.tags[0]).includes(content)) {
+			const tag = env.tags[0][content];
+			return `
+				${defaultTextRule(tokens, idx, options, env, slf)}
+				<div class="d2l-component-catalog-tag d2l-body-standard">
+					<<div class="d2l-component-catalog-tag-inner">${tag}</div>>
+				</div>
+			`;
+		} else return defaultTextRule(tokens, idx, options, env, slf);
+	};
+
+	const defaultHtmlRule = markdownIt.renderer.rules.html_block;
+	markdownIt.renderer.rules.html_block = (tokens, idx, options, env, slf) => {
+		const content = tokens[idx].content;
 		if (content.includes('<!-- docs: start hidden content -->'))
 			return '<div style="display: none;">';
 		else if (content.includes('<!-- docs: end'))
@@ -94,15 +111,7 @@ module.exports = function(eleventyConfig) {
 			const splitEnd = splitStart[1].split(' -->');
 			const contentClass = `d2l-component-catalog-${splitEnd[0].replace(/ /g, '-')}`;
 			return `<div class="${contentClass}">`;
-		} else if (env.tags && Object.keys(env.tags[0]).includes(content)) {
-			const tag = env.tags[0][content];
-			return `
-				${defaultTextRule(tokens, idx, options, env, slf)}
-				<div class="d2l-component-catalog-tag d2l-body-standard">
-					<<div class="d2l-component-catalog-tag-inner">${tag}</div>>
-				</div>
-			`;
-		} else return defaultTextRule(tokens, idx, options, env, slf);
+		} else return defaultHtmlRule(tokens, idx, options, env, slf);
 	};
 
 	eleventyConfig.addPlugin(eleventyNavigationPlugin);
