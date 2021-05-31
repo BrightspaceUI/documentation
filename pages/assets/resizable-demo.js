@@ -113,13 +113,14 @@ class ResizableDemo extends LitElement {
 	}
 
 	render() {
-		const sliderBottomRightBorderRadius = this.attached ? '0' : '10px';
+		const attachedBorderRadius = this.attached ? '0' : '10px';
+		const resizableBorderRadius = this.resizable ? '0' : '10px';
 		const sliderStyles = {
-			borderRadius: `0 10px ${sliderBottomRightBorderRadius} 0`
+			borderRadius: `0 10px ${attachedBorderRadius} 0`
 		};
 		const previewStyles = {
 			width: `calc(100% - ${this.resizable ? SLIDER_WIDTH : 0}px)`,
-			borderRadius: `10px 0 0 ${this.attached ? 0 : '10px'}`
+			borderRadius: `10px ${resizableBorderRadius} ${resizableBorderRadius} ${attachedBorderRadius}`
 		};
 		const previewContainerStyles = {
 			width: this._previewWidth ? `${this._previewWidth}px` : '100%',
