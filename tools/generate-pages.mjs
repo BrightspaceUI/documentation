@@ -21,10 +21,9 @@ const componentIssues = { 'official': [], 'labs':[], 'request': [] },
 	screenshotLocations = [];
 
 const ISSUE_LABELS = {
-	REQUEST: 'Component Request',
-	LABS: 'Component In Progress', // change to 'Labs Component'
-	DOCUMENTED: 'Component Documented',
-	OFFICIAL: 'Component Documented', // change to 'Official Component'
+	REQUEST: 'Requested Component',
+	LABS: 'Labs Component',
+	OFFICIAL: 'Official Component',
 	PUBLISHED: 'Published'
 };
 const STATES_COMPONENT = {
@@ -113,6 +112,14 @@ function _getMissingDependenciesList(dependencies) {
 	});
 }
 
+function _getPageUrl(data) {
+	if (!data.eleventyNavigation || !data.eleventyNavigation.parent || !data.eleventyNavigation.key) {
+		console.warn('WARNING: Component issue does not contain correct eleventyNavigation section');
+		return null;
+	}
+	return `../${data.eleventyNavigation.parent}/${data.eleventyNavigation.key}.html`;
+}
+
 function _installDependencies(dependencies, callback) {
 	_getMissingDependenciesList(dependencies).then((res) => {
 		exec(`npm i ${res} --no-save`, (err, stdout) => {
@@ -153,11 +160,10 @@ export default ${json};
 	fs.writeFileSync(outputPath, fileContent, 'utf8');
 }
 
-function _getDocumentationInfo(issue) {
+function _getDocumentationInfo(issue, parsedComment) {
 	try {
-		const comment = _getCommentContent(issue.body);
-		const parsedComment = matter(comment); // parsed.content = repo info, parsed.data = front matter
 		const info = _parseComponentIssueInfo(parsedComment.content, issue.title, issue.html_url);
+		info.pageUrl = _getPageUrl(parsedComment.data);
 		componentIssues.official.push(info);
 
 		if (!info.baseInstallLocation) {
@@ -208,26 +214,22 @@ _requestIssues().then(issues => {
 	});
 
 	labs.forEach((issue) => {
-		let isDocumented = false;
-		issue.labels.forEach((label) => {
-			if (label.name === ISSUE_LABELS.DOCUMENTED) isDocumented = true;
-		});
-		if (isDocumented) _getDocumentationInfo(issue);
-		else {
-			const comment = _getCommentContent(issue.body);
+		const comment = _getCommentContent(issue.body);
+		const parsedComment = matter(comment); // parsedComment.content = repo info, parsedComment.data = front matter
+		if (parsedComment.content.devMarkdown) {
+			_getDocumentationInfo(issue, parsedComment);
+		} else {
 			componentIssues.labs.push(_parseComponentIssueInfo(comment, issue.title, issue.html_url));
 		}
 	});
 
 	official.forEach((issue) => {
-		let isDocumented = false;
-		issue.labels.forEach((label) => {
-			if (label.name === ISSUE_LABELS.DOCUMENTED) isDocumented = true;
-		});
-		if (isDocumented) _getDocumentationInfo(issue);
-		else {
-			const comment = _getCommentContent(issue.body);
-			componentIssues.labs.push(_parseComponentIssueInfo(comment, issue.title, issue.html_url));
+		const comment = _getCommentContent(issue.body);
+		const parsedComment = matter(comment); // parsedComment.content = repo info, parsedComment.data = front matter
+		if (parsedComment.content.includes('devMarkdown')) {
+			_getDocumentationInfo(issue, parsedComment);
+		} else {
+			componentIssues.official.push(_parseComponentIssueInfo(comment, issue.title, issue.html_url));
 		}
 	});
 
