@@ -37,7 +37,7 @@
     "lit-analyzer": "^1",
     "markdown-it-modify-token": "^1",
     "mocha": "^8",
-    "playground-elements": "^0.9.4",
+    "playground-elements": "^0.9",
     "request": "^2",
     "rimraf": "^3",
     "rollup": "^2",

@@ -13,16 +13,27 @@ const MINIMUM_WIDTH = 300;
 class ResizableDemo extends LitElement {
 	static get properties() {
 		return {
-			// Code for the preview IFrame to display
+			/**
+			* Code for the preview IFrame to display
+			*/
 			code: { type: String },
-			// Necessary imports for the code running in the IFrame
+			/**
+			* Necessary imports for the code running in the IFrame
+			*/
 			imports: { type: String },
-			// Is the preview resizable
-			isResizable : { type: Boolean },
-			// Is a code editor attached to the preview
-			isAttached : { type: Boolean },
-			// Size of the IFrame demo portion, one of 'small' | 'medium' | 'large', defaults to small
-			size: { type: String }
+			/**
+			* Is the preview resizable
+			*/
+			resizable : { type: Boolean },
+			/**
+			*  Is a code editor attached to the preview
+			*/
+			attached : { type: Boolean },
+			/**
+			* Size of the IFrame demo portion
+			* @type {'small'|'medium'|'large'}
+			*/
+			size: { type: String, reflect: true }
 		};
 	}
 	static get styles() {
@@ -41,13 +52,13 @@ class ResizableDemo extends LitElement {
 			.code-demo-container {
 				width: 100%;
 			}
-			.small {
+			:host([size="small"]) {
 				height: 200px;
 			}
-			.medium {
+			:host([size="medium"]) {
 				height: 300px;
 			}
-			.large {
+			:host([size="large"]) {
 				height: 400px;
 			}
 			playground-preview {
@@ -55,6 +66,7 @@ class ResizableDemo extends LitElement {
 			}
 			.preview-container {
 				width: max(${MINIMUM_WIDTH}px, var(--playground-preview-width, 100%));
+				height: 100%;
 				position: relative;
 				border-radius: inherit;
 			}
@@ -101,26 +113,12 @@ class ResizableDemo extends LitElement {
 				overflow-x: hidden;
 				position: relative;
 			}
-			.d2l-template-primary-secondary-divider-handle-line {
-				display: flex;
-				height: 0.9rem;
-				justify-content: space-between;
-				width: 0.25rem;
-			}
-			.d2l-template-primary-secondary-divider-handle-line::before,
-			.d2l-template-primary-secondary-divider-handle-line::after {
-				background-color: var(--d2l-color-galena);
-				border-radius: 0.05rem;
-				content: '';
-				display: inline-block;
-				width: 0.1rem;
-			}
 		`;
 	}
 	constructor() {
 		super();
-		this.isResizable = true;
-		this.isAttached = true;
+		this.resizable = true;
+		this.attached = true;
 		this.size = 'small';
 	}
 	firstUpdated() {
@@ -129,17 +127,16 @@ class ResizableDemo extends LitElement {
 	}
 
 	render() {
-		const sliderBottomRightBorderRadius = this.isAttached ? '0' : '10px';
+		const sliderBottomRightBorderRadius = this.attached ? '0' : '10px';
 		const sliderStyles = {
 			borderRadius: `0 10px ${sliderBottomRightBorderRadius} 0`
 		};
 		const previewStyles = {
-			width: `calc(100% - ${this.isResizable ? SLIDER_WIDTH : 0}px)`,
-			borderRadius: `10px 0 0 ${this.isAttached ? 0 : '10px'}`,
+			width: `calc(100% - ${this.resizable ? SLIDER_WIDTH : 0}px)`,
+			borderRadius: `10px 0 0 ${this.attached ? 0 : '10px'}`,
 		};
 		const previewClasses = {
 			'preview-container': true,
-			[this.size]: true
 		};
 		return html`
 			<div class="slider-region">
@@ -183,7 +180,7 @@ class ResizableDemo extends LitElement {
 				</playground-project>
 				<div class=${classMap(previewClasses)}>
 					<playground-preview id="preview" style=${styleMap(previewStyles)} project="p1" filename="index.html"></playground-preview>
-					${this.isResizable ?  html`<div class="slider" style=${styleMap(sliderStyles)} @pointerdown=${this._onResizeBarPointerdown}>
+					${this.resizable ?  html`<div class="slider" style=${styleMap(sliderStyles)} @pointerdown=${this._onResizeBarPointerdown}>
 						<svg width="5" height="18" viewBox="0 0 5 18" xmlns="http://www.w3.org/2000/svg">
 							<g fill="#6E7376" fill-rule="evenodd">
 								<rect width="2" height="18" rx="1"/>

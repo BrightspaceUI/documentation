@@ -65,6 +65,8 @@ class ComponentCatalogDemoSnippetWrapper extends LitElement {
 	}
 
 	render() {
+		console.log(this.getCode)
+		console.log(this.getCode())
 		return html`
 			<div class="code-demo-container">
 				

@@ -10,9 +10,18 @@ const MINIMUM_WIDTH = 300;
 class ComponentCatalogDemoSnippetWrapper extends LitElement {
 	static get properties() {
 		return {
-			code: { type: String, attribute: 'code', reflect: true },
-			imports: { type: String, attribute: 'imports' },
-			showCode: { type: Boolean, attribute: 'show-code' }
+			/**
+			* Code for the preview IFrame to display
+			*/
+			code: { type: String },
+			/**
+			* Necessary imports for the code running in the IFrame
+			*/
+			imports: { type: String },
+			/**
+			* Hide the read-only code view
+			*/
+			hideCode: { type: Boolean, attribute: 'hide-code' }
 		};
 	}
 
@@ -58,19 +67,17 @@ class ComponentCatalogDemoSnippetWrapper extends LitElement {
 	}
 	constructor() {
 		super();
-		this.showCode = true;
+		this.hideCode = false;
 	}
 
 	render() {
 		return html`
-			<div class="code-demo-container">
-				<d2l-resizable-demo .code=${this.code} .imports=${this.imports}></d2l-resizable-demo>
-				<div class="editor-wrapper">
-					<div class="button-container">
-						<!-- Add button items to the overlay and pass through props -->
-					</div>
-					${this.showCode ? html`<playground-code-editor readonly type="html" .value=${this.code}></playground-code-editor>` : null}
+			<d2l-resizable-demo code=${this.code} imports=${this.imports}></d2l-resizable-demo>
+			<div class="editor-wrapper">
+				<div class="button-container">
+					<!-- Add button items to the overlay and pass through props -->
 				</div>
+				${!this.hideCode ? html`<playground-code-editor readonly type="html" .value=${this.code}></playground-code-editor>` : null}
 			</div>
 		`;
 	}
