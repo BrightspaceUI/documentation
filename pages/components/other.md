@@ -1,10 +1,10 @@
 ---
 layout: layouts/base
 eleventyNavigation:
-  title: Forms
-  key: forms
+  title: Other
+  key: other
   parent: components
-  order: 3
+  order: 8
 ---
 
-# Form Components
+# Other Components

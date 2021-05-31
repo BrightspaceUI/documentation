@@ -44,12 +44,6 @@ module.exports = function(eleventyConfig) {
 					token.attrSet('class', headingClass);
 					break;
 				}
-				// case 'table_open':
-				// 	token.tag = 'd2l-table';
-				// 	break;
-				// case 'table_close':
-				// 	token.tag = 'd2l-table';
-				// 	break;
 			}
 		}
 	};
@@ -79,6 +73,13 @@ module.exports = function(eleventyConfig) {
 			}
 		} else
 			return `<d2l-component-catalog-code-view-wrapper>${escapeHtml(content)}</d2l-component-catalog-code-view-wrapper>`;
+	};
+
+	markdownIt.renderer.rules.table_open = () => {
+		return '<d2l-table-wrapper><table class="d2l-table">';
+	};
+	markdownIt.renderer.rules.table_close = () => {
+		return '</table></d2l-table-wrapper>';
 	};
 
 	const defaultTextRule = markdownIt.renderer.rules.text;
