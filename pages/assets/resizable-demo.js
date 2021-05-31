@@ -5,7 +5,6 @@ import 'playground-elements/playground-preview';
 import 'playground-elements/playground-project';
 
 import { css, html, LitElement } from 'lit-element';
-import { classMap } from 'lit-html/directives/class-map.js';
 import { styleMap } from 'lit-html/directives/style-map.js';
 
 const SLIDER_WIDTH = 35;
@@ -33,7 +32,8 @@ class ResizableDemo extends LitElement {
 			* Size of the IFrame demo portion
 			* @type {'small'|'medium'|'large'}
 			*/
-			size: { type: String, reflect: true }
+			size: { type: String, reflect: true },
+			_previewWidth: { type: Number, reflect: true }
 		};
 	}
 	static get styles() {
@@ -65,7 +65,6 @@ class ResizableDemo extends LitElement {
 				height: 100%;
 			}
 			.preview-container {
-				width: max(${MINIMUM_WIDTH}px, var(--playground-preview-width, 100%));
 				height: 100%;
 				position: relative;
 				border-radius: inherit;
@@ -87,19 +86,6 @@ class ResizableDemo extends LitElement {
 			}
 			.slider:hover {
 				background-color: var(--d2l-color-gypsum);
-			}
-			#resizeOverlay {
-				display: none;
-			}
-			#resizeOverlay.resizing {
-				display: block;
-				position: fixed;
-				top: 0;
-				left: 0;
-				width: 100vw;
-				height: 100vh;
-				z-index: 99999;
-				cursor: col-resize;
 			}
 			#preview::part(preview-toolbar) {
 				display: none;
@@ -133,10 +119,12 @@ class ResizableDemo extends LitElement {
 		};
 		const previewStyles = {
 			width: `calc(100% - ${this.resizable ? SLIDER_WIDTH : 0}px)`,
-			borderRadius: `10px 0 0 ${this.attached ? 0 : '10px'}`,
+			borderRadius: `10px 0 0 ${this.attached ? 0 : '10px'}`
 		};
-		const previewClasses = {
-			'preview-container': true,
+		const previewContainerStyles = {
+			width: this._previewWidth ? `${this._previewWidth}px` : '100%',
+			maxWidth: '100%', // prevent preview from expanding past code block when page resizes
+			minWidth: `${MINIMUM_WIDTH}px`
 		};
 		return html`
 			<div class="slider-region">
@@ -178,7 +166,7 @@ class ResizableDemo extends LitElement {
 						${this.imports}
 					</script>
 				</playground-project>
-				<div class=${classMap(previewClasses)}>
+				<div class="preview-container" style=${styleMap(previewContainerStyles)}>
 					<playground-preview id="preview" style=${styleMap(previewStyles)} project="p1" filename="index.html"></playground-preview>
 					${this.resizable ?  html`<div class="slider" style=${styleMap(sliderStyles)} @pointerdown=${this._onResizeBarPointerdown}>
 						<svg width="5" height="18" viewBox="0 0 5 18" xmlns="http://www.w3.org/2000/svg">
@@ -196,7 +184,6 @@ class ResizableDemo extends LitElement {
 		const bar = this._slider;
 		bar.setPointerCapture(pointerId);
 
-		const previewContainerStyles = this._previewContainer.style;
 		const { left: hostLeft, right: hostRight } = this.getBoundingClientRect();
 		const hostWidth = hostRight - hostLeft;
 		const rhsMinWidth = 0;
@@ -208,8 +195,7 @@ class ResizableDemo extends LitElement {
 				rhsMaxWidth,
 				Math.max(rhsMinWidth, emptySpaceWidth) // prevent from expanding past right border
 			);
-			const percent = (rhsWidth / hostWidth) * 100;
-			previewContainerStyles.setProperty('--playground-preview-width', `${100 - percent}%`);
+			this._previewWidth = Math.max(hostWidth - rhsWidth, MINIMUM_WIDTH);
 		};
 		bar.addEventListener('pointermove', onPointermove);
 
