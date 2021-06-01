@@ -1,20 +1,20 @@
 ---
 name: Component - Request
 about: Submit a request for a new component to be built
-title: "Component Request - <Component Name>"
-labels: Component Request
+title: "<Component Name>"
+labels: Requested Component
 assignees: ''
 ---
 
-## <Component Name>
+# <Component Name>
 
-### General Information
+## General Information
 Add a short description that describes the proposed component and one or two potential use cases.
 
 Example:
 <Dropdown Menus> are used to <group similar menu items under one parent container>. With them it’s possible to <add advanced control menu’s without occupying extra screen space> and <allow users to more easily find closely related menu items>.
 
-### Attributes
+## Attributes
 
 List attributes and type declarations:
 
@@ -25,10 +25,10 @@ Example:
 > - **title** (optional): `String` defaults to `””` – The title of the popup card to be displayed in the header
 > - **onClose** (optional): `() => void` – A call-back for when the popup is closed
 
-### Usage Examples (optional)
+## Usage Examples (optional)
 Here you can include sample code for general component usage or specific use cases that you believe should be outlined.
 
-### Subcomponents (optional)
+## Subcomponents (optional)
 This section should only be included if the suggested component requires creation of new subcomponents. Include example usage, attributes, and most importantly a list of the proposed subcomponents.
 
 Example:

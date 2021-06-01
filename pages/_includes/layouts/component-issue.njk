@@ -1,0 +1,9 @@
+---
+layout: layouts/base
+permalink: components/{{baseUrl}}.html
+---
+{{ content | safe }}
+<script src="{{assets.getPath("code-view-wrapper.js")}}" type="module"></script>
+
+<h2 class="d2l-heading-2">Component Issue</h2>
+{% issue issueUrl %}

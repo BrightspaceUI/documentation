@@ -11,6 +11,9 @@ module.exports = function(eleventyConfig) {
 	eleventyConfig.addNunjucksShortcode('enhancements', (repo) => {
 		return `Looking for an enhancement not listed here? <d2l-link href="${repo}/issues">Create a GitHub issue!</d2l-link>`;
 	});
+	eleventyConfig.addNunjucksShortcode('issue', (issueUrl) => {
+		return `Looking for more details on the component or want to add your input? <d2l-link href="${issueUrl}">Check out the GitHub Issue</d2l-link>`;
+	});
 	eleventyConfig.addShortcode('statusTable', (type) => {
 		return `<d2l-component-catalog-status-table type="${type}"></d2l-component-catalog-status-table>`;
 	});
