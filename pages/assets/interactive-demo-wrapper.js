@@ -29,7 +29,6 @@ class ComponentCatalogDemoSnippetWrapper extends LitElement {
 				display: inline-block;
 			}
 
-		
 			.editor-wrapper {
 				position: relative;
 			}
@@ -65,12 +64,10 @@ class ComponentCatalogDemoSnippetWrapper extends LitElement {
 	}
 
 	render() {
-		console.log(this.getCode)
-		console.log(this.getCode())
 		return html`
 			<div class="code-demo-container">
 				
-				<d2l-resizable-demo .code=${this.getCode} .imports=${this.imports}></d2l-resizable-demo>
+				<d2l-resizable-demo code=${this.getCode} imports=${this.imports}></d2l-resizable-demo>
 
 				<div class="editor-wrapper">
 					<div class="button-container">
