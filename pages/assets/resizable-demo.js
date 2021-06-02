@@ -208,4 +208,4 @@ class ResizableDemo extends LitElement {
 		bar.addEventListener('pointerup', onPointerup);
 	}
 }
-customElements.define('d2l-resizable-demo', ResizableDemo);
+customElements.define('d2l-component-catalog-resizable-demo', ResizableDemo);

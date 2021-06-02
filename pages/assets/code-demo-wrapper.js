@@ -109,7 +109,7 @@ class ComponentCatalogDemoSnippetWrapper extends LitElement {
 
 	render() {
 		return html`
-			<d2l-resizable-demo code=${this.code} imports=${this.imports} ?attached=${!this.hideCode}></d2l-resizable-demo>
+			<d2l-component-catalog-resizable-demo code=${this.code} imports=${this.imports} ?attached=${!this.hideCode}></d2l-component-catalog-resizable-demo>
 			<div class="editor-wrapper">
 				<div class="button-container">
 					<!-- Add button items to the overlay and pass through props -->
