@@ -2,7 +2,6 @@
 const cleanCSS = require('clean-css');
 const eleventyNavigationPlugin = require('@11ty/eleventy-navigation');
 const { escapeHtml } = require('markdown-it/lib/common/utils');
-const { getScript } = require('./tools/getScript');
 
 module.exports = function(eleventyConfig) {
 	eleventyConfig.addPassthroughCopy('pages/components/imported/screenshots');
@@ -61,27 +60,21 @@ module.exports = function(eleventyConfig) {
 	markdownIt.renderer.rules.fence = (tokens, idx) => {
 		const content = tokens[idx].content;
 		if (content.includes('<!-- docs: live demo -->') || content.includes('<!-- docs: demo -->') || content.includes('<!-- docs: code demo -->')) {
-			const imports = getScript(content);
 			if (content.includes('<!-- docs: live demo -->')) {
 				return `
-					<d2l-component-catalog-interactive-demo code="${escapeHtml(content)}" imports="${escapeHtml(imports)}">
+					<d2l-component-catalog-code-demo interactive demo-snippet="${escapeHtml(content)}">
 					</d2l-component-catalog-interactive-demo>
 				`;
 			} else if (content.includes('<!-- docs: code demo -->')) {
-				// remove comment line from code snippet
-				const lines = content.split('\n');
-				lines.splice(0, 1);
-				const codeSnippet = lines.join('\n');
+
 				return `
-					<d2l-component-catalog-code-demo 
-						code="${escapeHtml(codeSnippet)}" 
-						imports="${escapeHtml(imports)}">
+					<d2l-component-catalog-code-demo demo-snippet="${escapeHtml(content)}">
 					</d2l-component-catalog-code-demo>
 				`;
 
 			} else {
 				return `
-					<d2l-component-catalog-code-demo showCode="false" code="${escapeHtml(content)}">
+					<d2l-component-catalog-code-demo showCode="false" demo-snippet="${escapeHtml(content)}"">
 					</d2l-component-catalog-code-demo>
 				`;
 			}

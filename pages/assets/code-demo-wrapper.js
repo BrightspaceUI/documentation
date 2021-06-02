@@ -6,22 +6,38 @@ import 'playground-elements/playground-preview';
 import 'playground-elements/playground-project';
 import { css, html, LitElement } from 'lit-element';
 
+const defaultImports = [
+	'import \'@brightspace-ui/core/components/typography/typography.js?module\';\n',
+];
+const getImports = (allContent) => {
+	const content = /<script.*>([\s\S]*)<\/script>/g.exec(allContent);
+	if (!content || content.length !== 2 || content[1] === '') return '';
+
+	const importsArray = content[1].split('\n');
+	let imports = '';
+	importsArray.forEach((importUrl) => {
+		if (!importUrl.includes('import')) return;
+		// append ?module to resolve imports in playground-demo components
+		const appendedModule = importUrl.slice(0, -2).concat('?module\';').trim();
+		imports += `${appendedModule}\n`;
+	});
+	// Append default imports for IFrames
+	defaultImports.forEach((importStatement) => imports += importStatement);
+	return imports;
+};
 const MINIMUM_WIDTH = 300;
 class ComponentCatalogDemoSnippetWrapper extends LitElement {
 	static get properties() {
 		return {
 			/**
-			* Code for the preview IFrame to display
+			* Code from the markdown to manipulate before previewing in the IFrame
 			*/
-			code: { type: String },
-			/**
-			* Necessary imports for the code running in the IFrame
-			*/
-			imports: { type: String },
+			demoSnippet:  { type: String, attribute: 'demo-snippet' },
 			/**
 			* Hide the read-only code view
 			*/
-			hideCode: { type: Boolean, attribute: 'hide-code' }
+			hideCode: { type: Boolean, attribute: 'hide-code' },
+			interactive: { type: Boolean },
 		};
 	}
 
@@ -64,9 +80,22 @@ class ComponentCatalogDemoSnippetWrapper extends LitElement {
 			}
 		`;
 	}
+
 	constructor() {
 		super();
 		this.hideCode = false;
+	}
+
+	get code() {
+		// remove comment line from code snippet
+		const lines = this.demoSnippet.split('\n');
+		lines.splice(0, 1);
+		const codeSnippet = lines.join('\n');
+		return codeSnippet;
+	}
+
+	get imports() {
+		return getImports(this.demoSnippet);
 	}
 
 	render() {
@@ -76,10 +105,10 @@ class ComponentCatalogDemoSnippetWrapper extends LitElement {
 				<div class="button-container">
 					<!-- Add button items to the overlay and pass through props -->
 				</div>
-				${!this.hideCode ? html`<playground-code-editor readonly type="html" .value=${this.code}></playground-code-editor>` : null}
+				${ !this.hideCode ? html`<playground-code-editor readonly type="html" .value=${this.code}></playground-code-editor>` : null }
 			</div>
+			${ this.interactive ? html`<div> interactive attribute table </div>` : null }
 		`;
 	}
-
 }
 customElements.define('d2l-component-catalog-code-demo', ComponentCatalogDemoSnippetWrapper);
