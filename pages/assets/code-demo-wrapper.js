@@ -91,6 +91,15 @@ class ComponentCatalogDemoSnippetWrapper extends LitElement {
 		const lines = this.demoSnippet.split('\n');
 		lines.splice(0, 1);
 		const codeSnippet = lines.join('\n');
+		if (this.interactive) {
+			const splitItems = this.code.split('$attributes');
+			if (splitItems.length === 2) {
+				// todo insert attributes based on table results
+				const withAttributes = `${splitItems[0]} -- insert attributes -- ${splitItems[1]}`;
+				return `${withAttributes}`;
+			}
+		}
+
 		return codeSnippet;
 	}
 
