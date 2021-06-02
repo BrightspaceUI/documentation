@@ -56,19 +56,19 @@ module.exports = function(eleventyConfig) {
 		if (content.includes('<!-- docs: live demo -->') || content.includes('<!-- docs: demo -->') || content.includes('<!-- docs: code demo -->')) {
 			if (content.includes('<!-- docs: live demo -->')) {
 				return `
-					<d2l-component-catalog-demo-snippet interactive demo-snippet="${escapeHtml(content)}">
+					<d2l-component-catalog-demo-snippet interactive resizable demo-snippet="${escapeHtml(content)}">
 					</d2l-component-catalog-interactive-demo>
 				`;
 			} else if (content.includes('<!-- docs: code demo -->')) {
 
 				return `
-					<d2l-component-catalog-demo-snippet demo-snippet="${escapeHtml(content)}">
+					<d2l-component-catalog-demo-snippet resizable demo-snippet="${escapeHtml(content)}">
 					</d2l-component-catalog-demo-snippet>
 				`;
 
 			} else {
 				return `
-					<d2l-component-catalog-demo-snippet hide-code="true" demo-snippet="${escapeHtml(content)}">
+					<d2l-component-catalog-demo-snippet resizable hide-code demo-snippet="${escapeHtml(content)}">
 					</d2l-component-catalog-demo-snippet>
 				`;
 			}

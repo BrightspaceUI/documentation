@@ -1,6 +1,5 @@
+import '@brightspace-ui/core/components/colors/colors.js';
 import '@brightspace-ui/core/components/demo/code-view.js';
-import 'playground-elements/playground-ide';
-import 'playground-elements/playground-code-editor';
 import 'playground-elements/playground-preview';
 import 'playground-elements/playground-project';
 
@@ -9,9 +8,13 @@ import { styleMap } from 'lit-html/directives/style-map.js';
 
 const SLIDER_WIDTH = 35;
 const MINIMUM_WIDTH = 300;
-class DemoResizablePreview extends LitElement {
+class ComponentCatalogDemoResizablePreview extends LitElement {
 	static get properties() {
 		return {
+			/**
+			*  Is a code editor attached to the preview
+			*/
+			attached : { type: Boolean },
 			/**
 			* Code for the preview IFrame to display
 			*/
@@ -24,10 +27,6 @@ class DemoResizablePreview extends LitElement {
 			* Is the preview resizable
 			*/
 			resizable : { type: Boolean },
-			/**
-			*  Is a code editor attached to the preview
-			*/
-			attached : { type: Boolean },
 			/**
 			* Size of the IFrame demo portion
 			* @type {'small'|'medium'|'large'}
@@ -49,9 +48,6 @@ class DemoResizablePreview extends LitElement {
 				width:100%;
 				z-index:5;
 			}
-			.code-demo-container {
-				width: 100%;
-			}
 			:host([size="small"]) {
 				height: 200px;
 			}
@@ -69,7 +65,6 @@ class DemoResizablePreview extends LitElement {
 				position: relative;
 				border-radius: inherit;
 			}
-
 			.slider {
 				position: absolute;
 				top: 0;
@@ -90,25 +85,13 @@ class DemoResizablePreview extends LitElement {
 			#preview::part(preview-toolbar) {
 				display: none;
 			}
-			.content-wrapper {
-				display: inline;
-			}
-			.empty-space {
-				height: 100%;
-				-webkit-overflow-scrolling: touch;
-				overflow-x: hidden;
-				position: relative;
-			}
 		`;
 	}
 	constructor() {
 		super();
-		this.resizable = true;
-		this.attached = true;
 		this.size = 'small';
 	}
 	firstUpdated() {
-		this._previewContainer = this.shadowRoot.querySelector('.preview-container');
 		this._slider = this.shadowRoot.querySelector('.slider');
 	}
 
@@ -169,7 +152,7 @@ class DemoResizablePreview extends LitElement {
 				</playground-project>
 				<div class="preview-container" style=${styleMap(previewContainerStyles)}>
 					<playground-preview id="preview" style=${styleMap(previewStyles)} project="p1" filename="index.html"></playground-preview>
-					${this.resizable ?  html`<div class="slider" style=${styleMap(sliderStyles)} @pointerdown=${this._onResizeBarPointerdown}>
+					${this.resizable ?  html`<div class="slider" style=${styleMap(sliderStyles)} @pointerdown=${this._onResizeSliderPointerdown}>
 						<svg width="5" height="18" viewBox="0 0 5 18" xmlns="http://www.w3.org/2000/svg">
 							<g fill="#6E7376" fill-rule="evenodd">
 								<rect width="2" height="18" rx="1"/>
@@ -181,9 +164,9 @@ class DemoResizablePreview extends LitElement {
 			</div>
 		`;
 	}
-	_onResizeBarPointerdown({ pointerId }) {
-		const bar = this._slider;
-		bar.setPointerCapture(pointerId);
+	_onResizeSliderPointerdown({ pointerId }) {
+		const slider = this._slider;
+		slider.setPointerCapture(pointerId);
 
 		const { left: hostLeft, right: hostRight } = this.getBoundingClientRect();
 		const hostWidth = hostRight - hostLeft;
@@ -198,14 +181,14 @@ class DemoResizablePreview extends LitElement {
 			);
 			this._previewWidth = Math.max(hostWidth - rhsWidth, MINIMUM_WIDTH);
 		};
-		bar.addEventListener('pointermove', onPointermove);
+		slider.addEventListener('pointermove', onPointermove);
 
 		const onPointerup = () => {
-			bar.releasePointerCapture(pointerId);
-			bar.removeEventListener('pointermove', onPointermove);
-			bar.removeEventListener('pointerup', onPointerup);
+			slider.releasePointerCapture(pointerId);
+			slider.removeEventListener('pointermove', onPointermove);
+			slider.removeEventListener('pointerup', onPointerup);
 		};
-		bar.addEventListener('pointerup', onPointerup);
+		slider.addEventListener('pointerup', onPointerup);
 	}
 }
-customElements.define('d2l-component-catalog-demo-resizable-preview', DemoResizablePreview);
+customElements.define('d2l-component-catalog-demo-resizable-preview', ComponentCatalogDemoResizablePreview);

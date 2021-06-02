@@ -1,8 +1,7 @@
+import '@brightspace-ui/core/components/colors/colors.js';
 import '@brightspace-ui/core/components/demo/demo-snippet.js';
 import './demo-resizable-preview.js';
-import 'playground-elements/playground-ide';
 import 'playground-elements/playground-code-editor';
-import 'playground-elements/playground-preview';
 import 'playground-elements/playground-project';
 import { css, html, LitElement } from 'lit-element';
 
@@ -37,7 +36,14 @@ class ComponentCatalogDemoSnippetWrapper extends LitElement {
 			* Hide the read-only code view
 			*/
 			hideCode: { type: Boolean, attribute: 'hide-code' },
+			/**
+			* Should the attribute table be rendered for interactivity
+			*/
 			interactive: { type: Boolean },
+			/**
+			* Is the preview resizable
+			*/
+			resizable : { type: Boolean },
 		};
 	}
 
@@ -57,9 +63,9 @@ class ComponentCatalogDemoSnippetWrapper extends LitElement {
 				--playground-code-font-family: 'Lato', 'Lucida Sans Unicode', 'Lucida Grande', sans-serif;
 				--playground-code-background: var(--d2l-color-ferrite);
 				/* todo: do some of these colors have names?? */
-				--playground-code-tag-color: #2de2c0; 
-				--playground-code-string-color: #FFF9D6;
-				--playground-code-attribute-color: #00D2ED;
+				--playground-code-tag-color: var(--d2l-color-malachite);
+				--playground-code-string-color: var(--d2l-color-citrine-plus-1);
+				--playground-code-attribute-color: var(--d2l-color-zircon-plus-1);
 				--playground-code-default-color: var(--d2l-color-gypsum);
 				border-radius: 0 0 10px 10px;
 			}
@@ -110,7 +116,7 @@ class ComponentCatalogDemoSnippetWrapper extends LitElement {
 
 	render() {
 		return html`
-			<d2l-component-catalog-demo-resizable-preview code=${this.code} imports=${this.imports} ?attached=${!this.hideCode}></d2l-component-catalog-demo-resizable-preview>
+			<d2l-component-catalog-demo-resizable-preview code=${this.code} imports=${this.imports} ?attached=${!this.hideCode} ?resizable=${this.resizable}></d2l-component-catalog-demo-resizable-preview>
 			<div class="editor-wrapper">
 				<div class="button-container">
 					<!-- Add button items to the overlay and pass through props -->
