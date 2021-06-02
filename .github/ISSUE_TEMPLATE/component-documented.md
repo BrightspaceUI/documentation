@@ -25,14 +25,12 @@ baseInstallLocation: "<npm install location (e.g., @brightspace-ui/core)>"
 components: ["<component file path (e.g., src/my-component.js)>"]
 devMarkdown: "<markdown file path (e.g., README.md)>"
 development: <In Progress | Completed>
-design: <In Progress | Completed>
 -->
 # <Component Name>
 
 ## General Information
 - Repository: <url>
 - Development Status: <In Progress | Completed>
-- Design Status: Completed
 
 ## Description
 A description of the component and its purposes

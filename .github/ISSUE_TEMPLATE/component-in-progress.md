@@ -9,7 +9,6 @@ assignees: ''
 <!--
 repo: <url>
 development: In Progress
-design: <In Progress | Completed>
 -->
 
 # <Component Name>
@@ -17,7 +16,6 @@ design: <In Progress | Completed>
 ## General Information
 - Repository: <url>
 - Development Status: In Progress
-- Design Status: <In Progress | Completed>
 
 ## Description
 A description of the component and its purposes
