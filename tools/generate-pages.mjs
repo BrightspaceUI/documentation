@@ -107,7 +107,7 @@ function _getDevStatus(labels, state, issueState) {
 
 function _getInfoGeneratePage(issue, type) {
 	const { frontMatter, info, issueBody } = _parseBody(issue);
-	componentIssues[type].push(info);
+	componentIssues[type].push({ name: info.name, issueUrl: info.issueUrl, development: info.development, fileName: frontMatter.fileName, owner: info.owner });
 
 	if (!info.devMarkdown || !info.baseInstallLocation) {
 		console.warn(`WARNING: Component issue for ${issue.title} DOES NOT CONTAIN "devMarkdown" OR "baseInstallLocation"`);
@@ -200,6 +200,7 @@ function _parseBody(issue) {
 		if (commentContent) info = Object.assign(info, matter(`---\n${commentContent}\n---`).data);
 		if (Object.keys(matterComment.data).length > 0) {
 			frontMatter = {
+				...frontMatter,
 				...matterComment.data,
 				repo: info.repo,
 				fileName: (frontMatter.eleventyNavigation && frontMatter.eleventyNavigation.key) || title
@@ -208,7 +209,6 @@ function _parseBody(issue) {
 	}
 
 	info.development = _getDevStatus(issue.labels, issue.state, info.development);
-	info.fileName = frontMatter.fileName; // for the status table
 	return { frontMatter, info, issueBody };
 }
 
