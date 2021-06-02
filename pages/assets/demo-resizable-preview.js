@@ -81,8 +81,8 @@ class DemoResizablePreview extends LitElement {
 				z-index: 9;
 				cursor: col-resize;
 				display: flex;
-    			align-items: center;
-    			justify-content: center;
+				align-items: center;
+				justify-content: center;
 			}
 			.slider:hover {
 				background-color: var(--d2l-color-gypsum);
@@ -90,7 +90,7 @@ class DemoResizablePreview extends LitElement {
 			#preview::part(preview-toolbar) {
 				display: none;
 			}
-			.content-wrapper { 
+			.content-wrapper {
 				display: inline;
 			}
 			.empty-space {
@@ -139,7 +139,7 @@ class DemoResizablePreview extends LitElement {
 						}
 					</script>
 					<!-- GETTING RENDERED -->
-					<script filename="index.html" type="sample/html"> 
+					<script filename="index.html" type="sample/html">
 						<script type="module" src="index.js">&lt;/script>
 						<style>
 							/* todo?: add this to md template and provide configuration for different item alignments? */
@@ -162,7 +162,7 @@ class DemoResizablePreview extends LitElement {
 								${this.code}
 							</div>
 						</body>
-					</script>	
+					</script>
 					<script filename="index.js" type="sample/js">
 						${this.imports}
 					</script>
