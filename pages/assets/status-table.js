@@ -85,16 +85,20 @@ class ComponentCatalogStatusTable extends LitElement {
 		if (!this._components || this._components.length === 0) return html`<div>There are currently no components of this type.</div>`;
 
 		const rows = this._components.map(component => {
-			const status = getStatus(component.development);
 			const linkHref = component.fileName ? `../${component.fileName}.html` : component.issueUrl;
 			const name = this.type === 'official'
 				? html`<d2l-link href="${linkHref}">${component.name}</d2l-link>`
 				: html `<d2l-link class="d2l-component-catalog-status-table-name" href="${linkHref}">${component.name}<img src="/img/${this.type}-icon.svg" alt="${this.type} icon"></d2l-link>`;
+
+			const status = getStatus(component.development);
+			const owner = component.owner && component.owner.includes('#')
+				? html`<d2l-link href="https://d2l.slack.com/messages/${component.owner}">${component.owner}</d2l-link>`
+				: component.owner;
 			return html`
 				<tr>
 					<td>${name}</td>
 					<td>${status}</td>
-					<td>${component.owner}</td>
+					<td>${owner}</td>
 				</tr>
 			`;
 		});

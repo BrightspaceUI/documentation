@@ -24,6 +24,7 @@ repo: "<url>"
 baseInstallLocation: "<npm install location (e.g., @brightspace-ui/core)>"
 components: ["<component file path (e.g., src/my-component.js)>"]
 devMarkdown: "<markdown file path (e.g., README.md)>"
+owner: "<team name or #slack-channel>"
 development: <In Progress | Completed>
 -->
 # <Component Name>

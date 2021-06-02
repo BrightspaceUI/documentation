@@ -7,7 +7,8 @@ assignees: ''
 ---
 
 <!--
-repo: <url>
+repo: "<url>"
+owner: "<team name or #slack-channel>"
 development: In Progress
 -->
 
