@@ -7,11 +7,3 @@ eleventyNavigation:
 ---
 
 # Form Components
-
-```html
-<!-- docs: code demo -->
-<script type="module">
-  import '@brightspace-ui/core/components/button/button.js';
-</script>
-<d2l-button $attributes>Button</d2l-button>
-```
