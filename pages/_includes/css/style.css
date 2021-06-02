@@ -63,7 +63,7 @@ div.d2l-component-catalog-content {
 	margin: 0;
 }
 
-h2 {
+h1, h2, h3 {
 	display: flex;
 }
 .d2l-component-catalog-tag {
@@ -94,6 +94,9 @@ d2l-component-catalog-interactive-demo {
 	list-style: none;
 	margin: 0;
 	padding: 0;
+}
+.d2l-component-catalog-best-practices li {
+	margin-bottom: 0.3rem;
 }
 .d2l-component-catalog-best-practices li::before {
 	display: inline-block;

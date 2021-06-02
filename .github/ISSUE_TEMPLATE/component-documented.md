@@ -24,7 +24,6 @@ repo: "<url>"
 baseInstallLocation: "<npm install location (e.g., @brightspace-ui/core)>"
 components: ["<component file path (e.g., src/my-component.js)>"]
 devMarkdown: "<markdown file path (e.g., README.md)>"
-designMarkdown: "<markdown file path (e.g., design/button.md)>"
 development: <In Progress | Completed>
 design: <In Progress | Completed>
 -->
@@ -40,3 +39,6 @@ A description of the component and its purposes
 
 ### Design Documentation (optional)
 Links to any design documents, discussions or mock ups.
+
+### Future Enhancements (optional)
+- List of any upcoming work.

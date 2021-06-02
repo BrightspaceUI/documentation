@@ -43,12 +43,6 @@ module.exports = function(eleventyConfig) {
 					token.attrSet('class', headingClass);
 					break;
 				}
-				// case 'table_open':
-				// 	token.tag = 'd2l-table';
-				// 	break;
-				// case 'table_close':
-				// 	token.tag = 'd2l-table';
-				// 	break;
 			}
 		}
 	};
@@ -83,6 +77,13 @@ module.exports = function(eleventyConfig) {
 			// todo: add a prop to hide the demo and only show code
 			return `<d2l-component-catalog-demo-snippet demo-snippet="${escapeHtml(content)}"></d2l-component-catalog-demo-snippet>`;
 		}
+	};
+
+	markdownIt.renderer.rules.table_open = () => {
+		return '<d2l-table-wrapper><table class="d2l-table">';
+	};
+	markdownIt.renderer.rules.table_close = () => {
+		return '</table></d2l-table-wrapper>';
 	};
 
 	const defaultTextRule = markdownIt.renderer.rules.text;

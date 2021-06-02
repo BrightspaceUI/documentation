@@ -1,9 +1,9 @@
 import { exec } from 'child_process';
 import fs from 'fs';
 import matter from 'gray-matter';
+import { Octokit } from '@octokit/rest';
 import path from 'path';
 import { default as publishedComponents } from './component-page-issues.js';
-import request from 'request';
 
 const __dirname = path.dirname(process.argv[1]);
 
@@ -14,14 +14,6 @@ const FILENAME_CUSTOM_ELEM = 'custom-elements-all.js';
 const FILENAME_ISSUES = 'component-issue-data.js';
 const FILENAME_ROLLUP = 'rollup-files-generated.js';
 
-const DESIGN_COMMENT = '<!-- docs: design -->';
-
-const ISSUES_REQUEST = {
-	url: 'https://api.github.com/repos/BrightspaceUI/documentation/issues?state=all',
-	headers: {
-		'User-Agent': 'request'
-	}
-};
 const ISSUE_LABELS = {
 	REQUEST: 'Component Request',
 	IN_PROGRESS: 'Component In Progress',
@@ -31,6 +23,12 @@ const ISSUE_LABELS = {
 const STATES_COMPONENT = {
 	NOT_STARTED: 'Not Started'
 };
+
+const octokit = new Octokit({
+	auth: process.env['GITHUB_TOKEN'],
+	baseUrl: 'https://api.github.com',
+	userAgent: 'documentation - request issues'
+});
 
 function _copyCustomElements(repos) {
 	let tags = [];
@@ -55,18 +53,8 @@ function _copyMarkdown(files) {
 		}
 		const newFile = path.join(DIR_IMPORTED_COMPONENTS, `${file.name}.md`);
 		const devContent = fs.readFileSync(devOriginFile);
-		let newContent = `${file.frontMatter}\n${devContent}`;
-		if (file.designFile) {
-			const designOriginFile = path.join(__dirname, `../node_modules/${file.designFile}`);
-			if (!fs.existsSync(designOriginFile)) {
-				console.warn(`WARNING: markdown file ${file.designFile} does not exist`);
-			} else {
-				const designContent = fs.readFileSync(designOriginFile);
-				newContent = newContent.replace(DESIGN_COMMENT, designContent);
-			}
-		}
 
-		fs.writeFileSync(newFile, newContent);
+		fs.writeFileSync(newFile, `${file.frontMatter}\n${devContent}`);
 	});
 }
 
@@ -83,17 +71,6 @@ function _copyScreenshots(screenshotDirs) {
 	});
 }
 
-function _generateRollupConfig(files) {
-	let content = 'export default [';
-	for (let i = 0; i < files.length; i++) {
-		if (i > 0) content += ',';
-		content += `\n\t"./node_modules/${files[i]}"`;
-	}
-	content += '\n];';
-	const outputPath = path.join(DIR_GENERATED, FILENAME_ROLLUP);
-	fs.writeFileSync(outputPath, content, 'utf8');
-}
-
 function _getCommentContent(body) {
 	if (!body) return '';
 	const splitStart = body.split(/<!--\r?\n/);
@@ -104,14 +81,12 @@ function _getCommentContent(body) {
 function _getIssues(issues, expectedLabelName) {
 	const isProd = process.env.NODE_ENV === 'production';
 	return issues.filter(issue => {
+		if (isProd && !publishedComponents.includes(issue.number)) return false;
 		let labelMatch = false;
-		let showComponent = !isProd; // if NODE_ENV is production, only show component with "Published" label
-		const issueNumberPublished = isProd && publishedComponents.includes(issue.number);
 		issue.labels.forEach((label) => {
 			if (label.name === expectedLabelName) labelMatch = true;
-			if (label.name === ISSUE_LABELS.PUBLISHED && issueNumberPublished) showComponent = true;
 		});
-		return labelMatch && showComponent;
+		return labelMatch;
 	});
 }
 
@@ -149,6 +124,17 @@ function _parseComponentIssueInfo(componentBody, name, url) {
 	return info;
 }
 
+async function _requestIssues() {
+	const props = {
+		owner: 'BrightspaceUI',
+		repo: 'documentation',
+		state: 'all'
+	};
+	if (process.env.NODE_ENV === 'production') props.labels = ISSUE_LABELS.PUBLISHED;
+
+	return await octokit.paginate(octokit.rest.issues.listForRepo, props);
+}
+
 function _writeJSONToGeneratedFile(data, fileName) {
 	const json = JSON.stringify(data, null, '\t');
 	const fileContent = `/* eslint quotes: 0 */
@@ -159,19 +145,13 @@ export default ${json};
 	fs.writeFileSync(outputPath, fileContent, 'utf8');
 }
 
-request(ISSUES_REQUEST, (error, response, body) => {
-	if (error || response.statusCode !== 200) {
-		console.error('ERROR: Failed to call GitHub issues API');
-		return;
-	}
-
+_requestIssues().then(issues => {
 	const componentIssues = [],
 		markdownFiles = [],
 		repoInstallLocations = [],
 		rollupFiles = [],
 		screenshotLocations = [];
 
-	const issues = JSON.parse(body);
 	const requested = _getIssues(issues, ISSUE_LABELS.REQUEST);
 	const inProgress = _getIssues(issues, ISSUE_LABELS.IN_PROGRESS);
 	const documented = _getIssues(issues, ISSUE_LABELS.DOCUMENTED);
@@ -223,7 +203,6 @@ request(ISSUES_REQUEST, (error, response, body) => {
 			parsedComment.data.repo = info.repo;
 			const frontMatterString = matter.stringify('', parsedComment.data);
 			const markdownData = { name: newFilename, devFile: devMarkdownPath, frontMatter: frontMatterString };
-			if (info.designMarkdown) markdownData.designFile = path.join(info.baseInstallLocation, info.designMarkdown);
 			markdownFiles.push(markdownData);
 		} catch (e) {
 			console.error(`ERROR: component issue for ${issue.title} is incorrectly formatted`);
@@ -237,7 +216,7 @@ request(ISSUES_REQUEST, (error, response, body) => {
 	_writeJSONToGeneratedFile(componentIssues, FILENAME_ISSUES);
 	console.info('INFO: Completed writing component issue info to file');
 
-	_generateRollupConfig(rollupFiles);
+	_writeJSONToGeneratedFile(rollupFiles, FILENAME_ROLLUP);
 	console.info('INFO: Completed generating rollup config');
 
 	if (!repoInstallLocations || repoInstallLocations.length === 0) {

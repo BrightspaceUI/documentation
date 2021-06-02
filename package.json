@@ -22,6 +22,7 @@
     "@babel/eslint-parser": "^7",
     "@babel/preset-env": "^7",
     "@brightspace-ui/core": "^1",
+    "@octokit/rest": "^18",
     "@open-wc/building-rollup": "^1",
     "@web/dev-server": "^0.1",
     "clean-css": "^5",
@@ -42,6 +43,6 @@
     "rimraf": "^3",
     "rollup": "^2",
     "rollup-plugin-output-manifest": "^2",
-    "sinon": "^10"
+    "sinon": "^11"
   }
 }
