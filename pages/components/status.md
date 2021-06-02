@@ -20,14 +20,14 @@ Official components adhere to our architectural guidelines, are localized and hi
 
 {% statusTable "official" %}
 
-## Labs Components
+## ![labs icon](/img/labs-icon.svg) Labs Components
 Components that fall into the "labs" tier have some buy-in from design, at least in an experimental sense. They may not have a full pattern documented on design.d2l yet, but some design thought has gone into the component and where and how it should be used. The component has the potential to be used in multiple places.
 
 Labs components may not fully adhere to archutectural guidelines, and may be missing some tests or documentation.
 
 {% statusTable "labs" %}
 
-## Requested Components
+## ![request icon](/img/request-icon.svg) Requested Components
 If you can't find what you're looking for, it may already be in the pipeline! This is a list of requested components or known gaps we're tracking.
 
 {% statusTable "request" %}

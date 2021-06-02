@@ -9,7 +9,7 @@ import { tableStyles } from '@brightspace-ui/core/components/table/table-wrapper
 function getStatus(devStatus) {
 	if (devStatus === DEV_STATES.COMPLETE) {
 		return html`
-			<div class="d2l-component-catalog-stable">
+			<div class="d2l-component-catalog-status-table-stable">
 				<d2l-icon icon="tier1:check" style="color: var(--d2l-color-olivine);"></d2l-icon>
 				${CC_STATES.STABLE}
 			</div>`;
@@ -41,16 +41,23 @@ class ComponentCatalogStatusTable extends LitElement {
 			:host([hidden]) {
 				display: none;
 			}
-			.d2l-component-catalog-stable {
+			d2l-table-wrapper {
+				padding-top: 1rem;
+			}
+			.d2l-component-catalog-status-table-stable {
 				align-items: center;
 				color: var(--d2l-color-olivine);
 				display: flex;
 			}
-			.d2l-component-catalog-stable d2l-icon {
+			.d2l-component-catalog-status-table-stable d2l-icon {
 				padding-right: 0.25rem;
 			}
-			d2l-table-wrapper {
-				padding-top: 1rem;
+			.d2l-component-catalog-status-table-name {
+				align-items: center;
+				display: flex;
+			}
+			.d2l-component-catalog-status-table-name img {
+				padding-left: 0.5rem;
 			}
 		`];
 	}
@@ -80,9 +87,12 @@ class ComponentCatalogStatusTable extends LitElement {
 		const rows = this._components.map(component => {
 			const status = getStatus(component.development);
 			const linkHref = component.fileName ? `../${component.fileName}.html` : component.issueUrl;
+			const name = this.type === 'official'
+				? html`<d2l-link href="${linkHref}">${component.name}</d2l-link>`
+				: html `<d2l-link class="d2l-component-catalog-status-table-name" href="${linkHref}">${component.name}<img src="/img/${this.type}-icon.svg" alt="${this.type} icon"></d2l-link>`;
 			return html`
 				<tr>
-					<td><d2l-link href="${linkHref}">${component.name}</d2l-link></td>
+					<td>${name}</td>
 					<td>${status}</td>
 					<td>${component.owner}</td>
 				</tr>

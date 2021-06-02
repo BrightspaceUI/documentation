@@ -23,7 +23,6 @@ module.exports = function(eleventyConfig) {
 		breaks: false,
 		linkify: true,
 		modifyToken: (token) => {
-			// TODO: enable table cases after d2l-table is ready
 			switch (token.type) {
 				case 'image': {
 					const src = token.attrGet('src');
