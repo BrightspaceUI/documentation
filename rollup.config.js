@@ -5,9 +5,9 @@ import outputManifest from 'rollup-plugin-output-manifest';
 
 const componentFiles = [
 	'./pages/assets/base-imports.js',
-	'./pages/assets/code-demo-wrapper.js',
-	'./pages/assets/navigation.js',
-	'./pages/assets/resizable-demo.js'
+	'./pages/assets/demo-resizable-preview.js',
+	'./pages/assets/demo-snippet.js',
+	'./pages/assets/navigation.js'
 ].concat(files);
 
 const baseConfig = createBasicConfig({

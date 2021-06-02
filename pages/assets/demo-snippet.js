@@ -1,5 +1,5 @@
 import '@brightspace-ui/core/components/demo/demo-snippet.js';
-import './resizable-demo.js';
+import './demo-resizable-preview.js';
 import 'playground-elements/playground-ide';
 import 'playground-elements/playground-code-editor';
 import 'playground-elements/playground-preview';
@@ -91,8 +91,9 @@ class ComponentCatalogDemoSnippetWrapper extends LitElement {
 		const lines = this.demoSnippet.split('\n');
 		lines.splice(0, 1);
 		const codeSnippet = lines.join('\n');
+
 		if (this.interactive) {
-			const splitItems = this.code.split('$attributes');
+			const splitItems = codeSnippet.split('$attributes');
 			if (splitItems.length === 2) {
 				// todo insert attributes based on table results
 				const withAttributes = `${splitItems[0]} -- insert attributes -- ${splitItems[1]}`;
@@ -109,7 +110,7 @@ class ComponentCatalogDemoSnippetWrapper extends LitElement {
 
 	render() {
 		return html`
-			<d2l-component-catalog-resizable-demo code=${this.code} imports=${this.imports} ?attached=${!this.hideCode}></d2l-component-catalog-resizable-demo>
+			<d2l-component-catalog-demo-resizable-preview code=${this.code} imports=${this.imports} ?attached=${!this.hideCode}></d2l-component-catalog-demo-resizable-preview>
 			<div class="editor-wrapper">
 				<div class="button-container">
 					<!-- Add button items to the overlay and pass through props -->
@@ -120,4 +121,4 @@ class ComponentCatalogDemoSnippetWrapper extends LitElement {
 		`;
 	}
 }
-customElements.define('d2l-component-catalog-code-demo', ComponentCatalogDemoSnippetWrapper);
+customElements.define('d2l-component-catalog-demo-snippet', ComponentCatalogDemoSnippetWrapper);

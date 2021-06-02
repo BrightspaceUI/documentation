@@ -62,24 +62,27 @@ module.exports = function(eleventyConfig) {
 		if (content.includes('<!-- docs: live demo -->') || content.includes('<!-- docs: demo -->') || content.includes('<!-- docs: code demo -->')) {
 			if (content.includes('<!-- docs: live demo -->')) {
 				return `
-					<d2l-component-catalog-code-demo interactive demo-snippet="${escapeHtml(content)}">
+					<d2l-component-catalog-demo-snippet interactive demo-snippet="${escapeHtml(content)}">
 					</d2l-component-catalog-interactive-demo>
 				`;
 			} else if (content.includes('<!-- docs: code demo -->')) {
 
 				return `
-					<d2l-component-catalog-code-demo demo-snippet="${escapeHtml(content)}">
-					</d2l-component-catalog-code-demo>
+					<d2l-component-catalog-demo-snippet demo-snippet="${escapeHtml(content)}">
+					</d2l-component-catalog-demo-snippet>
 				`;
 
 			} else {
 				return `
-					<d2l-component-catalog-code-demo showCode="false" demo-snippet="${escapeHtml(content)}"">
-					</d2l-component-catalog-code-demo>
+					<d2l-component-catalog-demo-snippet hide-code="true" demo-snippet="${escapeHtml(content)}">
+					</d2l-component-catalog-demo-snippet>
 				`;
 			}
-		} else
-			return `<d2l-component-catalog-code-view-wrapper>${escapeHtml(content)}</d2l-component-catalog-code-view-wrapper>`;
+		} else {
+			// Code only snippets
+			// todo: add a prop to hide the demo and only show code
+			return `<d2l-component-catalog-demo-snippet demo-snippet="${escapeHtml(content)}"></d2l-component-catalog-demo-snippet>`;
+		}
 	};
 
 	const defaultTextRule = markdownIt.renderer.rules.text;

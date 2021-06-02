@@ -9,7 +9,7 @@ import { styleMap } from 'lit-html/directives/style-map.js';
 
 const SLIDER_WIDTH = 35;
 const MINIMUM_WIDTH = 300;
-class ResizableDemo extends LitElement {
+class DemoResizablePreview extends LitElement {
 	static get properties() {
 		return {
 			/**
@@ -208,4 +208,4 @@ class ResizableDemo extends LitElement {
 		bar.addEventListener('pointerup', onPointerup);
 	}
 }
-customElements.define('d2l-component-catalog-resizable-demo', ResizableDemo);
+customElements.define('d2l-component-catalog-demo-resizable-preview', DemoResizablePreview);
