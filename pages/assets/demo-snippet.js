@@ -62,7 +62,6 @@ class ComponentCatalogDemoSnippetWrapper extends LitElement {
 				display: inline-block;
 				--playground-code-font-family: 'Lato', 'Lucida Sans Unicode', 'Lucida Grande', sans-serif;
 				--playground-code-background: var(--d2l-color-ferrite);
-				/* todo: do some of these colors have names?? */
 				--playground-code-tag-color: var(--d2l-color-malachite);
 				--playground-code-string-color: var(--d2l-color-citrine-plus-1);
 				--playground-code-attribute-color: var(--d2l-color-zircon-plus-1);
