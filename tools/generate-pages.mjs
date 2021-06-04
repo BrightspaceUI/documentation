@@ -94,7 +94,7 @@ function _getDevStatus(labels, state, issueState) {
 
 function _getInfoGeneratePage(issue) {
 	const { frontMatter, info, issueBody } = _parseBody(issue);
-	const output = { name: info.name, issueUrl: info.issueUrl, development: info.development, fileName: frontMatter.fileName, owner: info.owner }
+	const output = { name: info.name, issueUrl: info.issueUrl, development: info.development, fileName: frontMatter.fileName, owner: info.owner };
 
 	if (!info.devMarkdown || !info.baseInstallLocation) {
 		console.warn(`WARNING: Component issue for ${issue.title} DOES NOT CONTAIN "devMarkdown" OR "baseInstallLocation"`);
