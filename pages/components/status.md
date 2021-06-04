@@ -9,27 +9,27 @@ eleventyNavigation:
 
 # Component Status
 
-This page lists all our components, including [Labs]() components and even [requested]() components that haven't been built yet. We include the overall status of the component, but you can get the full details by clicking on the component name or its status.
+This page lists all of our components, including [Labs]() components and [requested]() components. We include the overall status of each component, but for more details follow the link on the component name.
 
-To learn more on how we organize components see [Component Tiers]().
+To learn more about how we organize our components see [Component Tiers]().
 
 ## Official Components
-The "official" tier is reserved for components that have complete buy-in from design and are common to many pages or workflows in Brightspace.
+The "official" tier is reserved for components that have complete support from our designers and are common to many pages or workflows in Brightspace.
 
-Official components adhere to our architectural guidelines, are localized and highly performant. They have a full suite of automated tests (include accessibility and perceptual diff), a demo page, and appropriate documentation.
+Official components adhere to our architectural guidelines, are localized, and highly performant. They have a full suite of automated tests (including accessibility and visual diff), a demo page, and appropriate documentation.
 
 {% statusTable "official" %}
 
 ## ![labs icon](/img/labs-icon.svg) Labs Components
-Components that fall into the "labs" tier have some buy-in from design, at least in an experimental sense. They may not have a full pattern documented on design.d2l yet, but some design thought has gone into the component and where and how it should be used. The component has the potential to be used in multiple places.
+Components that fall into the "labs" tier have some support from our designers, at least in an experimental sense. Some design thought has gone into the component, including where and how it should be used. The component has the potential to be used in multiple places.
 
-Labs components may not fully adhere to archutectural guidelines, and may be missing some tests or documentation.
+Labs components may not fully adhere to architectural guidelines, and may be missing some tests or documentation.
 
 {% statusTable "labs" %}
 
 ## ![request icon](/img/request-icon.svg) Requested Components
-If you can't find what you're looking for, it may already be in the pipeline! This is a list of requested components or known gaps we're tracking.
+If you can't find what you're looking for, it may already be in the pipeline! Below is a list of requested components or known gaps that we are tracking.
 
 {% statusTable "request" %}
 
-Are we missing something? [Create a Request]().
+Are we missing something? [Create a Request](https://github.com/BrightspaceUI/documentation/issues/new/choose).

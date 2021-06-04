@@ -22,3 +22,9 @@ export const ISSUE_LABELS = {
 	PUBLISHED: 'Published',
 	REQUEST: 'Requested Component'
 };
+
+export const TIERS = {
+	LABS: 'labs',
+	OFFICIAL: 'official',
+	REQUEST: 'request'
+};

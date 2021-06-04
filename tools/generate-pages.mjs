@@ -1,4 +1,4 @@
-import { DEV_STATES, ISSUE_LABELS } from './states.mjs';
+import { DEV_STATES, ISSUE_LABELS, TIERS } from './states.mjs';
 import { exec } from 'child_process';
 import fs from 'fs';
 import matter from 'gray-matter';
@@ -15,17 +15,15 @@ const FILENAME_CUSTOM_ELEM = 'custom-elements-all.js';
 const FILENAME_ISSUES = 'component-issue-data.js';
 const FILENAME_ROLLUP = 'rollup-files-generated.js';
 
-const TYPES = {
-	LABS: 'labs',
-	OFFICIAL: 'official',
-	REQUEST: 'request'
-};
-
-const componentIssues = { 'official': [], 'labs':[], 'request': [] },
+const componentIssues = {},
 	markdownFiles = [],
 	repoInstallLocations = [],
 	rollupFiles = [],
 	screenshotLocations = [];
+
+componentIssues[TIERS.LABS] = [];
+componentIssues[TIERS.OFFICIAL] = [];
+componentIssues[TIERS.REQUEST] = [];
 
 const octokit = new Octokit({
 	auth: process.env['GITHUB_TOKEN'],
@@ -73,18 +71,6 @@ function _copyScreenshots(screenshotDirs) {
 	});
 }
 
-function _filterIssues(issues, expectedLabelName) {
-	const isProd = process.env.NODE_ENV === 'production';
-	return issues.filter(issue => {
-		if (isProd && !publishedComponents.includes(issue.number)) return false;
-		let labelMatch = false;
-		issue.labels.forEach((label) => {
-			if (label.name === expectedLabelName) labelMatch = true;
-		});
-		return labelMatch;
-	});
-}
-
 function _generatePage(frontMatter, content) {
 	Object.keys(frontMatter).forEach(key => frontMatter[key] === undefined && delete frontMatter[key]); // remove any keys with an undefined value else matter.stringify fails
 	const newFile = path.join(DIR_IMPORTED_COMPONENTS, `${frontMatter.fileName}.md`);
@@ -94,25 +80,26 @@ function _generatePage(frontMatter, content) {
 
 function _getDevStatus(labels, state, issueState) {
 	// if closed default to COMPLETE if no other information, if open default to NOT STARTED if no other information
+	const labelNames = labels.map((label) => label.name);
 	if (state === 'closed') {
-		if (labels.filter(label => label.name === ISSUE_LABELS.DEPRECATED).length > 0) return DEV_STATES.DEPRECATED;
+		if (labelNames.includes(ISSUE_LABELS.DEPRECATED)) return DEV_STATES.DEPRECATED;
 		else if (Object.values(DEV_STATES).includes(issueState)) return issueState;
 		else return DEV_STATES.COMPLETE;
 	} else if (state === 'open') {
-		if (labels.filter(label => label.name === ISSUE_LABELS.BACKLOG).length > 0) return DEV_STATES.BACKLOG;
+		if (labelNames.includes(ISSUE_LABELS.BACKLOG)) return DEV_STATES.BACKLOG;
 		else if (Object.values(DEV_STATES).includes(issueState)) return issueState;
 		else return DEV_STATES.NOT_STARTED;
 	}
 }
 
-function _getInfoGeneratePage(issue, type) {
+function _getInfoGeneratePage(issue) {
 	const { frontMatter, info, issueBody } = _parseBody(issue);
-	componentIssues[type].push({ name: info.name, issueUrl: info.issueUrl, development: info.development, fileName: frontMatter.fileName, owner: info.owner });
+	const output = { name: info.name, issueUrl: info.issueUrl, development: info.development, fileName: frontMatter.fileName, owner: info.owner }
 
 	if (!info.devMarkdown || !info.baseInstallLocation) {
 		console.warn(`WARNING: Component issue for ${issue.title} DOES NOT CONTAIN "devMarkdown" OR "baseInstallLocation"`);
 		_generatePage(frontMatter, issueBody);
-		return;
+		return output;
 	}
 
 	if (!repoInstallLocations.includes(info.baseInstallLocation)) repoInstallLocations.push(info.baseInstallLocation);
@@ -135,6 +122,7 @@ function _getInfoGeneratePage(issue, type) {
 	const newFilename = (frontMatter.eleventyNavigation && frontMatter.eleventyNavigation.key) || issue.title;
 	const markdownData = { name: newFilename, devFile: devMarkdownPath, frontMatter: frontMatter };
 	markdownFiles.push(markdownData);
+	return output;
 }
 
 function _getMissingDependenciesList(dependencies) {
@@ -177,8 +165,9 @@ function _parseBody(issue) {
 	const splitStart = issue.body.split(/<!--\r?\n/);
 	let comment = '', issueBody = issue.body;
 	if (splitStart.length === 2) {
-		comment = splitStart[1].split('-->')[0];
-		issueBody = splitStart[1].split('-->')[1];
+		const splitEnd = splitStart[1].split('-->');
+		comment = splitEnd[0];
+		issueBody = splitEnd[1];
 	}
 
 	const title = issue.title.replace(/\s+/g, '-').toLowerCase();
@@ -234,23 +223,31 @@ export default ${json};
 }
 
 _requestIssues().then(issues => {
-	const request = _filterIssues(issues, ISSUE_LABELS.REQUEST);
-	const labs = _filterIssues(issues, ISSUE_LABELS.LABS);
-	const official = _filterIssues(issues, ISSUE_LABELS.OFFICIAL);
-
 	fs.mkdirSync(DIR_IMPORTED_SCREENSHOTS, { recursive: true });
 
-	request.forEach((issue) => {
-		_getInfoGeneratePage(issue, TYPES.REQUEST);
+	const isProd = process.env.NODE_ENV === 'production';
+	issues.forEach((issue) => {
+		if (isProd && !publishedComponents.includes(issue.number)) return;
+		for (let i = 0; i < issue.labels.length; i++) {
+			switch (issue.labels[i].name) {
+				case ISSUE_LABELS.LABS:
+					componentIssues[TIERS.LABS].push(_getInfoGeneratePage(issue));
+					return;
+				case ISSUE_LABELS.OFFICIAL:
+					componentIssues[TIERS.OFFICIAL].push(_getInfoGeneratePage(issue));
+					return;
+				case ISSUE_LABELS.REQUEST:
+					componentIssues[TIERS.REQUEST].push(_getInfoGeneratePage(issue));
+					return;
+			}
+		}
 	});
 
-	labs.forEach((issue) => {
-		_getInfoGeneratePage(issue, TYPES.LABS);
-	});
-
-	official.forEach((issue) => {
-		_getInfoGeneratePage(issue, TYPES.OFFICIAL);
-	});
+	[TIERS.LABS, TIERS.OFFICIAL, TIERS.REQUEST].forEach(tier => componentIssues[tier].sort((a, b) => {
+		if (a.name < b.name) return -1;
+		else if (a.name > b.name) return 1;
+		else return 0;
+	}));
 
 	console.info('INFO: Completed GitHub issue processing');
 

@@ -14,8 +14,8 @@ module.exports = function(eleventyConfig) {
 	eleventyConfig.addNunjucksShortcode('issue', (issueUrl) => {
 		return `Looking for more details on the component or want to add your input? <d2l-link href="${issueUrl}">Check out the GitHub Issue</d2l-link>`;
 	});
-	eleventyConfig.addShortcode('statusTable', (type) => {
-		return `<d2l-component-catalog-status-table type="${type}"></d2l-component-catalog-status-table>`;
+	eleventyConfig.addShortcode('statusTable', (tier) => {
+		return `<d2l-component-catalog-status-table tier="${tier}"></d2l-component-catalog-status-table>`;
 	});
 
 	const options = {
@@ -95,7 +95,7 @@ module.exports = function(eleventyConfig) {
 			return `
 				${defaultTextRule(tokens, idx, options, env, slf)}
 				<div class="d2l-component-catalog-tag d2l-body-standard">
-					<<div class="d2l-component-catalog-tag-inner">${tag}</div>>
+					&lt;<div class="d2l-component-catalog-tag-inner">${tag}</div>&gt;
 				</div>
 			`;
 		} else return defaultTextRule(tokens, idx, options, env, slf);
