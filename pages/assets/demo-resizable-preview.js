@@ -36,6 +36,10 @@ class DemoResizablePreview extends LitElement {
 			_previewWidth: { type: Number, reflect: true }
 		};
 	}
+	update() {
+		super.update();
+		const pp = this.shadowRoot.querySelector('playground-preview')
+	}
 	static get styles() {
 		return css`
 			:host {
@@ -87,9 +91,9 @@ class DemoResizablePreview extends LitElement {
 			.slider:hover {
 				background-color: var(--d2l-color-gypsum);
 			}
-			#preview::part(preview-toolbar) {
+			/* #preview::part(preview-toolbar) {
 				display: none;
-			}
+			} */
 			.content-wrapper {
 				display: inline;
 			}
@@ -109,9 +113,57 @@ class DemoResizablePreview extends LitElement {
 	}
 	firstUpdated() {
 		this._previewContainer = this.shadowRoot.querySelector('.preview-container');
+		this._preview = this.shadowRoot.querySelector('playground-preview');
+		this._project = this.shadowRoot.querySelector('playground-project');
 		this._slider = this.shadowRoot.querySelector('.slider');
 	}
+	
+	update(changedProperties) {
+		console.log(changedProperties)
+		if (changedProperties.has('code') && this._preview) {
+			this._preview._project = this._project;
+		}
+		super.update(changedProperties);
 
+	}
+	get testCode() {
+		return html`<script type="sample/importmap">
+		{
+			"imports": {
+				"@brightspace-ui/core": "https://unpkg.com/@brightspace-ui/core",
+				"@brightspace-ui/core/": "https://unpkg.com/@brightspace-ui/core/"
+			}
+		}
+	</script>
+	<!-- GETTING RENDERED -->
+	<script filename="index.html" type="sample/html">
+		<script type="module" src="index.js">&lt;/script>
+		<style>
+			/* todo?: add this to md template and provide configuration for different item alignments? */
+			html {
+				margin: 20px;
+			}
+			.layout {
+				display: flex;
+				justify-content: space-evenly;
+				align-items: center;
+				width: 100%;
+				height: 100%;
+			}
+		</style>
+
+		<body class="d2l-typography">
+			<!-- todo: provide layout options for components-->
+			<div class="layout">
+				<!-- script tags are technically within this atm -->
+				${this.code}
+			</div>
+		</body>
+	</script>
+	<script filename="index.js" type="sample/js">
+		${this.imports}
+	</script>`
+	}
 	render() {
 		const attachedBorderRadius = this.attached ? '0' : '10px';
 		const resizableBorderRadius = this.resizable ? '0' : '10px';
@@ -127,9 +179,10 @@ class DemoResizablePreview extends LitElement {
 			maxWidth: '100%', // prevent preview from expanding past code block when page resizes
 			minWidth: `${MINIMUM_WIDTH}px`
 		};
+		console.log(this.code)
 		return html`
 			<div class="slider-region">
-				<playground-project id="p1">
+				<playground-project id=${this.code}>
 					<script type="sample/importmap">
 						{
 							"imports": {
@@ -168,7 +221,7 @@ class DemoResizablePreview extends LitElement {
 					</script>
 				</playground-project>
 				<div class="preview-container" style=${styleMap(previewContainerStyles)}>
-					<playground-preview id="preview" style=${styleMap(previewStyles)} project="p1" filename="index.html"></playground-preview>
+					<playground-preview id="preview" style=${styleMap(previewStyles)} .project=${this.code} filename="index.html"></playground-preview>
 					${this.resizable ?  html`<div class="slider" style=${styleMap(sliderStyles)} @pointerdown=${this._onResizeBarPointerdown}>
 						<svg width="5" height="18" viewBox="0 0 5 18" xmlns="http://www.w3.org/2000/svg">
 							<g fill="#6E7376" fill-rule="evenodd">

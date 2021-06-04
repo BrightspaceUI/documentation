@@ -6,6 +6,7 @@ import outputManifest from 'rollup-plugin-output-manifest';
 const componentFiles = [
 	'./pages/assets/base-imports.js',
 	'./pages/assets/demo-resizable-preview.js',
+	'./pages/assets/demo-attribute-table.js',
 	'./pages/assets/demo-snippet.js',
 	'./pages/assets/navigation.js'
 ].concat(files);

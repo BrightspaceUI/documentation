@@ -1,13 +1,11 @@
 import '@brightspace-ui/core/components/inputs/input-text.js';
 import '@brightspace-ui/core/components/switch/switch.js';
-// import 'd2l-table/d2l-table.js';
 import { css, html, LitElement } from 'lit-element';
 import { default as components } from '../../.generated/custom-elements-all.js';
 import { heading4Styles } from '@brightspace-ui/core/components/typography/styles.js';
 import { ifDefined } from 'lit-html/directives/if-defined.js';
 import { selectStyles } from '@brightspace-ui/core/components/inputs/input-select-styles.js';
-// import { tableStyles } from './table-styles.js';
-
+import { tableStyles } from '@brightspace-ui/core/components/table/table-wrapper.js';
 const validTypes = [
 	'array',
 	'boolean',
@@ -19,10 +17,10 @@ const validTypes = [
 export class ComponentCatalogDemoAttributeTable extends LitElement {
 	static get properties() {
 		return {
-			tagName: { type: String, attribute: 'tag-name', reflect: true }
+			tagName: { type: String, attribute: 'tag-name', reflect: true },
+			editable: { type: Boolean }
 		};
 	}
-
 	static get styles() {
 		return [heading4Styles, selectStyles, tableStyles, css`
 			:host {
@@ -31,11 +29,11 @@ export class ComponentCatalogDemoAttributeTable extends LitElement {
 			:host([hidden]) {
 				display: none;
 			}
-			d2l-td.d2l-table-cell-first,
-			d2l-td.d2l-design-system-component-type {
+			td.d2l-table-cell-first,
+			td.d2l-design-system-component-type {
 				white-space: nowrap;
 			}
-			d2l-td d2l-input-text {
+			td d2l-input-text {
 				min-width: 200px;
 			}
 			h2.d2l-heading-4 {
@@ -44,12 +42,8 @@ export class ComponentCatalogDemoAttributeTable extends LitElement {
 		`];
 	}
 
-	constructor() {
-		super();
-		this.hideDemo = false;
-	}
-
 	render() {
+
 		const componentInfo = components.find((component) =>  component.name === this.tagName);
 		if (!componentInfo) return;
 
@@ -64,40 +58,42 @@ export class ComponentCatalogDemoAttributeTable extends LitElement {
 			} else {
 				demoValue = validTypes.includes(demoType) ? this._getDemoValueOptions(demoType, info.name, infoDefault) : null;
 			}
-			const demoValueRow = !this.hideDemo ? html`<d2l-td>${demoValue}</d2l-td>` : null;
+			const demoValueRow = this.editable ? html`<td>${demoValue}</td>` : null;
 			return html`
-				<d2l-tr>
-					<d2l-td>${info.name}</d2l-td>
-					<d2l-td>${info.description}</d2l-td>
-					<d2l-td class="d2l-design-system-component-type">${demoType}</d2l-td>
-					<d2l-td>${infoDefault}</d2l-td>
+				<tr>
+					<td>${info.name}</td>
+					<td class="d2l-design-system-component-type">${demoType}</td>
+					<td>${info.description}</td>
+					<td>${infoDefault}</td>
 					${demoValueRow}
-				</d2l-tr>
+				</tr>
 			`;
 		});
-		const demoValueHeading = !this.hideDemo ? html`<d2l-th>Demo Value</d2l-th>` : null;
+		const demoValueHeading = this.editable ? html`<th>Demo Value</th>` : null;
 		return html`
 			<h2 class="d2l-heading-4">Attributes</h2>
-			<d2l-table class="d2l-table">
-				<d2l-thead>
-					<d2l-tr>
-						<d2l-th>Name</d2l-th>
-						<d2l-th>Description</d2l-th>
-						<d2l-th>Type</d2l-th>
-						<d2l-th>Default</d2l-th>
-						${demoValueHeading}
-					</d2l-tr>
-				</d2l-thead>
-				<d2l-tbody>
-					${rows}
-				</d2l-tbody>
-			</d2l-table>
+			<d2l-table-wrapper>
+				<table class="d2l-table">
+					<thead>
+						<tr>
+							<th>Property</th>
+							<th>Type</th>
+							<th>Description</th>
+							<th>Default</th>
+							${demoValueHeading}
+						</tr>
+					</thead>
+					<tbody>
+						${rows}
+					</tbody>
+				</table>
+			</d2l-table-wrapper>
 		`;
 	}
 
 	_dispatchChangeEvent(details) {
 		this.dispatchEvent(new CustomEvent(
-			'change',
+			'property-change',
 			{ bubbles: true, composed: false, detail: details }
 		));
 	}
