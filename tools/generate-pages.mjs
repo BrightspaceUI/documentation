@@ -1,3 +1,4 @@
+import { DEV_STATES, ISSUE_LABELS, TIERS } from './states.mjs';
 import { exec } from 'child_process';
 import fs from 'fs';
 import matter from 'gray-matter';
@@ -14,15 +15,15 @@ const FILENAME_CUSTOM_ELEM = 'custom-elements-all.js';
 const FILENAME_ISSUES = 'component-issue-data.js';
 const FILENAME_ROLLUP = 'rollup-files-generated.js';
 
-const ISSUE_LABELS = {
-	REQUEST: 'Component Request',
-	IN_PROGRESS: 'Component In Progress',
-	DOCUMENTED: 'Component Documented',
-	PUBLISHED: 'Published'
-};
-const STATES_COMPONENT = {
-	NOT_STARTED: 'Not Started'
-};
+const componentIssues = {},
+	markdownFiles = [],
+	repoInstallLocations = [],
+	rollupFiles = [],
+	screenshotLocations = [];
+
+componentIssues[TIERS.LABS] = [];
+componentIssues[TIERS.OFFICIAL] = [];
+componentIssues[TIERS.REQUEST] = [];
 
 const octokit = new Octokit({
 	auth: process.env['GITHUB_TOKEN'],
@@ -52,10 +53,8 @@ function _copyMarkdown(files) {
 			console.warn(`WARNING: markdown file ${file.devFile} does not exist`);
 			return;
 		}
-		const newFile = path.join(DIR_IMPORTED_COMPONENTS, `${file.name}.md`);
 		const devContent = fs.readFileSync(devOriginFile);
-
-		fs.writeFileSync(newFile, `${file.frontMatter}\n${devContent}`);
+		_generatePage(file.frontMatter, devContent);
 	});
 }
 
@@ -72,23 +71,58 @@ function _copyScreenshots(screenshotDirs) {
 	});
 }
 
-function _getCommentContent(body) {
-	if (!body) return '';
-	const splitStart = body.split(/<!--\r?\n/);
-	if (splitStart.length !== 2) return '';
-	return splitStart[1].split('-->')[0];
+function _generatePage(frontMatter, content) {
+	Object.keys(frontMatter).forEach(key => frontMatter[key] === undefined && delete frontMatter[key]); // remove any keys with an undefined value else matter.stringify fails
+	const newFile = path.join(DIR_IMPORTED_COMPONENTS, `${frontMatter.fileName}.md`);
+	const frontMatterString = matter.stringify('', frontMatter);
+	fs.writeFileSync(newFile, `${frontMatterString}\n${content}`);
 }
 
-function _getIssues(issues, expectedLabelName) {
-	const isProd = process.env.NODE_ENV === 'production';
-	return issues.filter(issue => {
-		if (isProd && !publishedComponents.includes(issue.number)) return false;
-		let labelMatch = false;
-		issue.labels.forEach((label) => {
-			if (label.name === expectedLabelName) labelMatch = true;
+function _getDevStatus(labels, state, issueState) {
+	// if closed default to COMPLETE if no other information, if open default to NOT STARTED if no other information
+	const labelNames = labels.map((label) => label.name);
+	if (state === 'closed') {
+		if (labelNames.includes(ISSUE_LABELS.DEPRECATED)) return DEV_STATES.DEPRECATED;
+		else if (Object.values(DEV_STATES).includes(issueState)) return issueState;
+		else return DEV_STATES.COMPLETE;
+	} else if (state === 'open') {
+		if (labelNames.includes(ISSUE_LABELS.BACKLOG)) return DEV_STATES.BACKLOG;
+		else if (Object.values(DEV_STATES).includes(issueState)) return issueState;
+		else return DEV_STATES.NOT_STARTED;
+	}
+}
+
+function _getInfoGeneratePage(issue) {
+	const { frontMatter, info, issueBody } = _parseBody(issue);
+	const output = { name: info.name, issueUrl: info.issueUrl, development: info.development, fileName: frontMatter.fileName, owner: info.owner };
+
+	if (!info.devMarkdown || !info.baseInstallLocation) {
+		console.warn(`WARNING: Component issue for ${issue.title} DOES NOT CONTAIN "devMarkdown" OR "baseInstallLocation"`);
+		_generatePage(frontMatter, issueBody);
+		return output;
+	}
+
+	if (!repoInstallLocations.includes(info.baseInstallLocation)) repoInstallLocations.push(info.baseInstallLocation);
+
+	if (!info.components || info.components.length === 0)
+		console.warn(`WARNING: Component issue for ${issue.title} DOES NOT CONTAIN "components" array`);
+	else {
+		info.components.forEach((component) => {
+			rollupFiles.push(`${info.baseInstallLocation}/${component}`);
 		});
-		return labelMatch;
-	});
+	}
+
+	const devMarkdownPath = path.join(info.baseInstallLocation, info.devMarkdown);
+	const dirname = path.dirname(devMarkdownPath);
+	const screenshotPath1 = path.join(dirname, 'screenshots');
+	const screenshotPath2 = path.join(dirname, '../screenshots'); // some repos have screenshots in a sibling directory to docs
+	if (!screenshotLocations.includes(screenshotPath1)) screenshotLocations.push(screenshotPath1);
+	if (!screenshotLocations.includes(screenshotPath2)) screenshotLocations.push(screenshotPath2);
+
+	const newFilename = (frontMatter.eleventyNavigation && frontMatter.eleventyNavigation.key) || issue.title;
+	const markdownData = { name: newFilename, devFile: devMarkdownPath, frontMatter: frontMatter };
+	markdownFiles.push(markdownData);
+	return output;
 }
 
 function _getMissingDependenciesList(dependencies) {
@@ -116,13 +150,55 @@ function _installDependencies(dependencies, callback) {
 	});
 }
 
-function _parseComponentIssueInfo(componentBody, name, url) {
-	const info = matter(`---\n${componentBody}\n---`).data;
-	if (!info.design) info.design = STATES_COMPONENT.NOT_STARTED;
-	if (!info.development) info.development = STATES_COMPONENT.NOT_STARTED;
-	info.name = name;
-	info.issueUrl = url;
-	return info;
+function _parseBody(issue) {
+	/**
+	 * issue body is formatted as follows with all pieces optional:
+	 * <!--
+	 * ---
+	 * front: matter
+	 * ---
+	 *
+	 * comment: content
+	 * -->
+	 * # issueBody
+	 */
+	const splitStart = issue.body.split(/<!--\r?\n/);
+	let comment = '', issueBody = issue.body;
+	if (splitStart.length === 2) {
+		const splitEnd = splitStart[1].split('-->');
+		comment = splitEnd[0];
+		issueBody = splitEnd[1];
+	}
+
+	const title = issue.title.replace(/\s+/g, '-').toLowerCase();
+	let info = {
+		issueUrl: issue.html_url,
+		name: issue.title
+	};
+	let frontMatter = {
+		layout: 'layouts/component-issue',
+		title: issue.title,
+		fileName: title,
+		issueUrl: issue.html_url
+	};
+
+	if (comment) {
+		const matterComment = matter(comment);
+		const commentContent = matterComment.content;
+
+		if (commentContent) info = Object.assign(info, matter(`---\n${commentContent}\n---`).data);
+		if (Object.keys(matterComment.data).length > 0) {
+			frontMatter = {
+				...frontMatter,
+				...matterComment.data,
+				repo: info.repo,
+				fileName: (frontMatter.eleventyNavigation && frontMatter.eleventyNavigation.key) || title
+			};
+		}
+	}
+
+	info.development = _getDevStatus(issue.labels, issue.state, info.development);
+	return { frontMatter, info, issueBody };
 }
 
 async function _requestIssues() {
@@ -147,68 +223,31 @@ export default ${json};
 }
 
 _requestIssues().then(issues => {
-	const componentIssues = [],
-		markdownFiles = [],
-		repoInstallLocations = [],
-		rollupFiles = [],
-		screenshotLocations = [];
+	fs.mkdirSync(DIR_IMPORTED_SCREENSHOTS, { recursive: true });
 
-	const requested = _getIssues(issues, ISSUE_LABELS.REQUEST);
-	const inProgress = _getIssues(issues, ISSUE_LABELS.IN_PROGRESS);
-	const documented = _getIssues(issues, ISSUE_LABELS.DOCUMENTED);
-
-	requested.forEach((issue) => {
-		const comment = _getCommentContent(issue.body);
-		componentIssues.push(_parseComponentIssueInfo(comment, issue.title, issue.html_url));
-	});
-
-	inProgress.forEach((issue) => {
-		const comment = _getCommentContent(issue.body);
-		componentIssues.push(_parseComponentIssueInfo(comment, issue.title, issue.html_url));
-	});
-
-	documented.forEach((issue) => {
-		try {
-			const comment = _getCommentContent(issue.body);
-			const parsedComment = matter(comment); // parsed.content = repo info, parsed.data = front matter
-			const info = _parseComponentIssueInfo(parsedComment.content, issue.title, issue.html_url);
-			componentIssues.push(info);
-
-			if (!info.baseInstallLocation) {
-				console.warn(`WARNING: Component issue for ${issue.title} DOES NOT CONTAIN "baseInstallLocation"`);
-				return;
+	const isProd = process.env.NODE_ENV === 'production';
+	issues.forEach((issue) => {
+		if (isProd && !publishedComponents.includes(issue.number)) return;
+		for (let i = 0; i < issue.labels.length; i++) {
+			switch (issue.labels[i].name) {
+				case ISSUE_LABELS.LABS:
+					componentIssues[TIERS.LABS].push(_getInfoGeneratePage(issue));
+					return;
+				case ISSUE_LABELS.OFFICIAL:
+					componentIssues[TIERS.OFFICIAL].push(_getInfoGeneratePage(issue));
+					return;
+				case ISSUE_LABELS.REQUEST:
+					componentIssues[TIERS.REQUEST].push(_getInfoGeneratePage(issue));
+					return;
 			}
-
-			if (!repoInstallLocations.includes(info.baseInstallLocation)) repoInstallLocations.push(info.baseInstallLocation);
-
-			if (!info.components || info.components.length === 0)
-				console.warn(`WARNING: Component issue for ${issue.title} DOES NOT CONTAIN "components" array`);
-			else {
-				info.components.forEach((component) => {
-					rollupFiles.push(`${info.baseInstallLocation}/${component}`);
-				});
-			}
-
-			if (!info.devMarkdown) {
-				console.warn(`WARNING: Component issue for ${issue.title} DOES NOT CONTAIN "markdown"`);
-				return;
-			}
-			const devMarkdownPath = path.join(info.baseInstallLocation, info.devMarkdown);
-			const dirname = path.dirname(devMarkdownPath);
-			const screenshotPath1 = path.join(dirname, 'screenshots');
-			const screenshotPath2 = path.join(dirname, '../screenshots'); // some repos have screenshots in a sibling directory to docs
-			if (!screenshotLocations.includes(screenshotPath1)) screenshotLocations.push(screenshotPath1);
-			if (!screenshotLocations.includes(screenshotPath2)) screenshotLocations.push(screenshotPath2);
-
-			const newFilename = (parsedComment.data.eleventyNavigation && parsedComment.data.eleventyNavigation.key) || issue.title;
-			parsedComment.data.repo = info.repo;
-			const frontMatterString = matter.stringify('', parsedComment.data);
-			const markdownData = { name: newFilename, devFile: devMarkdownPath, frontMatter: frontMatterString };
-			markdownFiles.push(markdownData);
-		} catch (e) {
-			console.error(`ERROR: component issue for ${issue.title} is incorrectly formatted`);
 		}
 	});
+
+	[TIERS.LABS, TIERS.OFFICIAL, TIERS.REQUEST].forEach(tier => componentIssues[tier].sort((a, b) => {
+		if (a.name < b.name) return -1;
+		else if (a.name > b.name) return 1;
+		else return 0;
+	}));
 
 	console.info('INFO: Completed GitHub issue processing');
 
@@ -227,8 +266,6 @@ _requestIssues().then(issues => {
 
 	_installDependencies(repoInstallLocations, () => {
 		console.info('INFO: Completed dependency installation');
-
-		fs.mkdirSync(DIR_IMPORTED_SCREENSHOTS, { recursive: true });
 
 		_copyMarkdown(markdownFiles);
 		console.info('INFO: Completed markdown file processing');
