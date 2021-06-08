@@ -149,40 +149,31 @@ export class ComponentCatalogDemoAttributeTable extends LitElement {
 			}
 		}
 	}
-
-	_onNumberChange(e) {
-		const eventDetails = {
+	_getEventDetails(e, type) {
+		const value = type === 'Boolean' ? e.target.hasAttribute('on') : e.target.value;
+		return {
 			name: e.target.getAttribute('data-name'),
-			type: 'Number',
-			value: e.target.value
+			type: type,
+			value
 		};
+	}
+	_onNumberChange(e) {
+		const eventDetails = this._getEventDetails(e, 'Number');
 		this._dispatchChangeEvent(eventDetails);
 	}
 
 	_onSelectChange(e) {
-		const eventDetails = {
-			name: e.target.getAttribute('data-name'),
-			type: 'String',
-			value: e.target.value
-		};
+		const eventDetails = this._getEventDetails(e, 'String');
 		this._dispatchChangeEvent(eventDetails);
 	}
 
 	_onStringChange(e) {
-		const eventDetails = {
-			name: e.target.getAttribute('data-name'),
-			type: 'String',
-			value: e.target.value
-		};
+		const eventDetails = this._getEventDetails(e, 'String');
 		this._dispatchChangeEvent(eventDetails);
 	}
 
 	_onSwitchChange(e) {
-		const eventDetails = {
-			name: e.target.getAttribute('data-name'),
-			type: 'Boolean',
-			value: e.target.hasAttribute('on')
-		};
+		const eventDetails = this._getEventDetails(e, 'Boolean');
 		this._dispatchChangeEvent(eventDetails);
 	}
 

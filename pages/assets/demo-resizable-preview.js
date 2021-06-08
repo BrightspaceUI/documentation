@@ -35,10 +35,6 @@ class ComponentCatalogDemoResizablePreview extends LitElement {
 			_previewWidth: { type: Number, reflect: true }
 		};
 	}
-	update() {
-		super.update();
-		const pp = this.shadowRoot.querySelector('playground-preview')
-	}
 	static get styles() {
 		return css`
 			:host {
@@ -152,53 +148,7 @@ class ComponentCatalogDemoResizablePreview extends LitElement {
 		this._project = this.shadowRoot.querySelector('playground-project');
 		this._slider = this.shadowRoot.querySelector('.d2l-slider');
 	}
-	
-	update(changedProperties) {
-		console.log(changedProperties)
-		if (changedProperties.has('code') && this._preview) {
-			this._preview._project = this._project;
-		}
-		super.update(changedProperties);
 
-	}
-	get testCode() {
-		return html`<script type="sample/importmap">
-		{
-			"imports": {
-				"@brightspace-ui/core": "https://unpkg.com/@brightspace-ui/core",
-				"@brightspace-ui/core/": "https://unpkg.com/@brightspace-ui/core/"
-			}
-		}
-	</script>
-	<!-- GETTING RENDERED -->
-	<script filename="index.html" type="sample/html">
-		<script type="module" src="index.js">&lt;/script>
-		<style>
-			/* todo?: add this to md template and provide configuration for different item alignments? */
-			html {
-				margin: 20px;
-			}
-			.layout {
-				display: flex;
-				justify-content: space-evenly;
-				align-items: center;
-				width: 100%;
-				height: 100%;
-			}
-		</style>
-
-		<body class="d2l-typography">
-			<!-- todo: provide layout options for components-->
-			<div class="layout">
-				<!-- script tags are technically within this atm -->
-				${this.code}
-			</div>
-		</body>
-	</script>
-	<script filename="index.js" type="sample/js">
-		${this.imports}
-	</script>`
-	}
 	render() {
 		const previewStyles = {
 			width: `calc(100% - ${this.resizable ? SLIDER_WIDTH : 0}px)`,
@@ -206,7 +156,6 @@ class ComponentCatalogDemoResizablePreview extends LitElement {
 		const previewContainerStyles = {
 			width: this._previewWidth ? `${this._previewWidth}px` : '100%',
 		};
-		console.log(this.code)
 		return html`
 			<div class="d2l-slider-region">
 				<playground-project id='demo'>
@@ -218,6 +167,7 @@ class ComponentCatalogDemoResizablePreview extends LitElement {
 							}
 						}
 					</script>
+					<!-- Changes to the index file are applied via the update method -->
 					<script filename=${PREVIEW_FILE} type="sample/html">
 						${this.indexHTML}
 					</script>
@@ -239,7 +189,19 @@ class ComponentCatalogDemoResizablePreview extends LitElement {
 			</div>
 		`;
 	}
+	update(changedProperties) {
+		super.update(changedProperties);
 
+		if (changedProperties.has('code') && this._preview) {
+			// Updates to the project must be directly applied via JS as playground elements
+			// do not update when slots are changed. Firing saveDebounced forces the playground to reload
+			// once the file content has been updated
+			const indexFile = this._project.files.find(({ name }) => name === PREVIEW_FILE);
+			indexFile.content = this.indexHTML;
+			this._project.saveDebounced();
+		}
+
+	}
 	_onResizeSliderPointerDown({ pointerId }) {
 		const slider = this._slider;
 		slider.setPointerCapture(pointerId);
