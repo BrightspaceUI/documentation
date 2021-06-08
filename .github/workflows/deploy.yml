@@ -1,0 +1,32 @@
+name: Deploy
+on:
+  push:
+    branches:
+      - master
+jobs:
+  deploy:
+    name: Deploy
+    timeout-minutes: 10
+    runs-on: ubuntu-latest
+    steps:
+      - uses: Brightspace/third-party-actions@actions/checkout
+        with:
+          persist-credentials: false
+      - uses: Brightspace/third-party-actions@actions/setup-node
+      - uses: Brightspace/third-party-actions@actions/cache
+        id: cache
+        with:
+          path: '**/node_modules'
+          key: npm-${{ hashFiles('**/package-lock.json') }}
+      - name: Install dependencies
+        if: steps.cache.outputs.cache-hit != 'true'
+        run: npm i && npm i aws-sdk --no-save
+      - name: Build
+        run: npm run build:prod
+      - name: Deploy
+        run: aws s3 sync --delete ./_site/ s3://daylight.d2l.dev/branches/master
+        env:
+          AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          AWS_SESSION_TOKEN: ${{ secrets.AWS_SESSION_TOKEN }}
+          AWS_DEFAULT_REGION: ca-central-1
