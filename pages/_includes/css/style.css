@@ -44,7 +44,7 @@ div.d2l-component-catalog-content {
 .d2l-component-catalog-content {
 	background: var(--d2l-color-regolith);
 	flex: 1 1 auto;
-	max-width: calc(78% - 15rem);
+	max-width: calc(79% - 15rem);
 	padding: 4.5rem 7.5rem;
 }
 .d2l-component-catalog-content h1.d2l-heading-1,
