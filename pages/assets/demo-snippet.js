@@ -1,9 +1,7 @@
+import '@brightspace-ui/core/components/colors/colors.js';
 import '@brightspace-ui/core/components/demo/demo-snippet.js';
 import './demo-resizable-preview.js';
 import './demo-attribute-table.js';
-import 'playground-elements/playground-ide';
-import 'playground-elements/playground-code-editor';
-import 'playground-elements/playground-preview';
 import 'playground-elements/playground-project';
 import { css, html, LitElement } from 'lit-element';
 
@@ -38,13 +36,19 @@ class ComponentCatalogDemoSnippetWrapper extends LitElement {
 			* Hide the read-only code view
 			*/
 			hideCode: { type: Boolean, attribute: 'hide-code' },
-			interactive: { type: Boolean },
 			// Name of the demo if interactive
 			name: { type: String },
-			attributes: { type: Object, reflect: true }
+			attributes: { type: Object, reflect: true },
+			/**
+			* Should the attribute table be rendered for interactivity
+			*/
+			interactive: { type: Boolean, reflect: true },
+			/**
+			* Is the preview resizable
+			*/
+			resizable : { type: Boolean, reflect: true },
 		};
 	}
-
 	static get styles() {
 		return css`
 			:host {
@@ -55,40 +59,39 @@ class ComponentCatalogDemoSnippetWrapper extends LitElement {
 			}
 
 			playground-code-editor {
-				min-width: ${MINIMUM_WIDTH}px;
-				width: 100%;
-				display: inline-block;
+				/* stylelint-disable */
 				--playground-code-font-family: 'Lato', 'Lucida Sans Unicode', 'Lucida Grande', sans-serif;
 				--playground-code-background: var(--d2l-color-ferrite);
-				/* todo: do some of these colors have names?? */
-				--playground-code-tag-color: #2de2c0; 
-				--playground-code-string-color: #FFF9D6;
-				--playground-code-attribute-color: #00D2ED;
+				--playground-code-tag-color: var(--d2l-color-malachite);
+				--playground-code-string-color: var(--d2l-color-citrine-plus-1);
+				--playground-code-attribute-color: var(--d2l-color-zircon-plus-1);
 				--playground-code-default-color: var(--d2l-color-gypsum);
+				/* stylelint-enable */
 				border-radius: 0 0 10px 10px;
+				display: inline-block;
+				min-width: ${MINIMUM_WIDTH}px;
+				width: 100%;
 			}
 
-			.editor-wrapper {
+			.d2l-editor-wrapper {
 				position: relative;
 			}
 
-			.CodeMirror {
-				padding: 40px 10px 0px 10px;
-			}
-
-			.button-container {
-				z-index:10;
-				position: absolute;
+			.d2l-button-container {
 				padding-right: 10px;
-				right:0;
+				position: absolute;
+				right: 0;
+				z-index: 10;
 			}
 		`;
 	}
 
 	constructor() {
 		super();
-		this.hideCode = false;
 		this.attributes = {};
+		this.hideCode = false;
+		this.interactive = false;
+		this.resizable = false;
 	}
 
 	get code() {
@@ -135,8 +138,8 @@ class ComponentCatalogDemoSnippetWrapper extends LitElement {
 		const codeSnippet = this.code;
 		return html`
 			<d2l-component-catalog-demo-resizable-preview .code=${codeSnippet} .imports=${this.imports} ?attached=${!this.hideCode}></d2l-component-catalog-demo-resizable-preview>
-			<div class="editor-wrapper">
-				<div class="button-container">
+			<div class="d2l-editor-wrapper">
+				<div class="d2l-button-container">
 					<!-- Add button items to the overlay and pass through props -->
 				</div>
 				${ !this.hideCode ? html`<playground-code-editor readonly type="html" .value=${codeSnippet}></playground-code-editor>` : null }

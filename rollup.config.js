@@ -8,7 +8,8 @@ const componentFiles = [
 	'./pages/assets/demo-resizable-preview.js',
 	'./pages/assets/demo-attribute-table.js',
 	'./pages/assets/demo-snippet.js',
-	'./pages/assets/navigation.js'
+	'./pages/assets/navigation.js',
+	'./pages/assets/status-table.js'
 ].concat(files);
 
 const baseConfig = createBasicConfig({

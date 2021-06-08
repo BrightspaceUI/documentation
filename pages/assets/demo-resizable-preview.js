@@ -1,6 +1,4 @@
 import '@brightspace-ui/core/components/demo/code-view.js';
-import 'playground-elements/playground-ide';
-import 'playground-elements/playground-code-editor';
 import 'playground-elements/playground-preview';
 import 'playground-elements/playground-project';
 
@@ -9,9 +7,14 @@ import { styleMap } from 'lit-html/directives/style-map.js';
 
 const SLIDER_WIDTH = 35;
 const MINIMUM_WIDTH = 300;
-class DemoResizablePreview extends LitElement {
+const PREVIEW_FILE = 'index.html';
+class ComponentCatalogDemoResizablePreview extends LitElement {
 	static get properties() {
 		return {
+			/**
+			*  Is a code editor attached to the preview
+			*/
+			attached : { type: Boolean, reflect: true },
 			/**
 			* Code for the preview IFrame to display
 			*/
@@ -23,11 +26,7 @@ class DemoResizablePreview extends LitElement {
 			/**
 			* Is the preview resizable
 			*/
-			resizable : { type: Boolean },
-			/**
-			*  Is a code editor attached to the preview
-			*/
-			attached : { type: Boolean },
+			resizable : { type: Boolean, reflect: true },
 			/**
 			* Size of the IFrame demo portion
 			* @type {'small'|'medium'|'large'}
@@ -48,13 +47,10 @@ class DemoResizablePreview extends LitElement {
 			:host([hidden]) {
 				display: none;
 			}
-			.slider-region {
+			.d2l-slider-region {
 				height: 100%;
-				width:100%;
-				z-index:5;
-			}
-			.code-demo-container {
 				width: 100%;
+				z-index: 5;
 			}
 			:host([size="small"]) {
 				height: 200px;
@@ -65,57 +61,96 @@ class DemoResizablePreview extends LitElement {
 			:host([size="large"]) {
 				height: 400px;
 			}
-			playground-preview {
-				height: 100%;
-			}
-			.preview-container {
-				height: 100%;
-				position: relative;
+
+			.d2l-preview-container {
 				border-radius: inherit;
+				height: 100%;
+				max-width: 100%; /* prevent preview from expanding past code block when page resizes */
+				min-width: ${MINIMUM_WIDTH}px;
+				position: relative;
 			}
 
-			.slider {
-				position: absolute;
-				top: 0;
-				right: 0px;
-				width: ${SLIDER_WIDTH}px;
-				height: 100%;
+			:host([resizable]) .d2l-slider {
+				border-radius: 0 10px 10px 0;
+			}
+			:host([attached]) .d2l-slider {
+				border-radius: 0 10px 0 0;
+			}
+			.d2l-slider {
+				align-items: center;
 				background-color: white;
 				border-left: 1px solid #eff3fa;
-				z-index: 9;
 				cursor: col-resize;
 				display: flex;
-				align-items: center;
+				height: 100%;
 				justify-content: center;
+				position: absolute;
+				right: 0;
+				top: 0;
+				width: ${SLIDER_WIDTH}px;
+				z-index: 9;
 			}
-			.slider:hover {
+			.d2l-slider:hover {
 				background-color: var(--d2l-color-gypsum);
 			}
-			/* #preview::part(preview-toolbar) {
+			playground-preview::part(preview-toolbar) {
 				display: none;
-			} */
-			.content-wrapper {
-				display: inline;
 			}
-			.empty-space {
+			playground-preview {
+				border-radius: 10px;
 				height: 100%;
-				-webkit-overflow-scrolling: touch;
-				overflow-x: hidden;
-				position: relative;
+			}
+			:host([resizable]) playground-preview {
+				border-radius: 10px 0 0 10px;
+			}
+			:host([attached]) playground-preview {
+				border-radius: 10px 10px 0 0;
 			}
 		`;
 	}
 	constructor() {
 		super();
-		this.resizable = true;
-		this.attached = true;
+		this.resizable = false;
+		this.attached = false;
 		this.size = 'small';
+	}
+	get indexHTML() {
+		return `
+			<script type="module" src="index.js"></script>
+			<script>
+				window.addEventListener('load', function () {
+					var demoEl = document.getElementById('demo-element');
+					demoEl.classList.remove('hide');
+				});
+			</script>
+			<style>
+				/* todo?: add this to md template and provide configuration for different item alignments? */
+				html {
+					margin: 20px;
+				}
+				.layout {
+					display: flex;
+					justify-content: space-evenly;
+					align-items: center;
+					width: 100%;
+					height: 100%;
+				}
+				.hide {
+					display:none;
+				}
+			</style>
+			<body class="d2l-typography">
+				<!-- todo: provide layout options for components-->
+				<div id="demo-element" class="layout hide">
+					${this.code}
+				</div>
+			</body>`;
 	}
 	firstUpdated() {
 		this._previewContainer = this.shadowRoot.querySelector('.preview-container');
 		this._preview = this.shadowRoot.querySelector('playground-preview');
 		this._project = this.shadowRoot.querySelector('playground-project');
-		this._slider = this.shadowRoot.querySelector('.slider');
+		this._slider = this.shadowRoot.querySelector('.d2l-slider');
 	}
 	
 	update(changedProperties) {
@@ -165,24 +200,16 @@ class DemoResizablePreview extends LitElement {
 	</script>`
 	}
 	render() {
-		const attachedBorderRadius = this.attached ? '0' : '10px';
-		const resizableBorderRadius = this.resizable ? '0' : '10px';
-		const sliderStyles = {
-			borderRadius: `0 10px ${attachedBorderRadius} 0`
-		};
 		const previewStyles = {
 			width: `calc(100% - ${this.resizable ? SLIDER_WIDTH : 0}px)`,
-			borderRadius: `10px ${resizableBorderRadius} ${resizableBorderRadius} ${attachedBorderRadius}`
 		};
 		const previewContainerStyles = {
 			width: this._previewWidth ? `${this._previewWidth}px` : '100%',
-			maxWidth: '100%', // prevent preview from expanding past code block when page resizes
-			minWidth: `${MINIMUM_WIDTH}px`
 		};
 		console.log(this.code)
 		return html`
-			<div class="slider-region">
-				<playground-project id=${this.code}>
+			<div class="d2l-slider-region">
+				<playground-project id='demo'>
 					<script type="sample/importmap">
 						{
 							"imports": {
@@ -191,38 +218,16 @@ class DemoResizablePreview extends LitElement {
 							}
 						}
 					</script>
-					<!-- GETTING RENDERED -->
-					<script filename="index.html" type="sample/html">
-						<script type="module" src="index.js">&lt;/script>
-						<style>
-							/* todo?: add this to md template and provide configuration for different item alignments? */
-							html {
-								margin: 20px;
-							}
-							.layout {
-								display: flex;
-								justify-content: space-evenly;
-								align-items: center;
-								width: 100%;
-								height: 100%;
-							}
-						</style>
-
-						<body class="d2l-typography">
-							<!-- todo: provide layout options for components-->
-							<div class="layout">
-								<!-- script tags are technically within this atm -->
-								${this.code}
-							</div>
-						</body>
+					<script filename=${PREVIEW_FILE} type="sample/html">
+						${this.indexHTML}
 					</script>
 					<script filename="index.js" type="sample/js">
 						${this.imports}
 					</script>
 				</playground-project>
-				<div class="preview-container" style=${styleMap(previewContainerStyles)}>
-					<playground-preview id="preview" style=${styleMap(previewStyles)} .project=${this.code} filename="index.html"></playground-preview>
-					${this.resizable ?  html`<div class="slider" style=${styleMap(sliderStyles)} @pointerdown=${this._onResizeBarPointerdown}>
+				<div class="d2l-preview-container" style=${styleMap(previewContainerStyles)}>
+					<playground-preview id="preview" style=${styleMap(previewStyles)} project='demo' filename=${PREVIEW_FILE}></playground-preview>
+					${this.resizable ?  html`<div class="d2l-slider" @pointerdown=${this._onResizeSliderPointerDown}>
 						<svg width="5" height="18" viewBox="0 0 5 18" xmlns="http://www.w3.org/2000/svg">
 							<g fill="#6E7376" fill-rule="evenodd">
 								<rect width="2" height="18" rx="1"/>
@@ -234,9 +239,10 @@ class DemoResizablePreview extends LitElement {
 			</div>
 		`;
 	}
-	_onResizeBarPointerdown({ pointerId }) {
-		const bar = this._slider;
-		bar.setPointerCapture(pointerId);
+
+	_onResizeSliderPointerDown({ pointerId }) {
+		const slider = this._slider;
+		slider.setPointerCapture(pointerId);
 
 		const { left: hostLeft, right: hostRight } = this.getBoundingClientRect();
 		const hostWidth = hostRight - hostLeft;
@@ -251,14 +257,14 @@ class DemoResizablePreview extends LitElement {
 			);
 			this._previewWidth = Math.max(hostWidth - rhsWidth, MINIMUM_WIDTH);
 		};
-		bar.addEventListener('pointermove', onPointermove);
+		slider.addEventListener('pointermove', onPointermove);
 
 		const onPointerup = () => {
-			bar.releasePointerCapture(pointerId);
-			bar.removeEventListener('pointermove', onPointermove);
-			bar.removeEventListener('pointerup', onPointerup);
+			slider.releasePointerCapture(pointerId);
+			slider.removeEventListener('pointermove', onPointermove);
+			slider.removeEventListener('pointerup', onPointerup);
 		};
-		bar.addEventListener('pointerup', onPointerup);
+		slider.addEventListener('pointerup', onPointerup);
 	}
 }
-customElements.define('d2l-component-catalog-demo-resizable-preview', DemoResizablePreview);
+customElements.define('d2l-component-catalog-demo-resizable-preview', ComponentCatalogDemoResizablePreview);
