@@ -113,7 +113,6 @@ class ComponentCatalogDemoSnippetWrapper extends LitElement {
 	}
 
 	render() {
-		console.log(this.resizable)
 		return html`
 			<d2l-component-catalog-demo-resizable-preview code=${this.code} imports=${this.imports} ?attached=${!this.hideCode} ?resizable=${this.resizable}></d2l-component-catalog-demo-resizable-preview>
 			<div class="d2l-editor-wrapper">
