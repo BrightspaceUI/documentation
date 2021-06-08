@@ -39,14 +39,13 @@ class ComponentCatalogDemoSnippetWrapper extends LitElement {
 			/**
 			* Should the attribute table be rendered for interactivity
 			*/
-			interactive: { type: Boolean },
+			interactive: { type: Boolean, reflect: true },
 			/**
 			* Is the preview resizable
 			*/
-			resizable : { type: Boolean },
+			resizable : { type: Boolean, reflect: true },
 		};
 	}
-
 	static get styles() {
 		return css`
 			:host {
@@ -57,31 +56,29 @@ class ComponentCatalogDemoSnippetWrapper extends LitElement {
 			}
 
 			playground-code-editor {
-				min-width: ${MINIMUM_WIDTH}px;
-				width: 100%;
-				display: inline-block;
+				/* stylelint-disable */
 				--playground-code-font-family: 'Lato', 'Lucida Sans Unicode', 'Lucida Grande', sans-serif;
 				--playground-code-background: var(--d2l-color-ferrite);
 				--playground-code-tag-color: var(--d2l-color-malachite);
 				--playground-code-string-color: var(--d2l-color-citrine-plus-1);
 				--playground-code-attribute-color: var(--d2l-color-zircon-plus-1);
 				--playground-code-default-color: var(--d2l-color-gypsum);
+				/* stylelint-enable */
 				border-radius: 0 0 10px 10px;
+				display: inline-block;
+				min-width: ${MINIMUM_WIDTH}px;
+				width: 100%;
 			}
 
-			.editor-wrapper {
+			.d2l-editor-wrapper {
 				position: relative;
 			}
 
-			.CodeMirror {
-				padding: 40px 10px 0px 10px;
-			}
-
-			.button-container {
-				z-index:10;
-				position: absolute;
+			.d2l-button-container {
 				padding-right: 10px;
-				right:0;
+				position: absolute;
+				right: 0;
+				z-index: 10;
 			}
 		`;
 	}
@@ -89,6 +86,8 @@ class ComponentCatalogDemoSnippetWrapper extends LitElement {
 	constructor() {
 		super();
 		this.hideCode = false;
+		this.resizable = false;
+		this.interactive = false;
 	}
 
 	get code() {
@@ -116,8 +115,8 @@ class ComponentCatalogDemoSnippetWrapper extends LitElement {
 	render() {
 		return html`
 			<d2l-component-catalog-demo-resizable-preview code=${this.code} imports=${this.imports} ?attached=${!this.hideCode} ?resizable=${this.resizable}></d2l-component-catalog-demo-resizable-preview>
-			<div class="editor-wrapper">
-				<div class="button-container">
+			<div class="d2l-editor-wrapper">
+				<div class="d2l-button-container">
 					<!-- Add button items to the overlay and pass through props -->
 				</div>
 				${ !this.hideCode ? html`<playground-code-editor readonly type="html" .value=${this.code}></playground-code-editor>` : null }
