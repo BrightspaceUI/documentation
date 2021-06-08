@@ -1,8 +1,7 @@
-/* global require, module, process */
+/* global require, module */
 const cleanCSS = require('clean-css');
 const eleventyNavigationPlugin = require('@11ty/eleventy-navigation');
 const { escapeHtml } = require('markdown-it/lib/common/utils');
-const { getScript } = require('./tools/getScript');
 
 module.exports = function(eleventyConfig) {
 	eleventyConfig.addPassthroughCopy('pages/components/imported/screenshots');
@@ -59,25 +58,29 @@ module.exports = function(eleventyConfig) {
 
 	markdownIt.renderer.rules.fence = (tokens, idx) => {
 		const content = tokens[idx].content;
-		if (content.includes('<!-- docs: live demo -->') || content.includes('<!-- docs: demo -->')) {
-			const script = getScript(content, process.env.NODE_ENV);
+		if (content.includes('<!-- docs: live demo -->') || content.includes('<!-- docs: demo -->') || content.includes('<!-- docs: code demo -->')) {
 			if (content.includes('<!-- docs: live demo -->')) {
 				return `
-					${script}
-					<d2l-component-catalog-interactive-demo>
-						${escapeHtml(content)}
-					</d2l-component-catalog-interactive-demo>
+					<d2l-component-catalog-demo-snippet interactive resizable demo-snippet="${escapeHtml(content)}">
+					</d2l-component-catalog-demo-snippet>
 				`;
+			} else if (content.includes('<!-- docs: code demo -->')) {
+
+				return `
+					<d2l-component-catalog-demo-snippet resizable demo-snippet="${escapeHtml(content)}">
+					</d2l-component-catalog-demo-snippet>
+				`;
+
 			} else {
 				return `
-					${script}
-					<d2l-component-catalog-demo-snippet-wrapper>
-						${escapeHtml(content)}
-					</d2l-component-catalog-demo-snippet-wrapper>
+					<d2l-component-catalog-demo-snippet resizable hide-code demo-snippet="${escapeHtml(content)}">
+					</d2l-component-catalog-demo-snippet>
 				`;
 			}
-		} else
-			return `<d2l-component-catalog-code-view-wrapper>${escapeHtml(content)}</d2l-component-catalog-code-view-wrapper>`;
+		} else {
+			// Code only snippets
+			return `<d2l-component-catalog-demo-snippet demo-snippet="${escapeHtml(content)}"></d2l-component-catalog-demo-snippet>`;
+		}
 	};
 
 	markdownIt.renderer.rules.table_open = () => {

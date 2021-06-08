@@ -45,7 +45,6 @@ function _copyCustomElements(repos) {
 	});
 	_writeJSONToGeneratedFile(tags, FILENAME_CUSTOM_ELEM);
 }
-
 function _copyMarkdown(files) {
 	files.forEach((file) => {
 		const devOriginFile = path.join(__dirname, `../node_modules/${file.devFile}`);
