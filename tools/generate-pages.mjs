@@ -274,6 +274,5 @@ _requestIssues().then(issues => {
 
 		_copyCustomElements(repoInstallLocations);
 		console.info('INFO: Completed custom-elements.json file processing');
-
 	});
 });

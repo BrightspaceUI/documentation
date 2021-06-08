@@ -79,7 +79,6 @@ module.exports = function(eleventyConfig) {
 			}
 		} else {
 			// Code only snippets
-			// todo: add a prop to hide the demo and only show code
 			return `<d2l-component-catalog-demo-snippet demo-snippet="${escapeHtml(content)}"></d2l-component-catalog-demo-snippet>`;
 		}
 	};
