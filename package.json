@@ -6,8 +6,10 @@
     "build:prod": "cross-env NODE_ENV=production npm run build && cross-env NODE_ENV=production npx eleventy",
     "build:rollup": "rollup -c rollup.config.js",
     "clean": "rimraf _site && rimraf .generated && rimraf pages/components/imported",
-    "lint": "npm run lint:eslint",
+    "lint": "npm run lint:eslint && npm run lint:lit && npm run lint:style",
     "lint:eslint": "eslint . --ext .js,.mjs",
+    "lint:lit": "lit-analyzer pages/**/*.js --strict",
+    "lint:style": "stylelint \"**/*.js\"",
     "start": "cross-env NODE_ENV=development npm run build && eleventy && concurrently \"npx eleventy --watch\" \"web-dev-server\"",
     "start:prod": "npm run build:prod && web-dev-server --config web-dev-server-prod.config.js",
     "test": "npm run lint",
@@ -22,6 +24,7 @@
     "@babel/eslint-parser": "^7",
     "@babel/preset-env": "^7",
     "@brightspace-ui/core": "^1",
+    "@brightspace-ui/stylelint-config": "^0.2",
     "@octokit/rest": "^18",
     "@open-wc/building-rollup": "^1",
     "@web/dev-server": "^0.1",
@@ -42,6 +45,7 @@
     "rimraf": "^3",
     "rollup": "^2",
     "rollup-plugin-output-manifest": "^2",
-    "sinon": "^11"
+    "sinon": "^11",
+    "stylelint": "^13"
   }
 }

@@ -2,7 +2,7 @@
 name: Component - Documented
 about: This template should be used for components that are already designed and mostly or fully developed and will soon be published to the component catalogue
 title: "<Component Name>"
-labels: Component Documented
+labels: Official Component
 assignees: ''
 ---
 
@@ -24,21 +24,20 @@ repo: "<url>"
 baseInstallLocation: "<npm install location (e.g., @brightspace-ui/core)>"
 components: ["<component file path (e.g., src/my-component.js)>"]
 devMarkdown: "<markdown file path (e.g., README.md)>"
+owner: "<team name or #slack-channel>"
 development: <In Progress | Completed>
-design: <In Progress | Completed>
 -->
-## <Component Name>
+# <Component Name>
 
-### General Information
+## General Information
 - Repository: <url>
 - Development Status: <In Progress | Completed>
-- Design Status: Completed
 
-### Description
+## Description
 A description of the component and its purposes
 
-### Design Documentation (optional)
+## Design Documentation (optional)
 Links to any design documents, discussions or mock ups.
 
-### Future Enhancements (optional)
+## Future Enhancements (optional)
 - List of any upcoming work.

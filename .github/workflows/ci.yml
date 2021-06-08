@@ -12,5 +12,9 @@ jobs:
         run: npm install
       - name: Lint (JavaScript)
         run: npm run lint:eslint
+      - name: Lint (CSS)
+        run: npm run lint:style
+      - name: Lint (Lit)
+        run: npm run lint:lit
       # - name: Unit Tests
       #   run: npm run test:unit

@@ -41,8 +41,6 @@ class ComponentCatalogNavigation extends LitElement {
 			}
 			ul ul li {
 				margin-left: 1rem;
-			}
-			ul ul li {
 				margin-top: 0.6rem;
 			}
 			ul ul ul li {
