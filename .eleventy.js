@@ -60,6 +60,7 @@ module.exports = function(eleventyConfig) {
 		const content = tokens[idx].content;
 		if (content.includes('<!-- docs: live demo') || content.includes('<!-- docs: demo -->') || content.includes('<!-- docs: code demo -->')) {
 			if (content.includes('<!-- docs: live demo')) {
+				console.log('test111')
 				// todo: move this somewhere more appropriate? Inside demo snippet?
 				let name = '';
 				if (content.includes('name:')) {

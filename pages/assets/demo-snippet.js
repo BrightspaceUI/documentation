@@ -2,7 +2,7 @@ import '@brightspace-ui/core/components/colors/colors.js';
 import '@brightspace-ui/core/components/demo/demo-snippet.js';
 import './demo-resizable-preview.js';
 import './demo-attribute-table.js';
-import 'playground-elements/playground-project';
+import 'playground-elements/playground-code-editor';
 import { css, html, LitElement } from 'lit-element';
 
 const defaultImports = [
@@ -136,8 +136,9 @@ class ComponentCatalogDemoSnippetWrapper extends LitElement {
 
 	render() {
 		const codeSnippet = this.code;
+		console.log(this.hideCode)
 		return html`
-			<d2l-component-catalog-demo-resizable-preview .code=${codeSnippet} .imports=${this.imports} ?attached=${!this.hideCode}></d2l-component-catalog-demo-resizable-preview>
+			<d2l-component-catalog-demo-resizable-preview .code=${codeSnippet} .imports=${this.imports} ?resizable=${this.resizable} ?attached=${!this.hideCode}></d2l-component-catalog-demo-resizable-preview>
 			<div class="d2l-editor-wrapper">
 				<div class="d2l-button-container">
 					<!-- Add button items to the overlay and pass through props -->
