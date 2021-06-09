@@ -23,10 +23,17 @@ jobs:
         run: npm i && npm i aws-sdk --no-save
       - name: Build
         run: npm run build:prod
+      - name: Assume role
+        uses: Brightspace/third-party-actions@aws-actions/configure-aws-credentials
+        with:
+          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          aws-session-token: ${{ secrets.AWS_SESSION_TOKEN }}
+          role-to-assume: arn:aws:iam::037018655140:role/daylight.d2l.dev-githubactions-access
+          role-duration-seconds: 3600
+          aws-region: ca-central-1
       - name: Deploy
         run: aws s3 sync --delete ./_site/ s3://daylight.d2l.dev/branches/master
         env:
-          AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
-          AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-          AWS_SESSION_TOKEN: ${{ secrets.AWS_SESSION_TOKEN }}
+          # cred variables set in the "Assume role" step
           AWS_DEFAULT_REGION: ca-central-1
