@@ -60,15 +60,8 @@ module.exports = function(eleventyConfig) {
 		const content = tokens[idx].content;
 		if (content.includes('<!-- docs: live demo') || content.includes('<!-- docs: demo -->') || content.includes('<!-- docs: code demo -->')) {
 			if (content.includes('<!-- docs: live demo')) {
-				console.log('test111')
-				// todo: move this somewhere more appropriate? Inside demo snippet?
-				let name = '';
-				if (content.includes('name:')) {
-					nameSection = content.split('name:')[1];
-					name = nameSection.split(' ')[0];
-				}
 				return `
-					<d2l-component-catalog-demo-snippet interactive resizable demo-snippet="${escapeHtml(content)}" name="${name}">
+					<d2l-component-catalog-demo-snippet interactive resizable demo-snippet="${escapeHtml(content)}">
 					</d2l-component-catalog-interactive-demo>
 				`;
 			} else if (content.includes('<!-- docs: code demo -->')) {

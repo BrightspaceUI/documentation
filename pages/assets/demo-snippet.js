@@ -4,6 +4,7 @@ import './demo-resizable-preview.js';
 import './demo-attribute-table.js';
 import 'playground-elements/playground-code-editor';
 import { css, html, LitElement } from 'lit-element';
+import { ifDefined } from 'lit-html/directives/if-defined.js';
 
 const defaultImports = [
 	'import \'@brightspace-ui/core/components/typography/typography.js?module\';\n',
@@ -36,8 +37,6 @@ class ComponentCatalogDemoSnippetWrapper extends LitElement {
 			* Hide the read-only code view
 			*/
 			hideCode: { type: Boolean, attribute: 'hide-code' },
-			// Name of the demo if interactive
-			name: { type: String },
 			attributes: { type: Object, reflect: true },
 			/**
 			* Should the attribute table be rendered for interactivity
@@ -103,26 +102,29 @@ class ComponentCatalogDemoSnippetWrapper extends LitElement {
 			const splitItems = codeSnippet.split('$attributes');
 			if (splitItems.length === 2) {
 
-				let attributes = [];
+				const attributes = [];
 
-				for(const attribute in this.attributes) {
-					console.log(attribute)
+				for (const attribute in this.attributes) {
 					const { type, value } = this.attributes[attribute];
-					console.log(type)
-					switch(type) {
+					switch (type) {
 						// todo: add other attribute types
-						case 'String': 
-							attributes.push(`${attribute}="${value}"`)
+						case 'String':
+							attributes.push(`${attribute}="${value}"`);
 							break;
-						case 'Boolean': 
-							attributes.push(`${attribute}`)
+						case 'Boolean':
+							attributes.push(`${attribute}`);
+							break;
+						case 'Number':
+							attributes.push(`${attribute}=${value}`);
 							break;
 						default:
 							break;
 					}
 				}
-				// Append the code snippet back together with 
-				const withAttributes = `${splitItems[0].trim()} ${attributes.join(' ')}${splitItems[1]}`;
+				attributes.sort();
+				const attributesText = attributes.length === 0 ? '' : ` ${attributes.join(' ')}`;
+				// Append the code snippet back together with our edited attributes
+				const withAttributes = `${splitItems[0].trim()}${attributesText}${splitItems[1]}`;
 				return `${withAttributes}`;
 			}
 		}
@@ -133,24 +135,45 @@ class ComponentCatalogDemoSnippetWrapper extends LitElement {
 	get imports() {
 		return parseImports(this.demoSnippet);
 	}
-
+	get size() {
+		const tag = 'size:';
+		let size;
+		if (this.demoSnippet.includes(tag)) {
+			const nameSection = this.demoSnippet.split(tag)[1];
+			size = nameSection.split(' ')[0];
+		}
+		console.log(size)
+		return size;
+	}
+	get tagName() {
+		const tag = 'name:';
+		let name;
+		if (this.demoSnippet.includes(tag)) {
+			const nameSection = this.demoSnippet.split(tag)[1];
+			name = nameSection.split(' ')[0];
+		}
+		return name;
+	}
 	render() {
 		const codeSnippet = this.code;
-		console.log(this.hideCode)
 		return html`
-			<d2l-component-catalog-demo-resizable-preview .code=${codeSnippet} .imports=${this.imports} ?resizable=${this.resizable} ?attached=${!this.hideCode}></d2l-component-catalog-demo-resizable-preview>
+			<d2l-component-catalog-demo-resizable-preview .code=${codeSnippet} .imports=${this.imports} ?resizable=${this.resizable} ?attached=${!this.hideCode} size=${ifDefined(this.size)}></d2l-component-catalog-demo-resizable-preview>
 			<div class="d2l-editor-wrapper">
 				<div class="d2l-button-container">
 					<!-- Add button items to the overlay and pass through props -->
 				</div>
 				${ !this.hideCode ? html`<playground-code-editor readonly type="html" .value=${codeSnippet}></playground-code-editor>` : null }
 			</div>
-			${ this.interactive ? html`<d2l-component-catalog-demo-attribute-table @property-change=${this._handlePropertyChange} editable tag-name="${this.name}"></d2l-component-catalog-demo-attribute-table>` : null }
+			${ this.interactive ? html`<d2l-component-catalog-demo-attribute-table @property-change=${this._handlePropertyChange} editable tag-name="${this.tagName}"></d2l-component-catalog-demo-attribute-table>` : null }
 		`;
 	}
 	_handlePropertyChange(event) {
 		const { name, type, value } = event.detail;
-		this.attributes[name] = {type, value}
+		if (value === '' || !value) {
+			delete this.attributes[name];
+		} else {
+			this.attributes[name] = { type, value };
+		}
 		this.requestUpdate();
 	}
 }

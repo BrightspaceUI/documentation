@@ -103,6 +103,7 @@ export class ComponentCatalogDemoAttributeTable extends LitElement {
 		switch (type) {
 			case 'array':
 			case 'object':
+				console.log(attributeName)
 				return '';
 			case 'boolean':
 				return html`

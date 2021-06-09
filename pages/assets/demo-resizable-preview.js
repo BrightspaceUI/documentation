@@ -29,7 +29,7 @@ class ComponentCatalogDemoResizablePreview extends LitElement {
 			resizable : { type: Boolean, reflect: true },
 			/**
 			* Size of the IFrame demo portion
-			* @type {'small'|'medium'|'large'}
+			* @type {'small'|'medium'|'large'|'xlarge'}
 			*/
 			size: { type: String, reflect: true },
 			_previewWidth: { type: Number, reflect: true }
@@ -57,7 +57,9 @@ class ComponentCatalogDemoResizablePreview extends LitElement {
 			:host([size="large"]) {
 				height: 400px;
 			}
-
+			:host([size="xlarge"]) {
+				height: 600px;
+			}
 			.d2l-preview-container {
 				border-radius: inherit;
 				height: 100%;
