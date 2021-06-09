@@ -37,7 +37,7 @@ class ComponentCatalogDemoSnippetWrapper extends LitElement {
 			* Hide the read-only code view
 			*/
 			hideCode: { type: Boolean, attribute: 'hide-code' },
-			attributes: { type: Object, reflect: true },
+			_attributes: { type: Object, reflect: true },
 			/**
 			* Should the attribute table be rendered for interactivity
 			*/
@@ -87,7 +87,7 @@ class ComponentCatalogDemoSnippetWrapper extends LitElement {
 
 	constructor() {
 		super();
-		this.attributes = {};
+		this._attributes = {};
 		this.hideCode = false;
 		this.interactive = false;
 		this.resizable = false;
@@ -104,10 +104,9 @@ class ComponentCatalogDemoSnippetWrapper extends LitElement {
 
 				const attributes = [];
 
-				for (const attribute in this.attributes) {
-					const { type, value } = this.attributes[attribute];
+				for (const attribute in this._attributes) {
+					const { type, value } = this._attributes[attribute];
 					switch (type) {
-						// todo: add other attribute types
 						case 'String':
 							attributes.push(`${attribute}="${value}"`);
 							break;
@@ -142,7 +141,6 @@ class ComponentCatalogDemoSnippetWrapper extends LitElement {
 			const nameSection = this.demoSnippet.split(tag)[1];
 			size = nameSection.split(' ')[0];
 		}
-		console.log(size)
 		return size;
 	}
 	get tagName() {
@@ -157,7 +155,7 @@ class ComponentCatalogDemoSnippetWrapper extends LitElement {
 	render() {
 		const codeSnippet = this.code;
 		return html`
-			<d2l-component-catalog-demo-resizable-preview .code=${codeSnippet} .imports=${this.imports} ?resizable=${this.resizable} ?attached=${!this.hideCode} size=${ifDefined(this.size)}></d2l-component-catalog-demo-resizable-preview>
+			<d2l-component-catalog-demo-resizable-preview code=${codeSnippet} imports=${this.imports} ?resizable=${this.resizable} ?attached=${!this.hideCode} size=${ifDefined(this.size)}></d2l-component-catalog-demo-resizable-preview>
 			<div class="d2l-editor-wrapper">
 				<div class="d2l-button-container">
 					<!-- Add button items to the overlay and pass through props -->
@@ -170,9 +168,9 @@ class ComponentCatalogDemoSnippetWrapper extends LitElement {
 	_handlePropertyChange(event) {
 		const { name, type, value } = event.detail;
 		if (value === '' || !value) {
-			delete this.attributes[name];
+			delete this._attributes[name];
 		} else {
-			this.attributes[name] = { type, value };
+			this._attributes[name] = { type, value };
 		}
 		this.requestUpdate();
 	}

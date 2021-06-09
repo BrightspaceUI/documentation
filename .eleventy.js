@@ -62,7 +62,7 @@ module.exports = function(eleventyConfig) {
 			if (content.includes('<!-- docs: live demo')) {
 				return `
 					<d2l-component-catalog-demo-snippet interactive resizable demo-snippet="${escapeHtml(content)}">
-					</d2l-component-catalog-interactive-demo>
+					</d2l-component-catalog-demo-snippet>
 				`;
 			} else if (content.includes('<!-- docs: code demo -->')) {
 

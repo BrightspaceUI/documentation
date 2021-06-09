@@ -103,8 +103,7 @@ export class ComponentCatalogDemoAttributeTable extends LitElement {
 		switch (type) {
 			case 'array':
 			case 'object':
-				console.log(attributeName)
-				return '';
+				return;
 			case 'boolean':
 				return html`
 					<d2l-switch
@@ -113,8 +112,7 @@ export class ComponentCatalogDemoAttributeTable extends LitElement {
 						?on="${value === 'true'}"
 						text="${attributeName}"
 						text-position="hidden">
-					</d2l-switch>
-				`;
+					</d2l-switch>`;
 			case 'number':
 				return html`
 					<d2l-input-text
@@ -123,8 +121,7 @@ export class ComponentCatalogDemoAttributeTable extends LitElement {
 						label="${attributeName}"
 						label-hidden
 						value="${ifDefined(value)}">
-					</d2l-input-text>
-				`;
+					</d2l-input-text>`;
 			case 'string':
 				return html`
 					<d2l-input-text
@@ -133,8 +130,7 @@ export class ComponentCatalogDemoAttributeTable extends LitElement {
 						label="${attributeName}"
 						label-hidden
 						value="${ifDefined(value)}">
-					</d2l-input-text>
-				`;
+					</d2l-input-text>`;
 			default: {
 				// the case of an array of strings
 				const optsHtml = type.replace(/'/g, '').split(' | ').map(opt => html`<option ?selected="${value === opt}">${opt}</option>`);
@@ -145,8 +141,7 @@ export class ComponentCatalogDemoAttributeTable extends LitElement {
 						class="d2l-input-select"
 						data-name="${attributeName}">
 						${optsHtml}
-					</select>
-				`;
+					</select>`;
 			}
 		}
 	}
