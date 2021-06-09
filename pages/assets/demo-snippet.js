@@ -15,14 +15,16 @@ const parseImports = (allContent) => {
 
 	const importsArray = content[1].split('\n');
 	let imports = '';
+
+	// Append default imports for IFrames
+	defaultImports.forEach((importStatement) => imports += importStatement);
+
 	importsArray.forEach((importUrl) => {
 		if (!importUrl.includes('import')) return;
 		// append ?module to resolve imports in playground-demo components
 		const appendedModule = importUrl.slice(0, -2).concat('?module\';').trim();
 		imports += `${appendedModule}\n`;
 	});
-	// Append default imports for IFrames
-	defaultImports.forEach((importStatement) => imports += importStatement);
 	return imports;
 };
 const MINIMUM_WIDTH = 300;
@@ -162,7 +164,7 @@ class ComponentCatalogDemoSnippetWrapper extends LitElement {
 				</div>
 				${ !this.hideCode ? html`<playground-code-editor readonly type="html" .value=${codeSnippet}></playground-code-editor>` : null }
 			</div>
-			${ this.interactive ? html`<d2l-component-catalog-demo-attribute-table @property-change=${this._handlePropertyChange} editable tag-name="${this.tagName}"></d2l-component-catalog-demo-attribute-table>` : null }
+			${ this.interactive ? html`<d2l-component-catalog-demo-attribute-table @property-change=${this._handlePropertyChange} interactive tag-name="${this.tagName}"></d2l-component-catalog-demo-attribute-table>` : null }
 		`;
 	}
 	_handlePropertyChange(event) {

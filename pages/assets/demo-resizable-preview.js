@@ -114,13 +114,18 @@ class ComponentCatalogDemoResizablePreview extends LitElement {
 	}
 	get indexHTML() {
 		return `
-			<script type="module" src="index.js"></script>
 			<script>
 				window.addEventListener('load', function () {
 					var demoEl = document.getElementById('demo-element');
 					demoEl.classList.remove('hide');
 				});
+				// Suppress errors only in production? This will hide any errors with attributes and the module not resolved errors
+				// occuring within the iframe
+				// window.onerror = function () {
+				// 	return true;
+				// };
 			</script>
+			<script type="module" src="index.js"></script>
 			<style>
 				/* todo?: add this to md template and provide configuration for different item alignments? */
 				html {

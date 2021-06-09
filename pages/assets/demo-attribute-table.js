@@ -18,7 +18,7 @@ export class ComponentCatalogDemoAttributeTable extends LitElement {
 	static get properties() {
 		return {
 			tagName: { type: String, attribute: 'tag-name', reflect: true },
-			editable: { type: Boolean }
+			interactive: { type: Boolean }
 		};
 	}
 	static get styles() {
@@ -58,7 +58,7 @@ export class ComponentCatalogDemoAttributeTable extends LitElement {
 			} else {
 				demoValue = validTypes.includes(demoType) ? this._getDemoValueOptions(demoType, info.name, infoDefault) : null;
 			}
-			const demoValueRow = this.editable ? html`<td>${demoValue}</td>` : null;
+			const demoValueRow = this.interactive ? html`<td>${demoValue}</td>` : null;
 			return html`
 				<tr>
 					<td>${info.name}</td>
@@ -69,7 +69,7 @@ export class ComponentCatalogDemoAttributeTable extends LitElement {
 				</tr>
 			`;
 		});
-		const demoValueHeading = this.editable ? html`<th>Demo Value</th>` : null;
+		const demoValueHeading = this.interactive ? html`<th>Demo Value</th>` : null;
 		return html`
 			<h2 class="d2l-heading-4">Attributes</h2>
 			<d2l-table-wrapper>
