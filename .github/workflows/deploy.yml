@@ -1,8 +1,5 @@
 name: Deploy
-on:
-  push:
-    branches:
-      - master
+on: push
 jobs:
   deploy:
     name: Deploy
@@ -32,15 +29,20 @@ jobs:
           role-to-assume: arn:aws:iam::037018655140:role/daylight.d2l.dev-githubactions-access
           role-duration-seconds: 3600
           aws-region: ca-central-1
-      - name: Deploy - master branch
-        run: aws s3 sync --delete ./_site/ s3://daylight.d2l.dev/branches/master
+      - name: Deploy - branch
+        run: |
+            if [ ${{ github.ref == 'refs/heads/master' }} ]; then
+                BRANCH=master
+            else
+                BRANCH=pr-${{ github.event.number }}
+            fi
+            aws s3 sync --delete ./_site/ "s3://daylight.d2l.dev/branches/${BRANCH}"
         env:
           # cred variables set in the "Assume role" step
           AWS_DEFAULT_REGION: ca-central-1
       - name: Deploy - commit
-        run: |
-            S3_TARGET=s3://daylight.d2l.dev/commits/${{ github.sha }}
-            aws s3 sync --delete ./_site/ $S3_TARGET
+        if: github.ref == 'refs/heads/master'
+        run: aws s3 sync --delete ./_site/ "s3://daylight.d2l.dev/commits/${GITHUB_SHA}"
         env:
           # cred variables set in the "Assume role" step
           AWS_DEFAULT_REGION: ca-central-1
