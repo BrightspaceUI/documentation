@@ -17,8 +17,8 @@ const validTypes = [
 export class ComponentCatalogDemoAttributeTable extends LitElement {
 	static get properties() {
 		return {
-			tagName: { type: String, attribute: 'tag-name', reflect: true },
-			interactive: { type: Boolean }
+			interactive: { type: Boolean },
+			tagName: { type: String, attribute: 'tag-name', reflect: true }
 		};
 	}
 	static get styles() {
@@ -71,7 +71,7 @@ export class ComponentCatalogDemoAttributeTable extends LitElement {
 		});
 		const demoValueHeading = this.interactive ? html`<th>Demo Value</th>` : null;
 		return html`
-			<h2 class="d2l-heading-4">Attributes</h2>
+			<h3 class="d2l-heading-4">Properties</h3>
 			<d2l-table-wrapper>
 				<table class="d2l-table">
 					<thead>

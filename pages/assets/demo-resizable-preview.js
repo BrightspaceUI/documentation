@@ -150,7 +150,6 @@ class ComponentCatalogDemoResizablePreview extends LitElement {
 			</body>`;
 	}
 	firstUpdated() {
-		this._previewContainer = this.shadowRoot.querySelector('.preview-container');
 		this._preview = this.shadowRoot.querySelector('playground-preview');
 		this._project = this.shadowRoot.querySelector('playground-project');
 		this._slider = this.shadowRoot.querySelector('.d2l-slider');
@@ -197,8 +196,6 @@ class ComponentCatalogDemoResizablePreview extends LitElement {
 		`;
 	}
 	update(changedProperties) {
-		super.update(changedProperties);
-
 		if (changedProperties.has('code') && this._preview) {
 			// Updates to the project must be directly applied via JS as playground elements
 			// do not update when slots are changed. Firing saveDebounced forces the playground to reload
@@ -208,6 +205,7 @@ class ComponentCatalogDemoResizablePreview extends LitElement {
 			this._project.saveDebounced();
 		}
 
+		super.update(changedProperties);
 	}
 	_onResizeSliderPointerDown({ pointerId }) {
 		const slider = this._slider;

@@ -1,7 +1,7 @@
 import '@brightspace-ui/core/components/colors/colors.js';
 import '@brightspace-ui/core/components/demo/demo-snippet.js';
-import './demo-resizable-preview.js';
 import './demo-attribute-table.js';
+import './demo-resizable-preview.js';
 import 'playground-elements/playground-code-editor';
 import { css, html, LitElement } from 'lit-element';
 import { ifDefined } from 'lit-html/directives/if-defined.js';
@@ -39,7 +39,6 @@ class ComponentCatalogDemoSnippetWrapper extends LitElement {
 			* Hide the read-only code view
 			*/
 			hideCode: { type: Boolean, attribute: 'hide-code' },
-			_attributes: { type: Object, reflect: true },
 			/**
 			* Should the attribute table be rendered for interactivity
 			*/
@@ -48,6 +47,7 @@ class ComponentCatalogDemoSnippetWrapper extends LitElement {
 			* Is the preview resizable
 			*/
 			resizable : { type: Boolean, reflect: true },
+			_attributes: { type: Object, reflect: true }
 		};
 	}
 	static get styles() {
