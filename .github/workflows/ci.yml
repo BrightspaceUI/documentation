@@ -18,6 +18,8 @@ jobs:
         run: npm run lint:lit
       # - name: Unit Tests
       #   run: npm run test:unit
+      - name: Build
+        run: npm run build:prod
       - name: Assume role
         uses: Brightspace/third-party-actions@aws-actions/configure-aws-credentials
         with:
