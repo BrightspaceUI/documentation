@@ -153,6 +153,7 @@ class ComponentCatalogDemoResizablePreview extends LitElement {
 		const previewContainerStyles = {
 			width: this._previewWidth ? `${this._previewWidth}px` : '100%',
 		};
+		console.log(this.resizable);
 		return html`
 			<div class="d2l-slider-region">
 				<playground-project id='demo'>
@@ -173,7 +174,7 @@ class ComponentCatalogDemoResizablePreview extends LitElement {
 				</playground-project>
 				<div class="d2l-preview-container" style=${styleMap(previewContainerStyles)}>
 					<playground-preview id="preview" style=${styleMap(previewStyles)} project='demo' filename=${PREVIEW_FILE}></playground-preview>
-					${this.resizable ?  html`<div class="d2l-slider" @pointerdown=${this._onResizeSliderPointerDown}>
+					${this.resizable ?  html`<div class="d2l-slider" tabindex="0" @pointerdown=${this._onResizeSliderPointerDown} @keydown=${this._onKeyPress}>
 						<svg width="5" height="18" viewBox="0 0 5 18" xmlns="http://www.w3.org/2000/svg">
 							<g fill="#6E7376" fill-rule="evenodd">
 								<rect width="2" height="18" rx="1"/>
@@ -184,6 +185,46 @@ class ComponentCatalogDemoResizablePreview extends LitElement {
 				</div>
 			</div>
 		`;
+	}
+
+	_moveSliderLeft() {
+		const { left: hostLeft, right: hostRight } = this.getBoundingClientRect();
+
+		const hostWidth = hostRight - hostLeft;
+		const intervalWidth = Math.floor(hostWidth / 6);
+		console.log(intervalWidth)
+		if (this._previewWidth) {
+			console.log('1')
+			this._previewWidth = Math.round(Math.max(MINIMUM_WIDTH, this._previewWidth - intervalWidth) / intervalWidth) * intervalWidth;
+		} else {
+			console.log('2')
+			this._previewWidth = Math.round(Math.max(MINIMUM_WIDTH, hostWidth - intervalWidth) / intervalWidth) * intervalWidth
+			;
+		}
+	}
+
+	_moveSliderRight() {
+		const { left: hostLeft, right: hostRight } = this.getBoundingClientRect();
+
+		const hostWidth = hostRight - hostLeft;
+		const intervalWidth = Math.floor(hostWidth / 6);
+
+		if (this._previewWidth) {
+			this._previewWidth = Math.round(Math.min(hostWidth, this._previewWidth + intervalWidth) / intervalWidth) * intervalWidth;
+		}
+	}
+
+	_onKeyPress(event) {
+
+		const { keyCode } = event;
+		const leftArrow = 37;
+		const rightArrow = 39;
+
+		if (keyCode === leftArrow) {
+			this._moveSliderLeft();
+		} else if (keyCode === rightArrow) {
+			this._moveSliderRight();
+		}
 	}
 
 	_onResizeSliderPointerDown({ pointerId }) {
