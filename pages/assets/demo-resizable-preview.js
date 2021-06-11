@@ -5,9 +5,11 @@ import 'playground-elements/playground-project';
 import { css, html, LitElement } from 'lit-element';
 import { styleMap } from 'lit-html/directives/style-map.js';
 
-const SLIDER_WIDTH = 35;
+const INTERVAL_COUNT = 6;
 const MINIMUM_WIDTH = 300;
 const PREVIEW_FILE = 'index.html';
+const SLIDER_WIDTH = 35;
+
 class ComponentCatalogDemoResizablePreview extends LitElement {
 	static get properties() {
 		return {
@@ -153,7 +155,7 @@ class ComponentCatalogDemoResizablePreview extends LitElement {
 		const previewContainerStyles = {
 			width: this._previewWidth ? `${this._previewWidth}px` : '100%',
 		};
-		console.log(this.resizable);
+
 		return html`
 			<div class="d2l-slider-region">
 				<playground-project id='demo'>
@@ -174,7 +176,7 @@ class ComponentCatalogDemoResizablePreview extends LitElement {
 				</playground-project>
 				<div class="d2l-preview-container" style=${styleMap(previewContainerStyles)}>
 					<playground-preview id="preview" style=${styleMap(previewStyles)} project='demo' filename=${PREVIEW_FILE}></playground-preview>
-					${this.resizable ?  html`<div class="d2l-slider" tabindex="0" @pointerdown=${this._onResizeSliderPointerDown} @keydown=${this._onKeyPress}>
+					${this.resizable ?  html`<div class="d2l-slider" tabindex="0" @pointerdown=${this._onResizeSliderPointerDown} @keydown=${this._onKeyPress} aria-orientation="vertical" >
 						<svg width="5" height="18" viewBox="0 0 5 18" xmlns="http://www.w3.org/2000/svg">
 							<g fill="#6E7376" fill-rule="evenodd">
 								<rect width="2" height="18" rx="1"/>
@@ -191,26 +193,26 @@ class ComponentCatalogDemoResizablePreview extends LitElement {
 		const { left: hostLeft, right: hostRight } = this.getBoundingClientRect();
 
 		const hostWidth = hostRight - hostLeft;
-		const intervalWidth = Math.floor(hostWidth / 6);
-		console.log(intervalWidth)
-		if (this._previewWidth) {
-			console.log('1')
-			this._previewWidth = Math.round(Math.max(MINIMUM_WIDTH, this._previewWidth - intervalWidth) / intervalWidth) * intervalWidth;
-		} else {
-			console.log('2')
-			this._previewWidth = Math.round(Math.max(MINIMUM_WIDTH, hostWidth - intervalWidth) / intervalWidth) * intervalWidth
-			;
+		const intervalWidth = Math.floor(hostWidth / INTERVAL_COUNT);
+
+		if (!this._previewWidth) {
+			this._previewWidth = hostWidth;
 		}
+
+		const updatedWidth = Math.max(MINIMUM_WIDTH, this._previewWidth - intervalWidth);
+		this._previewWidth = Math.round(updatedWidth / intervalWidth) * intervalWidth;
+
 	}
 
 	_moveSliderRight() {
 		const { left: hostLeft, right: hostRight } = this.getBoundingClientRect();
 
 		const hostWidth = hostRight - hostLeft;
-		const intervalWidth = Math.floor(hostWidth / 6);
+		const intervalWidth = Math.floor(hostWidth / INTERVAL_COUNT);
 
 		if (this._previewWidth) {
-			this._previewWidth = Math.round(Math.min(hostWidth, this._previewWidth + intervalWidth) / intervalWidth) * intervalWidth;
+			const updatedWidth = Math.min(hostWidth, this._previewWidth + intervalWidth);
+			this._previewWidth = Math.round(updatedWidth / intervalWidth) * intervalWidth;
 		}
 	}
 
