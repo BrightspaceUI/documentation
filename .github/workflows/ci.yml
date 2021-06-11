@@ -36,3 +36,14 @@ jobs:
         env:
           # cred variables set in the "Assume role" step
           AWS_DEFAULT_REGION: ca-central-1
+      - uses: Brightspace/third-party-actions@actions/github-script
+        if: github.event.name == 'opened'
+        with:
+          script: |
+            const url = `https://pr-${context.issue.number}-daylight.d2l.dev`
+            await github.issues.createComment({
+              issue_number: context.issue.number,
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              body: `Preview your changes at [${url}](${url})`
+            })
