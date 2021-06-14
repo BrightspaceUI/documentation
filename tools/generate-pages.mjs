@@ -25,6 +25,8 @@ componentIssues[TIERS.LABS] = [];
 componentIssues[TIERS.OFFICIAL] = [];
 componentIssues[TIERS.REQUEST] = [];
 
+const PROD = process.env.NODE_ENV === 'production';
+
 const octokit = new Octokit({
 	auth: process.env['GITHUB_TOKEN'],
 	baseUrl: 'https://api.github.com',
@@ -36,7 +38,8 @@ function _copyCustomElements(repos) {
 	repos.forEach((repo) => {
 		const customElementsFilePath = path.join(__dirname, `../node_modules/${repo}/custom-elements.json`);
 		if (!fs.existsSync(customElementsFilePath)) {
-			console.warn(`WARNING: custom-elements.json does not exist for ${repo}`);
+			const message = `custom-elements.json does not exist for ${repo}`;
+			_handleError(message);
 			return;
 		}
 		const file = fs.readFileSync(customElementsFilePath).toString();
@@ -49,7 +52,8 @@ function _copyMarkdown(files) {
 	files.forEach((file) => {
 		const devOriginFile = path.join(__dirname, `../node_modules/${file.devFile}`);
 		if (!fs.existsSync(devOriginFile)) {
-			console.warn(`WARNING: markdown file ${file.devFile} does not exist`);
+			const message = `markdown file ${file.devFile} does not exist`;
+			_handleError(message);
 			return;
 		}
 		const devContent = fs.readFileSync(devOriginFile);
@@ -139,6 +143,13 @@ function _getMissingDependenciesList(dependencies) {
 	});
 }
 
+function _handleError(message) {
+	if (PROD) {
+		console.error(`ERROR: ${message}`);
+		process.exit(5);
+	} else console.warn(`WARNING: ${message}`);
+}
+
 function _installDependencies(dependencies, callback) {
 	_getMissingDependenciesList(dependencies).then((res) => {
 		exec(`npm i ${res} --no-save`, (err, stdout) => {
@@ -206,7 +217,7 @@ async function _requestIssues() {
 		repo: 'documentation',
 		state: 'all'
 	};
-	if (process.env.NODE_ENV === 'production') props.labels = ISSUE_LABELS.PUBLISHED;
+	if (PROD) props.labels = ISSUE_LABELS.PUBLISHED;
 
 	return await octokit.paginate(octokit.rest.issues.listForRepo, props);
 }
@@ -224,9 +235,8 @@ export default ${json};
 _requestIssues().then(issues => {
 	fs.mkdirSync(DIR_IMPORTED_SCREENSHOTS, { recursive: true });
 
-	const isProd = process.env.NODE_ENV === 'production';
 	issues.forEach((issue) => {
-		if (isProd && !publishedComponents.includes(issue.number)) return;
+		if (PROD && !publishedComponents.includes(issue.number)) return;
 		for (let i = 0; i < issue.labels.length; i++) {
 			switch (issue.labels[i].name) {
 				case ISSUE_LABELS.LABS:
