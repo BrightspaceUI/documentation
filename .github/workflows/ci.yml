@@ -7,7 +7,6 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: Brightspace/third-party-actions@actions/checkout
-      - uses: actions/setup-node@v2
       # - name: Unit Tests
       #   run: npm run test:unit
       - name: Node version
