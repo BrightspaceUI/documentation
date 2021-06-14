@@ -94,7 +94,7 @@ module.exports = function(eleventyConfig) {
 	const defaultTextRule = markdownIt.renderer.rules.text;
 	markdownIt.renderer.rules.text = (tokens, idx, options, env, slf) => {
 		const content = tokens[idx].content;
-		// Note: for tags if formatted like eleventyNavigation then we get error "entry.data.tags is not iterable" when parsing
+		// Note: if tags are formatted like eleventyNavigation then we get error "entry.data.tags is not iterable" when parsing
 		if (env.tags && Object.keys(env.tags[0]).includes(content)) {
 			const tag = env.tags[0][content];
 			return `

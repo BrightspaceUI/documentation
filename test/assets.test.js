@@ -11,11 +11,11 @@ describe('assets', () => {
 		'example-test-file.js': manifestFileName
 	};
 
-	beforeEach(() => {
+	before(() => {
 		sandbox.stub(Module.prototype, 'require').returns(manifest);
 	});
 
-	afterEach(() => {
+	after(() => {
 		sandbox.restore();
 	});
 
