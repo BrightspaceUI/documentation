@@ -96,10 +96,9 @@ class ComponentCatalogDemoSnippetWrapper extends LitElement {
 	}
 
 	get code() {
-		// remove comment line from code snippet
-		const lines = this.demoSnippet.split('\n');
-		lines.splice(0, 1);
-		const codeSnippet = lines.join('\n');
+		// remove comment lines from code snippet
+		const lines = this.demoSnippet.split('-->');
+		const codeSnippet = lines[1];
 		if (this.interactive) {
 			const splitItems = codeSnippet.split('$attributes');
 			if (splitItems.length === 2) {
@@ -136,24 +135,17 @@ class ComponentCatalogDemoSnippetWrapper extends LitElement {
 	get imports() {
 		return parseImports(this.demoSnippet);
 	}
+
 	get size() {
-		const tag = 'size:';
-		let size;
-		if (this.demoSnippet.includes(tag)) {
-			const nameSection = this.demoSnippet.split(tag)[1];
-			size = nameSection.split(' ')[0];
-		}
+		const size = this._parseConfigurationValue('size');
 		return size;
 	}
+
 	get tagName() {
-		const tag = 'name:';
-		let name;
-		if (this.demoSnippet.includes(tag)) {
-			const nameSection = this.demoSnippet.split(tag)[1];
-			name = nameSection.split(' ')[0];
-		}
+		const name = this._parseConfigurationValue('name');
 		return name;
 	}
+
 	render() {
 		const codeSnippet = this.code;
 		return html`
@@ -167,6 +159,7 @@ class ComponentCatalogDemoSnippetWrapper extends LitElement {
 			${ this.interactive ? html`<d2l-component-catalog-demo-attribute-table @property-change=${this._handlePropertyChange} interactive tag-name="${this.tagName}"></d2l-component-catalog-demo-attribute-table>` : null }
 		`;
 	}
+
 	_handlePropertyChange(event) {
 		const { name, type, value } = event.detail;
 		if (value === '' || !value) {
@@ -176,5 +169,22 @@ class ComponentCatalogDemoSnippetWrapper extends LitElement {
 		}
 		this.requestUpdate();
 	}
+
+	_parseConfigurationValue(tag) {
+		let value;
+		if (this.demoSnippet.includes(`${tag}:`)) {
+			let section = this.demoSnippet.split(`${tag}:`)[1];
+			section = section.split('-->')[0];
+			// Get configuration values from inline
+			if (section.includes(' ')) {
+				value = section.split(' ')[0];
+			} else {
+				// Get configuration values on mulitple lines
+				value = section.split('\n')[0];
+			}
+		}
+		return value;
+	}
+
 }
 customElements.define('d2l-component-catalog-demo-snippet', ComponentCatalogDemoSnippetWrapper);
