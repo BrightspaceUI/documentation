@@ -8,6 +8,18 @@ eleventyNavigation:
 ---
 
 # Form Components
+```html
+<!-- docs: demo -->
+<script type="module">
+  import '@brightspace-ui/core/components/button/button.js';
+  import '@brightspace-ui/core/components/button/button-subtle.js';
+  import '@brightspace-ui/core/components/button/button-icon.js';
+</script>
+<d2l-button>Button</d2l-button>
+<d2l-button primary>Primary Button</d2l-button>
+<d2l-button-subtle text="Subtle Button" icon="tier1:gear"></d2l-button-subtle>
+<d2l-button-icon text="Icon Button" icon="tier1:gear"></d2l-button-icon>
+```
 ```html 		
 <!-- docs: live demo name:d2l-tooltip size:xlarge -->
 <script type="module">
