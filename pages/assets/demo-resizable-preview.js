@@ -6,6 +6,10 @@ import 'playground-elements/playground-project';
 import { css, html, LitElement } from 'lit-element';
 import { styleMap } from 'lit-html/directives/style-map.js';
 
+const LEFT_ARROW_KEY = 37;
+const RIGHT_ARROW_KEY = 39;
+
+// The distance in pixels in which the demo width is automatically snapped to 100% if it is within
 const LOCK_OPEN_VALUE = 15;
 const MINIMUM_WIDTH = 300;
 const PREVIEW_FILE_NAME = 'index.html';
@@ -226,12 +230,10 @@ class ComponentCatalogDemoResizablePreview extends LitElement {
 	_onKeyPress(event) {
 
 		const { keyCode } = event;
-		const leftArrow = 37;
-		const rightArrow = 39;
 
-		if (keyCode === leftArrow) {
+		if (keyCode === LEFT_ARROW_KEY) {
 			this._moveSliderLeft();
-		} else if (keyCode === rightArrow) {
+		} else if (keyCode === RIGHT_ARROW_KEY) {
 			this._moveSliderRight();
 		}
 	}

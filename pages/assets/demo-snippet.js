@@ -119,7 +119,7 @@ class ComponentCatalogDemoSnippetWrapper extends LitElement {
 				<div class="d2l-button-container">
 					<!-- Add button items to the overlay and pass through props -->
 				</div>
-				${ !this.hideCode ? html`<playground-code-editor type="html" .value=${this.code}></playground-code-editor>` : null }
+				${ !this.hideCode ? html`<playground-code-editor readonly type="html" .value=${this.code}></playground-code-editor>` : null }
 			</div>
 			${ this.interactive ? html`<div> interactive attribute table </div>` : null }
 		`;
