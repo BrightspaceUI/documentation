@@ -82,7 +82,7 @@ function _generatePage(frontMatter, content) {
 	fs.writeFileSync(newFile, `${frontMatterString}\n${content}`);
 }
 
-export function _getInfoGeneratePage(issue) {
+function _getInfoGeneratePage(issue) {
 	const { frontMatter, info, issueBody } = parseBody(issue);
 	const output = { name: frontMatter.title, issueUrl: info.issueUrl, development: info.development, fileName: frontMatter.fileName, owner: info.owner };
 
