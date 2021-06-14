@@ -6,10 +6,11 @@ import 'playground-elements/playground-project';
 import { css, html, LitElement } from 'lit-element';
 import { styleMap } from 'lit-html/directives/style-map.js';
 
-const INTERVAL_COUNT = 6;
+// Number of steps that keyboards have while resizing
+const STEP_COUNT = 6;
 const LOCK_OPEN_VALUE = 15;
 const MINIMUM_WIDTH = 300;
-const PREVIEW_FILE = 'index.html';
+const PREVIEW_FILE_NAME = 'index.html';
 const SLIDER_WIDTH = 35;
 
 class ComponentCatalogDemoResizablePreview extends LitElement {
@@ -170,7 +171,7 @@ class ComponentCatalogDemoResizablePreview extends LitElement {
 							}
 						}
 					</script>
-					<script filename=${PREVIEW_FILE} type="sample/html">
+					<script filename=${PREVIEW_FILE_NAME} type="sample/html">
 						${this.indexHTML}
 					</script>
 					<script filename="index.js" type="sample/js">
@@ -178,7 +179,7 @@ class ComponentCatalogDemoResizablePreview extends LitElement {
 					</script>
 				</playground-project>
 				<div class="d2l-preview-container" style=${styleMap(previewContainerStyles)}>
-					<playground-preview id="preview" style=${styleMap(previewStyles)} project='demo' filename=${PREVIEW_FILE}></playground-preview>
+					<playground-preview id="preview" style=${styleMap(previewStyles)} project='demo' filename=${PREVIEW_FILE_NAME}></playground-preview>
 					<d2l-offscreen id="instructions">Use the left or right arrow keys to resize the preview demo area.</d2l-offscreen>
 					${this.resizable ?  html`<div class="d2l-slider" tabindex="0" @pointerdown=${this._onResizeSliderPointerDown} @keydown=${this._onKeyPress} aria-label="Resizable demo slider" aria-describedby="instructions" aria-orientation="vertical" >
 						<svg width="5" height="18" viewBox="0 0 5 18" xmlns="http://www.w3.org/2000/svg">
@@ -197,7 +198,7 @@ class ComponentCatalogDemoResizablePreview extends LitElement {
 		const { left: hostLeft, right: hostRight } = this.getBoundingClientRect();
 
 		const hostWidth = hostRight - hostLeft;
-		const intervalWidth = Math.floor(hostWidth / INTERVAL_COUNT);
+		const intervalWidth = Math.floor(hostWidth / STEP_COUNT);
 
 		if (!this._previewWidth) {
 			this._previewWidth = hostWidth;
@@ -212,7 +213,7 @@ class ComponentCatalogDemoResizablePreview extends LitElement {
 		const { left: hostLeft, right: hostRight } = this.getBoundingClientRect();
 
 		const hostWidth = hostRight - hostLeft;
-		const intervalWidth = Math.floor(hostWidth / INTERVAL_COUNT);
+		const intervalWidth = Math.floor(hostWidth / STEP_COUNT);
 
 		if (this._previewWidth) {
 			const updatedWidth = Math.min(hostWidth, this._previewWidth + intervalWidth);
