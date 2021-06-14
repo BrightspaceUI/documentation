@@ -1,11 +1,7 @@
 import { _getDevStatus, parseBody } from '../tools/generate-pages-utils.mjs';
 import assert from 'assert';
-// import sinon from 'sinon';
 
 describe('generate-pages', () => {
-	describe('_getInfoGeneratePage', () => {
-		// TODO: stub out writeFileSync
-	});
 
 	describe('_getDevStatus', () => {
 		[

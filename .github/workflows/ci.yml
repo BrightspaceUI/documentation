@@ -7,9 +7,6 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: Brightspace/third-party-actions@actions/checkout
-      - uses: Brightspace/third-party-actions@actions/setup-node
-        with:
-          node-version: '14.x'
       - name: Install dependencies
         run: npm install
       - name: Lint (JavaScript)
@@ -18,8 +15,8 @@ jobs:
         run: npm run lint:style
       - name: Lint (Lit)
         run: npm run lint:lit
-      # - name: Unit Tests
-      #   run: npm run test:unit
+      - name: Unit Tests
+        run: npm run test:unit
       - name: Build
         run: npm run build:prod
       - name: Assume role
