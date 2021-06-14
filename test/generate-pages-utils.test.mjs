@@ -85,24 +85,22 @@ describe('generate-pages', () => {
 		});
 
 		it('should be correct when body contains front matter but no eleventyNavigation', () => {
-			issueBase.body = `
-<!--
+			issueBase.body = `<!--
 ---
 layout: layouts/component
 tags:
-  Component 1: d2l-component-1
-  Component 2: d2l-component-2
+  - Component 1: d2l-component-1
+    Component 2: d2l-component-2
 ---
 -->`;
 			expectedFrontMatter.layout = 'layouts/component';
-			expectedFrontMatter.tags = { 'Component 1': 'd2l-component-1', 'Component 2': 'd2l-component-2' };
+			expectedFrontMatter.tags = [{ 'Component 1': 'd2l-component-1', 'Component 2': 'd2l-component-2' }];
 			assert.deepEqual(parseBody(issueBase), { frontMatter: expectedFrontMatter, info: expectedInfo, issueBody: '' });
 		});
 
 		it('should be correct when body contains front matter includes eleventyNavigation', () => {
 			const keyName = 'my-component';
-			issueBase.body = `
-<!--
+			issueBase.body = `<!--
 ---
 eleventyNavigation:
   key: ${keyName}
@@ -116,8 +114,7 @@ eleventyNavigation:
 		});
 
 		it('should be correct when body comment contains info and no development state', () => {
-			issueBase.body = `
-<!--
+			issueBase.body = `<!--
 components: ["components/component1.js","component/component2.js"]
 -->`;
 			expectedInfo.components = ['components/component1.js', 'component/component2.js'];
@@ -125,12 +122,56 @@ components: ["components/component1.js","component/component2.js"]
 		});
 
 		it('should be correct when body comment contains development state', () => {
-			issueBase.body = `
-<!--
+			issueBase.body = `<!--
 development: Completed
 -->`;
 			expectedInfo.development = 'Completed';
 			assert.deepEqual(parseBody(issueBase), { frontMatter: expectedFrontMatter, info: expectedInfo, issueBody: '' });
+		});
+
+		it('should be correct when body comment contains front matter and other info', () => {
+			issueBase.body = `<!--
+---
+layout: layouts/component
+other: info
+---
+
+development: Completed
+-->`;
+			expectedFrontMatter.layout = 'layouts/component';
+			expectedFrontMatter.other = 'info';
+			expectedInfo.development = 'Completed';
+			assert.deepEqual(parseBody(issueBase), { frontMatter: expectedFrontMatter, info: expectedInfo, issueBody: '' });
+		});
+
+		it('should be correct when body but no comment', () => {
+			const body = `# My Component
+
+This is my component info`;
+			issueBase.body = body;
+			expectedInfo.development = 'Not Started';
+			assert.deepEqual(parseBody(issueBase), { frontMatter: expectedFrontMatter, info: expectedInfo, issueBody: body });
+		});
+
+		it('should be correct when comment and body content', () => {
+			const body = `# My Second Component
+
+This is my other component info`;
+			issueBase.body = `<!--
+---
+layout: layouts/component
+other: info
+---
+
+development: Completed
+baseInstallLocation: "@brightspace-ui/core"
+-->
+${body}`;
+			expectedFrontMatter.layout = 'layouts/component';
+			expectedFrontMatter.other = 'info';
+			expectedInfo.development = 'Completed';
+			expectedInfo.baseInstallLocation = '@brightspace-ui/core';
+			assert.deepEqual(parseBody(issueBase), { frontMatter: expectedFrontMatter, info: expectedInfo, issueBody: `\n${body}` });
 		});
 	});
 
