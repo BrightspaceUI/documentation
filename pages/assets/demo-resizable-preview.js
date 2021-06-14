@@ -6,12 +6,12 @@ import 'playground-elements/playground-project';
 import { css, html, LitElement } from 'lit-element';
 import { styleMap } from 'lit-html/directives/style-map.js';
 
-// Number of steps that keyboards have while resizing
-const STEP_COUNT = 6;
 const LOCK_OPEN_VALUE = 15;
 const MINIMUM_WIDTH = 300;
 const PREVIEW_FILE_NAME = 'index.html';
 const SLIDER_WIDTH = 35;
+// Number of steps that keyboards have while resizing
+const STEP_COUNT = 6;
 
 class ComponentCatalogDemoResizablePreview extends LitElement {
 	static get properties() {
