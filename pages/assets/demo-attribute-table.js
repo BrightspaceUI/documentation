@@ -1,3 +1,4 @@
+import '@brightspace-ui/core/components/inputs/input-number.js';
 import '@brightspace-ui/core/components/inputs/input-text.js';
 import '@brightspace-ui/core/components/switch/switch.js';
 import { css, html, LitElement } from 'lit-element';
@@ -99,7 +100,8 @@ export class ComponentCatalogDemoAttributeTable extends LitElement {
 	}
 
 	_getDemoValueOptions(type, attributeName, defaultVal) {
-		const value = defaultVal ? defaultVal.replace(/"/g, '') : undefined;
+		const strippedDefaultVal = defaultVal?.replace(/"/g, '');
+		const value = defaultVal ? strippedDefaultVal : undefined;
 		switch (type) {
 			case 'array':
 			case 'object':
@@ -115,13 +117,13 @@ export class ComponentCatalogDemoAttributeTable extends LitElement {
 					</d2l-switch>`;
 			case 'number':
 				return html`
-					<d2l-input-text
+					<d2l-input-number
 						@change="${this._onNumberChange}"
 						data-name="${attributeName}"
 						label="${attributeName}"
 						label-hidden
 						value="${ifDefined(value)}">
-					</d2l-input-text>`;
+					</d2l-input-number>`;
 			case 'string':
 				return html`
 					<d2l-input-text
@@ -133,7 +135,14 @@ export class ComponentCatalogDemoAttributeTable extends LitElement {
 					</d2l-input-text>`;
 			default: {
 				// the case of an array of strings
-				const optsHtml = type.replace(/'/g, '').split(' | ').map(opt => html`<option ?selected="${value === opt}">${opt}</option>`);
+				let options = type.replace(/'/g, '').split(' | ');
+
+				// Add empty default values to the dropdown lists
+				if (!options.includes(strippedDefaultVal)) {
+					options = [strippedDefaultVal, ...options];
+				}
+				const optsHtml = options.map(opt => html`<option ?selected="${value === opt}">${opt}</option>`);
+
 				return html`
 					<select
 						aria-label="Valid values"
