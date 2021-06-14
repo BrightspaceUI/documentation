@@ -26,7 +26,7 @@ describe('generate-pages', () => {
 			{ labels: [{ name: 'Backlog' }], state: 'open', issueState: 'asdf', expected: 'Backlog' },
 			{ labels: [{ name: 'Deprecated' }], state: 'closed', issueState: 'asdf', expected: 'Deprecated' },
 		].forEach((test) => {
-			it(`should be correct with label: ${test.labels.length > 0 ? test.labels[0].name : 'no label'}, state: ${test.state}, issue state: ${test.issueState}`, () => {
+			it(`should be correct with label: ${test.labels.length > 0 ? test.labels[0].name : 'N/A'}, state: ${test.state}, issue state: ${test.issueState}`, () => {
 				assert.equal(_getDevStatus(test.labels, test.state, test.issueState), test.expected);
 			});
 		});
