@@ -93,8 +93,8 @@ module.exports = function(eleventyConfig) {
 	const defaultTextRule = markdownIt.renderer.rules.text;
 	markdownIt.renderer.rules.text = (tokens, idx, options, env, slf) => {
 		const content = tokens[idx].content;
-		if (env.tags && Object.keys(env.tags[0]).includes(content)) {
-			const tag = env.tags[0][content];
+		if (env.tags && Object.keys(env.tags).includes(content)) {
+			const tag = env.tags[content];
 			return `
 				${defaultTextRule(tokens, idx, options, env, slf)}
 				<div class="d2l-component-catalog-tag d2l-body-standard">

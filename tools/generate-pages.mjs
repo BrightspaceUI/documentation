@@ -1,8 +1,9 @@
-import { DEV_STATES, ISSUE_LABELS, TIERS } from './states.mjs';
+import { ISSUE_LABELS, TIERS } from './states.mjs';
 import { exec } from 'child_process';
 import fs from 'fs';
 import matter from 'gray-matter';
 import { Octokit } from '@octokit/rest';
+import { parseBody } from './generate-pages-utils.mjs';
 import path from 'path';
 import { default as publishedComponents } from './component-page-issues.js';
 
@@ -81,23 +82,9 @@ function _generatePage(frontMatter, content) {
 	fs.writeFileSync(newFile, `${frontMatterString}\n${content}`);
 }
 
-function _getDevStatus(labels, state, issueState) {
-	// if closed default to COMPLETE if no other information, if open default to NOT STARTED if no other information
-	const labelNames = labels.map((label) => label.name);
-	if (state === 'closed') {
-		if (labelNames.includes(ISSUE_LABELS.DEPRECATED)) return DEV_STATES.DEPRECATED;
-		else if (Object.values(DEV_STATES).includes(issueState)) return issueState;
-		else return DEV_STATES.COMPLETE;
-	} else if (state === 'open') {
-		if (labelNames.includes(ISSUE_LABELS.BACKLOG)) return DEV_STATES.BACKLOG;
-		else if (Object.values(DEV_STATES).includes(issueState)) return issueState;
-		else return DEV_STATES.NOT_STARTED;
-	}
-}
-
-function _getInfoGeneratePage(issue) {
-	const { frontMatter, info, issueBody } = _parseBody(issue);
-	const output = { name: info.name, issueUrl: info.issueUrl, development: info.development, fileName: frontMatter.fileName, owner: info.owner };
+export function _getInfoGeneratePage(issue) {
+	const { frontMatter, info, issueBody } = parseBody(issue);
+	const output = { name: frontMatter.title, issueUrl: info.issueUrl, development: info.development, fileName: frontMatter.fileName, owner: info.owner };
 
 	if (!info.devMarkdown || !info.baseInstallLocation) {
 		console.warn(`WARNING: Component issue for ${issue.title} DOES NOT CONTAIN "devMarkdown" OR "baseInstallLocation"`);
@@ -158,57 +145,6 @@ function _installDependencies(dependencies, callback) {
 			callback();
 		});
 	});
-}
-
-function _parseBody(issue) {
-	/**
-	 * issue body is formatted as follows with all pieces optional:
-	 * <!--
-	 * ---
-	 * front: matter
-	 * ---
-	 *
-	 * comment: content
-	 * -->
-	 * # issueBody
-	 */
-	const splitStart = issue.body.split(/<!--\r?\n/);
-	let comment = '', issueBody = issue.body;
-	if (splitStart.length === 2) {
-		const splitEnd = splitStart[1].split('-->');
-		comment = splitEnd[0];
-		issueBody = splitEnd[1];
-	}
-
-	const title = issue.title.replace(/\s+/g, '-').toLowerCase();
-	let info = {
-		issueUrl: issue.html_url,
-		name: issue.title
-	};
-	let frontMatter = {
-		layout: 'layouts/component-issue',
-		title: issue.title,
-		fileName: title,
-		issueUrl: issue.html_url
-	};
-
-	if (comment) {
-		const matterComment = matter(comment);
-		const commentContent = matterComment.content;
-
-		if (commentContent) info = Object.assign(info, matter(`---\n${commentContent}\n---`).data);
-		if (Object.keys(matterComment.data).length > 0) {
-			frontMatter = {
-				...frontMatter,
-				...matterComment.data,
-				repo: info.repo,
-				fileName: (frontMatter.eleventyNavigation && frontMatter.eleventyNavigation.key) || title
-			};
-		}
-	}
-
-	info.development = _getDevStatus(issue.labels, issue.state, info.development);
-	return { frontMatter, info, issueBody };
 }
 
 async function _requestIssues() {

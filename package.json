@@ -13,7 +13,7 @@
     "start": "cross-env NODE_ENV=development npm run build && eleventy && concurrently \"npx eleventy --watch\" \"web-dev-server\"",
     "start:prod": "npm run build:prod && web-dev-server --config web-dev-server-prod.config.js",
     "test": "npm run lint",
-    "test:unit": "mocha"
+    "test:unit": "mocha test"
   },
   "author": "D2L Corporation",
   "license": "Apache-2.0",
