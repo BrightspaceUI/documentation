@@ -62,7 +62,7 @@ export class ComponentCatalogDemoAttributeTable extends LitElement {
 			const demoValueRow = this.interactive ? html`<td>${demoValue}</td>` : null;
 			return html`
 				<tr>
-					<td>${info.name}</td>
+					<th scope="row">${info.name}</th>
 					<td class="d2l-design-system-component-type">${demoType}</td>
 					<td>${info.description}</td>
 					<td>${infoDefault}</td>
