@@ -200,7 +200,8 @@ class ComponentCatalogDemoResizablePreview extends LitElement {
 							class="d2l-slider" 
 							tabindex="0" 
 							@pointerdown=${this._onResizeSliderPointerDown} 
-							@keydown=${this._onKeyPress} aria-label="Resizable demo slider" 
+							@keydown=${this._onKeyPress}
+							aria-label="Resizable demo slider"
 							aria-describedby="instructions" 
 							aria-orientation="vertical">
 							<svg width="5" height="18" viewBox="0 0 5 18" xmlns="http://www.w3.org/2000/svg">
@@ -260,7 +261,7 @@ class ComponentCatalogDemoResizablePreview extends LitElement {
 
 		if (keyCode === KEY_CODES.LEFT) {
 			this._moveSliderLeft();
-		} else if (keyCode === KEY_CODES.RIGTH) {
+		} else if (keyCode === KEY_CODES.RIGHT) {
 			this._moveSliderRight();
 		}
 	}
