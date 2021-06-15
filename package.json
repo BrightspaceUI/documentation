@@ -42,6 +42,7 @@
     "markdown-it-modify-token": "^1",
     "mocha": "^9",
     "playground-elements": "^0.9",
+    "prismjs": "^1.23",
     "rimraf": "^3",
     "rollup": "^2",
     "rollup-plugin-output-manifest": "^2",
