@@ -133,7 +133,7 @@ function _getMissingDependenciesList(dependencies) {
 function _handleError(message) {
 	if (PROD) {
 		console.error(`ERROR: ${message}`);
-		process.exit(5);
+		process.exit(1);
 	} else console.warn(`WARNING: ${message}`);
 }
 
