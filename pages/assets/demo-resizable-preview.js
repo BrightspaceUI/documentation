@@ -220,7 +220,7 @@ class ComponentCatalogDemoResizablePreview extends LitElement {
 			// Updates to the project must be directly applied via JS as playground elements
 			// do not update when slots are changed. Firing saveDebounced forces the playground to reload
 			// once the file content has been updated
-			const indexFile = this._project.files.find(({ name }) => name === PREVIEW_FILE);
+			const indexFile = this._project.files.find(({ name }) => name === PREVIEW_FILE_NAME);
 			indexFile.content = this.indexHTML;
 			this._project.saveDebounced();
 		}
