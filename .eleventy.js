@@ -59,8 +59,8 @@ module.exports = function(eleventyConfig) {
 
 	markdownIt.renderer.rules.fence = (tokens, idx) => {
 		const content = tokens[idx].content;
-		if (content.includes('<!-- docs: live demo -->') || content.includes('<!-- docs: demo -->') || content.includes('<!-- docs: code demo -->')) {
-			if (content.includes('<!-- docs: live demo -->')) {
+		if (content.includes('<!-- docs: live demo') || content.includes('<!-- docs: demo -->') || content.includes('<!-- docs: code demo -->')) {
+			if (content.includes('<!-- docs: live demo')) {
 				return `
 					<d2l-component-catalog-demo-snippet interactive resizable demo-snippet="${escapeHtml(content)}">
 					</d2l-component-catalog-demo-snippet>
