@@ -38,7 +38,7 @@ class ComponentCatalogDemoResizablePreview extends LitElement {
 			resizable : { type: Boolean, reflect: true },
 			/**
 			* Size of the IFrame demo portion
-			* @type {'small'|'medium'|'large'}
+			* @type {'small'|'medium'|'large'|'xlarge'}
 			*/
 			size: { type: String, reflect: true },
 			_previewWidth: { type: Number, reflect: true }
@@ -66,7 +66,9 @@ class ComponentCatalogDemoResizablePreview extends LitElement {
 			:host([size="large"]) {
 				height: 400px;
 			}
-
+			:host([size="xlarge"]) {
+				height: 600px;
+			}
 			.d2l-preview-container {
 				border-radius: inherit;
 				height: 100%;
@@ -121,13 +123,18 @@ class ComponentCatalogDemoResizablePreview extends LitElement {
 	}
 	get indexHTML() {
 		return `
-			<script type="module" src="index.js"></script>
 			<script>
 				window.addEventListener('load', function () {
 					var demoEl = document.getElementById('demo-element');
 					demoEl.classList.remove('hide');
 				});
+				// Suppress errors only in production? This will hide any errors with attributes and the module not resolved errors
+				// occuring within the iframe
+				// window.onerror = function () {
+				// 	return true;
+				// };
 			</script>
+			<script type="module" src="index.js"></script>
 			<style>
 				/* todo?: add this to md template and provide configuration for different item alignments? */
 				html {
@@ -153,6 +160,8 @@ class ComponentCatalogDemoResizablePreview extends LitElement {
 			</body>`;
 	}
 	firstUpdated() {
+		this._preview = this.shadowRoot.querySelector('playground-preview');
+		this._project = this.shadowRoot.querySelector('playground-project');
 		this._slider = this.shadowRoot.querySelector('.d2l-slider');
 	}
 
@@ -175,6 +184,7 @@ class ComponentCatalogDemoResizablePreview extends LitElement {
 							}
 						}
 					</script>
+					<!-- Changes to the index file are applied via the update method -->
 					<script filename=${PREVIEW_FILE_NAME} type="sample/html">
 						${this.indexHTML}
 					</script>
@@ -204,7 +214,17 @@ class ComponentCatalogDemoResizablePreview extends LitElement {
 			</div>
 		`;
 	}
-
+	update(changedProperties) {
+		if (changedProperties.has('code') && this._preview) {
+			// Updates to the project must be directly applied via JS as playground elements
+			// do not update when slots are changed. Firing saveDebounced forces the playground to reload
+			// once the file content has been updated
+			const indexFile = this._project.files.find(({ name }) => name === PREVIEW_FILE);
+			indexFile.content = this.indexHTML;
+			this._project.saveDebounced();
+		}
+		super.update(changedProperties);
+	}
 	_moveSliderLeft() {
 		const { left: hostLeft, right: hostRight } = this.getBoundingClientRect();
 
