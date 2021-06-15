@@ -8,7 +8,8 @@ module.exports = function(eleventyConfig) {
 	eleventyConfig.addPassthroughCopy('pages/favicon.ico');
 	eleventyConfig.addPassthroughCopy('pages/img');
 	eleventyConfig.addNunjucksShortcode('enhancements', (repo) => {
-		return `Looking for an enhancement not listed here? <d2l-link href="${repo}/issues">Create a GitHub issue!</d2l-link>`;
+		const href = repo ? `${repo}/issues` : 'https://github.com/BrightspaceUI/documentation/issues';
+		return `Looking for an enhancement not listed here? <d2l-link href="${href}">Create a GitHub issue!</d2l-link>`;
 	});
 	eleventyConfig.addNunjucksShortcode('issue', (issueUrl) => {
 		return `Looking for more details on the component or want to add your input? <d2l-link href="${issueUrl}">Check out the GitHub Issue</d2l-link>`;
@@ -93,6 +94,7 @@ module.exports = function(eleventyConfig) {
 	const defaultTextRule = markdownIt.renderer.rules.text;
 	markdownIt.renderer.rules.text = (tokens, idx, options, env, slf) => {
 		const content = tokens[idx].content;
+		// Note: if tags are formatted like eleventyNavigation then we get error "entry.data.tags is not iterable" when parsing
 		if (env.tags && Object.keys(env.tags[0]).includes(content)) {
 			const tag = env.tags[0][content];
 			return `
