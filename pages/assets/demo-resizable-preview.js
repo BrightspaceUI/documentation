@@ -1,13 +1,22 @@
 import '@brightspace-ui/core/components/demo/code-view.js';
+import '@brightspace-ui/core/components/offscreen/offscreen.js';
 import 'playground-elements/playground-preview';
 import 'playground-elements/playground-project';
 
 import { css, html, LitElement } from 'lit-element';
 import { styleMap } from 'lit-html/directives/style-map.js';
 
-const SLIDER_WIDTH = 35;
+const KEY_CODES = {
+	LEFT: 37,
+	RIGHT: 39
+};
+
+const LOCK_OPEN_VALUE = 15; // The distance in pixels in which the demo width is automatically snapped to 100% if it is within
 const MINIMUM_WIDTH = 300;
-const PREVIEW_FILE = 'index.html';
+const PREVIEW_FILE_NAME = 'index.html';
+const SLIDER_WIDTH = 35;
+const STEP_COUNT = 6;// Number of steps that keyboards have while resizing
+
 class ComponentCatalogDemoResizablePreview extends LitElement {
 	static get properties() {
 		return {
@@ -135,6 +144,7 @@ class ComponentCatalogDemoResizablePreview extends LitElement {
 					display: flex;
 					justify-content: space-evenly;
 					align-items: center;
+					flex-wrap: wrap;
 					width: 100%;
 					height: 100%;
 				}
@@ -162,6 +172,7 @@ class ComponentCatalogDemoResizablePreview extends LitElement {
 		const previewContainerStyles = {
 			width: this._previewWidth ? `${this._previewWidth}px` : '100%',
 		};
+
 		return html`
 			<div class="d2l-slider-region">
 				<playground-project id='demo'>
@@ -174,7 +185,7 @@ class ComponentCatalogDemoResizablePreview extends LitElement {
 						}
 					</script>
 					<!-- Changes to the index file are applied via the update method -->
-					<script filename=${PREVIEW_FILE} type="sample/html">
+					<script filename=${PREVIEW_FILE_NAME} type="sample/html">
 						${this.indexHTML}
 					</script>
 					<script filename="index.js" type="sample/js">
@@ -182,15 +193,24 @@ class ComponentCatalogDemoResizablePreview extends LitElement {
 					</script>
 				</playground-project>
 				<div class="d2l-preview-container" style=${styleMap(previewContainerStyles)}>
-					<playground-preview id="preview" style=${styleMap(previewStyles)} project='demo' filename=${PREVIEW_FILE}></playground-preview>
-					${this.resizable ?  html`<div class="d2l-slider" @pointerdown=${this._onResizeSliderPointerDown}>
-						<svg width="5" height="18" viewBox="0 0 5 18" xmlns="http://www.w3.org/2000/svg">
-							<g fill="#6E7376" fill-rule="evenodd">
-								<rect width="2" height="18" rx="1"/>
-								<rect x="3" width="2" height="18" rx="1"/>
-							</g>
-						</svg>
-					</div>` : null}
+					<playground-preview id="preview" style=${styleMap(previewStyles)} project='demo' filename=${PREVIEW_FILE_NAME}></playground-preview>
+					<d2l-offscreen id="instructions">Use the left or right arrow keys to resize the preview demo area.</d2l-offscreen>
+					${this.resizable ? html`
+						<div 
+							class="d2l-slider" 
+							tabindex="0" 
+							@pointerdown=${this._onResizeSliderPointerDown} 
+							@keydown=${this._onKeyPress}
+							aria-label="Resizable demo slider"
+							aria-describedby="instructions" 
+							aria-orientation="vertical">
+							<svg width="5" height="18" viewBox="0 0 5 18" xmlns="http://www.w3.org/2000/svg">
+								<g fill="#6E7376" fill-rule="evenodd">
+									<rect width="2" height="18" rx="1"/>
+									<rect x="3" width="2" height="18" rx="1"/>
+								</g>
+							</svg>
+						</div>` : null}
 				</div>
 			</div>
 		`;
@@ -200,13 +220,52 @@ class ComponentCatalogDemoResizablePreview extends LitElement {
 			// Updates to the project must be directly applied via JS as playground elements
 			// do not update when slots are changed. Firing saveDebounced forces the playground to reload
 			// once the file content has been updated
-			const indexFile = this._project.files.find(({ name }) => name === PREVIEW_FILE);
+			const indexFile = this._project.files.find(({ name }) => name === PREVIEW_FILE_NAME);
 			indexFile.content = this.indexHTML;
 			this._project.saveDebounced();
 		}
-
 		super.update(changedProperties);
 	}
+	_moveSliderLeft() {
+		const { left: hostLeft, right: hostRight } = this.getBoundingClientRect();
+
+		const hostWidth = hostRight - hostLeft;
+		const intervalWidth = Math.floor(hostWidth / STEP_COUNT);
+
+		if (!this._previewWidth) {
+			this._previewWidth = hostWidth;
+		}
+
+		const updatedWidth = Math.max(MINIMUM_WIDTH, this._previewWidth - intervalWidth);
+		this._previewWidth = Math.round(updatedWidth / intervalWidth) * intervalWidth;
+
+	}
+
+	_moveSliderRight() {
+		const { left: hostLeft, right: hostRight } = this.getBoundingClientRect();
+
+		const hostWidth = hostRight - hostLeft;
+		const intervalWidth = Math.floor(hostWidth / STEP_COUNT);
+
+		if (this._previewWidth) {
+			const updatedWidth = Math.min(hostWidth, this._previewWidth + intervalWidth);
+			this._previewWidth = Math.round(updatedWidth / intervalWidth) * intervalWidth;
+		}
+
+		this._shouldSnapOpen();
+	}
+
+	_onKeyPress(event) {
+
+		const { keyCode } = event;
+
+		if (keyCode === KEY_CODES.LEFT) {
+			this._moveSliderLeft();
+		} else if (keyCode === KEY_CODES.RIGHT) {
+			this._moveSliderRight();
+		}
+	}
+
 	_onResizeSliderPointerDown({ pointerId }) {
 		const slider = this._slider;
 		slider.setPointerCapture(pointerId);
@@ -230,8 +289,22 @@ class ComponentCatalogDemoResizablePreview extends LitElement {
 			slider.releasePointerCapture(pointerId);
 			slider.removeEventListener('pointermove', onPointermove);
 			slider.removeEventListener('pointerup', onPointerup);
+
+			this._shouldSnapOpen();
+
 		};
 		slider.addEventListener('pointerup', onPointerup);
+	}
+
+	// If the width is near 100% then snap the preview open so that it stays 100% on page resizes
+	_shouldSnapOpen() {
+		const { left: hostLeft, right: hostRight } = this.getBoundingClientRect();
+		const hostWidth = hostRight - hostLeft;
+
+		const diff = Math.abs(this._previewWidth - hostWidth);
+		if (diff < LOCK_OPEN_VALUE) {
+			this._previewWidth = undefined;
+		}
 	}
 }
 customElements.define('d2l-component-catalog-demo-resizable-preview', ComponentCatalogDemoResizablePreview);
