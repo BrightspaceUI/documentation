@@ -6,16 +6,16 @@ import 'playground-elements/playground-project';
 import { css, html, LitElement } from 'lit-element';
 import { styleMap } from 'lit-html/directives/style-map.js';
 
-const LEFT_ARROW_KEY = 37;
-const RIGHT_ARROW_KEY = 39;
+const KEY_CODES = {
+	LEFT: 37,
+	RIGHT: 39
+};
 
-// The distance in pixels in which the demo width is automatically snapped to 100% if it is within
-const LOCK_OPEN_VALUE = 15;
+const LOCK_OPEN_VALUE = 15; // The distance in pixels in which the demo width is automatically snapped to 100% if it is within
 const MINIMUM_WIDTH = 300;
 const PREVIEW_FILE_NAME = 'index.html';
 const SLIDER_WIDTH = 35;
-// Number of steps that keyboards have while resizing
-const STEP_COUNT = 6;
+const STEP_COUNT = 6;// Number of steps that keyboards have while resizing
 
 class ComponentCatalogDemoResizablePreview extends LitElement {
 	static get properties() {
@@ -185,14 +185,21 @@ class ComponentCatalogDemoResizablePreview extends LitElement {
 				<div class="d2l-preview-container" style=${styleMap(previewContainerStyles)}>
 					<playground-preview id="preview" style=${styleMap(previewStyles)} project='demo' filename=${PREVIEW_FILE_NAME}></playground-preview>
 					<d2l-offscreen id="instructions">Use the left or right arrow keys to resize the preview demo area.</d2l-offscreen>
-					${this.resizable ?  html`<div class="d2l-slider" tabindex="0" @pointerdown=${this._onResizeSliderPointerDown} @keydown=${this._onKeyPress} aria-label="Resizable demo slider" aria-describedby="instructions" aria-orientation="vertical" >
-						<svg width="5" height="18" viewBox="0 0 5 18" xmlns="http://www.w3.org/2000/svg">
-							<g fill="#6E7376" fill-rule="evenodd">
-								<rect width="2" height="18" rx="1"/>
-								<rect x="3" width="2" height="18" rx="1"/>
-							</g>
-						</svg>
-					</div>` : null}
+					${this.resizable ? html`
+						<div 
+							class="d2l-slider" 
+							tabindex="0" 
+							@pointerdown=${this._onResizeSliderPointerDown} 
+							@keydown=${this._onKeyPress} aria-label="Resizable demo slider" 
+							aria-describedby="instructions" 
+							aria-orientation="vertical">
+							<svg width="5" height="18" viewBox="0 0 5 18" xmlns="http://www.w3.org/2000/svg">
+								<g fill="#6E7376" fill-rule="evenodd">
+									<rect width="2" height="18" rx="1"/>
+									<rect x="3" width="2" height="18" rx="1"/>
+								</g>
+							</svg>
+						</div>` : null}
 				</div>
 			</div>
 		`;
@@ -231,9 +238,9 @@ class ComponentCatalogDemoResizablePreview extends LitElement {
 
 		const { keyCode } = event;
 
-		if (keyCode === LEFT_ARROW_KEY) {
+		if (keyCode === KEY_CODES.LEFT) {
 			this._moveSliderLeft();
-		} else if (keyCode === RIGHT_ARROW_KEY) {
+		} else if (keyCode === KEY_CODES.RIGTH) {
 			this._moveSliderRight();
 		}
 	}
