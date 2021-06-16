@@ -30,7 +30,7 @@ const parseImports = (allContent) => {
 	});
 	return imports;
 };
-const MINIMUM_WIDTH = 300;
+
 class ComponentCatalogDemoSnippetWrapper extends LitElement {
 	static get properties() {
 		return {
