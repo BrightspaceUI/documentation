@@ -1,6 +1,6 @@
 {
 	"extends": "brightspace/lit-config",
 	"globals": {
-		"Prism": true
+		"Prism": false
 	}
 }

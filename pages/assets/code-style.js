@@ -1,3 +1,4 @@
+/* stylelint-disable */
 import { css } from 'lit-element';
 
 export const themeStyles = css`
@@ -5,24 +6,20 @@ export const themeStyles = css`
 	pre {
 		background: none;
 		color: var(--d2l-color-gypsum);
-
 		font-family: 'Lato', 'Lucida Sans Unicode', 'Lucida Grande', sans-serif;
+		-webkit-hyphens: none;
+		-moz-hyphens: none;
+		-ms-hyphens: none;
+		hyphens: none;
 		line-height: 1.5;
+		-moz-tab-size: 8;
+		-o-tab-size: 8;
+		tab-size: 8;
 		text-align: left;
 		white-space: pre;
 		word-break: normal;
 		word-spacing: normal;
 		word-wrap: normal;
-
-		-moz-tab-size: 8;
-		-o-tab-size: 8;
-		tab-size: 8;
-
-		-webkit-hyphens: none;
-		-moz-hyphens: none;
-		-ms-hyphens: none;
-		hyphens: none;
-
 	}
 
 	/* Code blocks */
@@ -32,23 +29,13 @@ export const themeStyles = css`
 		overflow: auto;
 		padding: 40px 24px 24px 40px;
 	}
-	
-	:host([hide-demo]) pre {
-		border-radius: 10px;
-	}
+
 	:not(pre) > code,
 	pre {
 		background: var(--d2l-color-ferrite);
 	}
 
-	/* Inline code */
-	:not(pre) > code {
-		border-radius: 0.3em;
-		padding: 0.1em;
-		white-space: normal;
-	}
-
-	/* todo: get color from jeff
+	/* todo: get colors from jeff
 
 	.token.comment,
 	.token.block-comment,
@@ -58,7 +45,6 @@ export const themeStyles = css`
 		color: #808080;
 	}
 
-	.token.punctuation,
 	.token.number,
 	.token.url,
 	.token.operator {
@@ -89,6 +75,7 @@ export const themeStyles = css`
 	}
 
 	.token.string,
+	.token.punctuation,
 	.token.char {
 		color: var(--d2l-color-gypsum);
 	}

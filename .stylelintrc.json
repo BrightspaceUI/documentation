@@ -1,3 +1,6 @@
 {
-	"extends": "@brightspace-ui/stylelint-config"
+	"extends": "@brightspace-ui/stylelint-config",
+	"ignoreFiles": [
+		"pages/assets/code-style.js"
+	]
 }
