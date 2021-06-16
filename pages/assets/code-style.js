@@ -5,6 +5,7 @@ export const themeStyles = css`
 	code,
 	pre {
 		background: none;
+		/* this color is for base text within code snippets */
 		color: var(--d2l-color-gypsum);
 		font-family: 'Lato', 'Lucida Sans Unicode', 'Lucida Grande', sans-serif;
 		-webkit-hyphens: none;
