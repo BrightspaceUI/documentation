@@ -45,11 +45,15 @@ class ComponentCatalogDemoSnippetWrapper extends LitElement {
 			/**
 			* Hide the IFramed demo
 			*/
-			hideDemo: { type: Boolean, attribute: 'hide-demo' },
+			hideDemo: { type: Boolean, attribute: 'code-only' },
 			/**
-			* Should the attribute table be rendered for interactivity
+			* Should the attribute table be rendered for interactiv	ity
 			*/
 			interactive: { type: Boolean, reflect: true },
+			/**
+			* Language used to highlight code, defaults to `html`
+			*/
+			language: { type: String, reflect: true },
 			/**
 			* Is the preview resizable
 			*/
@@ -62,23 +66,13 @@ class ComponentCatalogDemoSnippetWrapper extends LitElement {
 			:host {
 				display: block;
 			}
+
 			:host([hidden]) {
 				display: none;
 			}
 
-			playground-code-editor {
-				/* stylelint-disable */
-				--playground-code-font-family: 'Lato', 'Lucida Sans Unicode', 'Lucida Grande', sans-serif;
-				--playground-code-background: var(--d2l-color-ferrite);
-				--playground-code-tag-color: var(--d2l-color-malachite);
-				--playground-code-string-color: var(--d2l-color-citrine-plus-1);
-				--playground-code-attribute-color: var(--d2l-color-zircon-plus-1);
-				--playground-code-default-color: var(--d2l-color-gypsum);
-				/* stylelint-enable */
-				border-radius: 0 0 10px 10px;
-				display: inline-block;
-				min-width: ${MINIMUM_WIDTH}px;
-				width: 100%;
+			:host([code-only]) pre {
+				border-radius: 10px;
 			}
 
 			.d2l-editor-wrapper {
@@ -101,18 +95,18 @@ class ComponentCatalogDemoSnippetWrapper extends LitElement {
 		this.hideDemo = false;
 		this.interactive = false;
 		this.resizable = false;
+		this.language = 'html';
 	}
 
 	get code() {
 		// remove comment lines from code snippet
 		const lines = this.demoSnippet.split('-->');
-		const codeSnippet = lines[1];
+		const codeSnippet = lines.length === 1 ? lines[0] : lines[1]; // if there was no `-->` found lines[1] will be null
 		if (this.interactive) {
 			const splitItems = codeSnippet.split('$attributes');
 			if (splitItems.length === 2) {
 
 				const attributes = [];
-
 				for (const attribute in this._attributes) {
 					const { type, value } = this._attributes[attribute];
 					switch (type) {
@@ -154,24 +148,34 @@ class ComponentCatalogDemoSnippetWrapper extends LitElement {
 		return name;
 	}
 
+	connectedCallback() {
+		super.connectedCallback();
+		this._highlightedCodeSnippet = Prism.highlight(this.code, Prism.languages[this.language], this.language);
+	}
+
 	render() {
 		const codeSnippet = this.code;
-		const formattedCodeSnippet = Prism.highlight(this.code, Prism.languages['html'], 'html');
 		return html`
-			${ !this.hideDemo ? html`<d2l-component-catalog-demo-resizable-preview 
-				code=${codeSnippet}
-				imports=${this.imports}
-				?resizable=${this.resizable}
-				?attached=${!this.hideCode}
-				size=${ifDefined(this.size)}>
+			${ !this.hideDemo ? html`
+				<d2l-component-catalog-demo-resizable-preview
+					code=${codeSnippet}
+					imports=${this.imports}
+					?resizable=${this.resizable}
+					?attached=${!this.hideCode}
+					size=${ifDefined(this.size)}>
 				</d2l-component-catalog-demo-resizable-preview>` : null}
 			<div class="d2l-editor-wrapper">
 				<div class="d2l-button-container">
 					<!-- Add button items to the overlay and pass through props -->
 				</div>
-				${ !this.hideCode ? html`<pre class="language-html"><code class="language-html">${unsafeHTML(formattedCodeSnippet)}</code></pre>` : null }
+				${ !this.hideCode ? html`<pre class="language-html"><code class="language-html">${unsafeHTML(this._highlightedCodeSnippet)}</code></pre>` : null }
 			</div>
-			${ this.interactive ? html`<d2l-component-catalog-demo-attribute-table @property-change=${this._handlePropertyChange} interactive tag-name="${this.tagName}"></d2l-component-catalog-demo-attribute-table>` : null }
+			${ this.interactive ? html`
+				<d2l-component-catalog-demo-attribute-table
+					@property-change=${this._handlePropertyChange}
+					interactive
+					tag-name="${this.tagName}">
+				</d2l-component-catalog-demo-attribute-table>` : null }
 		`;
 
 	}

@@ -28,10 +28,6 @@ export const themeStyles = css`
 		margin: 0;
 		overflow: auto;
 		padding: 40px 24px 24px 40px;
-	}
-
-	:not(pre) > code,
-	pre {
 		background: var(--d2l-color-ferrite);
 	}
 
