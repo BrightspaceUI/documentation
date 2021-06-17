@@ -49,7 +49,7 @@ In the component repo do the following:
 Interactive demo (maximum of 1 per file): add the comment `<!-- docs: live demo -->` within the code block at the top. For example:
 ```
 ```html
-<!-- docs: live demo -->
+<!-- docs: live demo name:<component-name> size:<'small'|'medium'|'large'> -->
 <script type="module">
   import '/assets/js/input-date.js';
 </script>
