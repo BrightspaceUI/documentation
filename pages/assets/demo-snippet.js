@@ -1,9 +1,9 @@
-import 'prismjs/prism.js';
 import '@brightspace-ui/core/components/colors/colors.js';
 import '@brightspace-ui/core/components/demo/demo-snippet.js';
 import './demo-attribute-table.js';
 import './demo-resizable-preview.js';
 import 'playground-elements/playground-code-editor';
+import 'prismjs/prism.js';
 import { css, html, LitElement } from 'lit-element';
 import { ifDefined } from 'lit-html/directives/if-defined.js';
 import { themeStyles } from './code-style.js';
@@ -47,7 +47,7 @@ class ComponentCatalogDemoSnippetWrapper extends LitElement {
 			*/
 			hideDemo: { type: Boolean, attribute: 'code-only' },
 			/**
-			* Should the attribute table be rendered for interactiv	ity
+			* Should the attribute table be rendered for interactivity
 			*/
 			interactive: { type: Boolean, reflect: true },
 			/**
@@ -62,7 +62,7 @@ class ComponentCatalogDemoSnippetWrapper extends LitElement {
 		};
 	}
 	static get styles() {
-		return [css`
+		return [themeStyles, css`
 			:host {
 				display: block;
 			}
@@ -85,7 +85,7 @@ class ComponentCatalogDemoSnippetWrapper extends LitElement {
 				right: 0;
 				z-index: 10;
 			}
-		`, themeStyles];
+		`];
 	}
 
 	constructor() {
@@ -94,8 +94,8 @@ class ComponentCatalogDemoSnippetWrapper extends LitElement {
 		this.hideCode = false;
 		this.hideDemo = false;
 		this.interactive = false;
-		this.resizable = false;
 		this.language = 'html';
+		this.resizable = false;
 	}
 
 	get code() {
@@ -158,17 +158,17 @@ class ComponentCatalogDemoSnippetWrapper extends LitElement {
 		return html`
 			${ !this.hideDemo ? html`
 				<d2l-component-catalog-demo-resizable-preview
+					?attached=${!this.hideCode}
 					code=${codeSnippet}
 					imports=${this.imports}
 					?resizable=${this.resizable}
-					?attached=${!this.hideCode}
 					size=${ifDefined(this.size)}>
 				</d2l-component-catalog-demo-resizable-preview>` : null}
 			<div class="d2l-editor-wrapper">
 				<div class="d2l-button-container">
 					<!-- Add button items to the overlay and pass through props -->
 				</div>
-				${ !this.hideCode ? html`<pre class="language-html"><code class="language-html">${unsafeHTML(this._highlightedCodeSnippet)}</code></pre>` : null }
+				${ !this.hideCode ? html`<pre class="language-${this.languge}"><code class="language-${this.languge}">${unsafeHTML(this._highlightedCodeSnippet)}</code></pre>` : null }
 			</div>
 			${ this.interactive ? html`
 				<d2l-component-catalog-demo-attribute-table
@@ -177,14 +177,24 @@ class ComponentCatalogDemoSnippetWrapper extends LitElement {
 					tag-name="${this.tagName}">
 				</d2l-component-catalog-demo-attribute-table>` : null }
 		`;
-
 	}
+
+	update(changedProperties) {
+
+		if (changedProperties.has('_attributes')) {
+			this._highlightedCodeSnippet = Prism.highlight(this.code, Prism.languages[this.language], this.language);
+		}
+
+		super.update(changedProperties);
+	}
+
 	_handlePropertyChange(event) {
 		const { name, type, value } = event.detail;
 		if (value === '' || !value) {
 			delete this._attributes[name];
+			this._attributes = { ...this._attributes };
 		} else {
-			this._attributes[name] = { type, value };
+			this._attributes = { ...this._attributes, [name]: { type, value } };
 		}
 		this.requestUpdate();
 	}

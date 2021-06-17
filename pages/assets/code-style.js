@@ -28,7 +28,7 @@ export const themeStyles = css`
 		border-radius: 0 0 10px 10px;
 		margin: 0;
 		overflow: auto;
-		padding: 40px 24px 24px 40px;
+		padding: 40px 24px;
 		background: var(--d2l-color-ferrite);
 	}
 
