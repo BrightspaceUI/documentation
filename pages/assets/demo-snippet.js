@@ -3,8 +3,11 @@ import '@brightspace-ui/core/components/demo/demo-snippet.js';
 import './demo-attribute-table.js';
 import './demo-resizable-preview.js';
 import 'playground-elements/playground-code-editor';
+import 'prismjs/prism.js';
 import { css, html, LitElement } from 'lit-element';
 import { ifDefined } from 'lit-html/directives/if-defined.js';
+import { themeStyles } from './code-style.js';
+import { unsafeHTML } from 'lit-html/directives/unsafe-html';
 
 const defaultImports = [
 	'import \'@brightspace-ui/core/components/typography/typography.js?module\';\n',
@@ -27,7 +30,7 @@ const parseImports = (allContent) => {
 	});
 	return imports;
 };
-const MINIMUM_WIDTH = 300;
+
 class ComponentCatalogDemoSnippetWrapper extends LitElement {
 	static get properties() {
 		return {
@@ -40,9 +43,17 @@ class ComponentCatalogDemoSnippetWrapper extends LitElement {
 			*/
 			hideCode: { type: Boolean, attribute: 'hide-code' },
 			/**
+			* Hide the IFramed demo
+			*/
+			hideDemo: { type: Boolean, attribute: 'code-only' },
+			/**
 			* Should the attribute table be rendered for interactivity
 			*/
 			interactive: { type: Boolean, reflect: true },
+			/**
+			* Language used to highlight code, defaults to `html`
+			*/
+			language: { type: String, reflect: true },
 			/**
 			* Is the preview resizable
 			*/
@@ -51,27 +62,18 @@ class ComponentCatalogDemoSnippetWrapper extends LitElement {
 		};
 	}
 	static get styles() {
-		return css`
+		return [themeStyles, css`
 			:host {
 				display: block;
+				margin-bottom: 15px;
 			}
+
 			:host([hidden]) {
 				display: none;
 			}
 
-			playground-code-editor {
-				/* stylelint-disable */
-				--playground-code-font-family: 'Lato', 'Lucida Sans Unicode', 'Lucida Grande', sans-serif;
-				--playground-code-background: var(--d2l-color-ferrite);
-				--playground-code-tag-color: var(--d2l-color-malachite);
-				--playground-code-string-color: var(--d2l-color-citrine-plus-1);
-				--playground-code-attribute-color: var(--d2l-color-zircon-plus-1);
-				--playground-code-default-color: var(--d2l-color-gypsum);
-				/* stylelint-enable */
-				border-radius: 0 0 10px 10px;
-				display: inline-block;
-				min-width: ${MINIMUM_WIDTH}px;
-				width: 100%;
+			:host([code-only]) pre {
+				border-radius: 10px;
 			}
 
 			.d2l-editor-wrapper {
@@ -84,27 +86,28 @@ class ComponentCatalogDemoSnippetWrapper extends LitElement {
 				right: 0;
 				z-index: 10;
 			}
-		`;
+		`];
 	}
 
 	constructor() {
 		super();
 		this._attributes = {};
 		this.hideCode = false;
+		this.hideDemo = false;
 		this.interactive = false;
+		this.language = 'html';
 		this.resizable = false;
 	}
 
 	get code() {
 		// remove comment lines from code snippet
 		const lines = this.demoSnippet.split('-->');
-		const codeSnippet = lines[1];
+		const codeSnippet = lines.length === 1 ? lines[0] : lines[1]; // if there was no `-->` found lines[1] will be null
 		if (this.interactive) {
 			const splitItems = codeSnippet.split('$attributes');
 			if (splitItems.length === 2) {
 
 				const attributes = [];
-
 				for (const attribute in this._attributes) {
 					const { type, value } = this._attributes[attribute];
 					switch (type) {
@@ -146,26 +149,53 @@ class ComponentCatalogDemoSnippetWrapper extends LitElement {
 		return name;
 	}
 
+	connectedCallback() {
+		super.connectedCallback();
+		this._highlightedCodeSnippet = Prism.highlight(this.code, Prism.languages[this.language], this.language);
+	}
+
 	render() {
 		const codeSnippet = this.code;
 		return html`
-			<d2l-component-catalog-demo-resizable-preview code=${codeSnippet} imports=${this.imports} ?resizable=${this.resizable} ?attached=${!this.hideCode} size=${ifDefined(this.size)}></d2l-component-catalog-demo-resizable-preview>
+			${ !this.hideDemo ? html`
+				<d2l-component-catalog-demo-resizable-preview
+					?attached=${!this.hideCode}
+					code=${codeSnippet}
+					imports=${this.imports}
+					?resizable=${this.resizable}
+					size=${ifDefined(this.size)}>
+				</d2l-component-catalog-demo-resizable-preview>` : null}
 			<div class="d2l-editor-wrapper">
 				<div class="d2l-button-container">
 					<!-- Add button items to the overlay and pass through props -->
 				</div>
-				${ !this.hideCode ? html`<playground-code-editor readonly type="html" .value=${codeSnippet}></playground-code-editor>` : null }
+				${ !this.hideCode ? html`<pre class="language-${this.languge}"><code class="language-${this.languge}">${unsafeHTML(this._highlightedCodeSnippet)}</code></pre>` : null }
 			</div>
-			${ this.interactive ? html`<d2l-component-catalog-demo-attribute-table @property-change=${this._handlePropertyChange} interactive tag-name="${this.tagName}"></d2l-component-catalog-demo-attribute-table>` : null }
+			${ this.interactive ? html`
+				<d2l-component-catalog-demo-attribute-table
+					@property-change=${this._handlePropertyChange}
+					interactive
+					tag-name="${this.tagName}">
+				</d2l-component-catalog-demo-attribute-table>` : null }
 		`;
+	}
+
+	update(changedProperties) {
+
+		if (changedProperties.has('_attributes')) {
+			this._highlightedCodeSnippet = Prism.highlight(this.code, Prism.languages[this.language], this.language);
+		}
+
+		super.update(changedProperties);
 	}
 
 	_handlePropertyChange(event) {
 		const { name, type, value } = event.detail;
 		if (value === '' || !value) {
 			delete this._attributes[name];
+			this._attributes = { ...this._attributes };
 		} else {
-			this._attributes[name] = { type, value };
+			this._attributes = { ...this._attributes, [name]: { type, value } };
 		}
 		this.requestUpdate();
 	}
