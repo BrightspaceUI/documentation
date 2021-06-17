@@ -2,6 +2,8 @@ import { createBasicConfig } from '@open-wc/building-rollup';
 import { default as files } from './.generated/rollup-files-generated.js';
 import merge from 'deepmerge';
 import outputManifest from 'rollup-plugin-output-manifest';
+import resolve from '@rollup/plugin-node-resolve';
+import {importMetaAssets} from '@web/rollup-plugin-import-meta-assets';
 
 const componentFiles = [
 	'./pages/assets/base-imports.js',
@@ -16,8 +18,12 @@ const baseConfig = createBasicConfig({
 
 export default merge(baseConfig, {
 	input: componentFiles,
-	plugins: [outputManifest({
-		fileName: '../../pages/_includes/manifest.json',
-		publicPath: 'assets/'
-	})]
+	plugins: [
+		resolve(),
+		importMetaAssets(),
+		outputManifest({
+			fileName: '../../pages/_includes/manifest.json',
+			publicPath: 'assets/'
+		}),
+	]
 });
