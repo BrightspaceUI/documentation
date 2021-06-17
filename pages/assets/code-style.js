@@ -7,15 +7,16 @@ export const themeStyles = css`
 		background: none;
 		/* this color is for base text within code snippets */
 		color: var(--d2l-color-gypsum);
-		font-family: 'Lato', 'Lucida Sans Unicode', 'Lucida Grande', sans-serif;
+		font-family: Consolas, Monaco, 'Andale Mono', 'Ubuntu Mono', monospace;
+		font-size: 0.6rem;
 		-webkit-hyphens: none;
 		-moz-hyphens: none;
 		-ms-hyphens: none;
 		hyphens: none;
 		line-height: 1.5;
-		-moz-tab-size: 8;
-		-o-tab-size: 8;
-		tab-size: 8;
+		-moz-tab-size: 4;
+		-o-tab-size: 4;
+		tab-size: 4;
 		text-align: left;
 		white-space: pre;
 		word-break: normal;

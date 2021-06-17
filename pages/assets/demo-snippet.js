@@ -65,6 +65,7 @@ class ComponentCatalogDemoSnippetWrapper extends LitElement {
 		return [themeStyles, css`
 			:host {
 				display: block;
+				margin-bottom: 15px;
 			}
 
 			:host([hidden]) {
