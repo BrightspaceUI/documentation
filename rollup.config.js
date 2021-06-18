@@ -1,7 +1,9 @@
+import { babel } from '@rollup/plugin-babel';
 import { default as files } from './.generated/rollup-files-generated.js';
 import { importMetaAssets } from '@web/rollup-plugin-import-meta-assets';
 import outputManifest from 'rollup-plugin-output-manifest';
 import resolve from '@rollup/plugin-node-resolve';
+import { terser } from 'rollup-plugin-terser';
 
 const componentFiles = [
 	'./pages/assets/base-imports.js',
@@ -26,7 +28,9 @@ export default [
 				publicPath: 'assets/'
 			}),
 			resolve(),
-			importMetaAssets()
+			importMetaAssets(),
+			babel({ babelHelpers: 'bundled' }),
+			terser(),
 		]
 	},
 ];
