@@ -1,9 +1,7 @@
-import { createBasicConfig } from '@open-wc/building-rollup';
 import { default as files } from './.generated/rollup-files-generated.js';
-import merge from 'deepmerge';
+import { importMetaAssets } from '@web/rollup-plugin-import-meta-assets';
 import outputManifest from 'rollup-plugin-output-manifest';
 import resolve from '@rollup/plugin-node-resolve';
-import {importMetaAssets} from '@web/rollup-plugin-import-meta-assets';
 
 const componentFiles = [
 	'./pages/assets/base-imports.js',
@@ -12,18 +10,23 @@ const componentFiles = [
 	'./pages/assets/status-table.js'
 ].concat(files);
 
-const baseConfig = createBasicConfig({
-	outputDir: '_site/assets'
-});
-
-export default merge(baseConfig, {
-	input: componentFiles,
-	plugins: [
-		resolve(),
-		importMetaAssets(),
-		outputManifest({
-			fileName: '../../pages/_includes/manifest.json',
-			publicPath: 'assets/'
-		}),
-	]
-});
+export default [
+	{
+		input: componentFiles,
+		output: {
+			entryFileNames: '[hash].js',
+			chunkFileNames: '[hash].js',
+			assetFileNames: '[hash][extname]',
+			dir: '_site/assets',
+			format: 'esm',
+		},
+		plugins: [
+			outputManifest({
+				fileName: '../../pages/_includes/manifest.json',
+				publicPath: 'assets/'
+			}),
+			resolve(),
+			importMetaAssets()
+		]
+	},
+];
