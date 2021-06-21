@@ -10,6 +10,11 @@ jobs:
       - uses: Brightspace/third-party-actions@actions/setup-node
         with:
           node-version: '14'
+      - uses: Brightspace/third-party-actions@actions/cache
+        id: cache
+        with:
+          path: '**/node_modules'
+          key: npm-${{ hashFiles('**/package.json') }}
       - name: Install dependencies
         run: npm install
       - name: Lint (JavaScript)
