@@ -14,9 +14,9 @@ jobs:
         id: cache
         with:
           path: '**/node_modules'
-          key: npm-${{ hashFiles('**/package.json') }}
+          key: npm-${{ hashFiles('**/package-lock.json') }}
       - name: Install Dependencies
-        run: npm install
+        run: npm ci
       - name: Build
         run: npm run build
       - name: Visual Diff Tests
