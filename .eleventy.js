@@ -4,9 +4,9 @@ const eleventyNavigationPlugin = require('@11ty/eleventy-navigation');
 const { escapeHtml } = require('markdown-it/lib/common/utils');
 
 module.exports = function(eleventyConfig) {
+	eleventyConfig.addPassthroughCopy('img');
 	eleventyConfig.addPassthroughCopy('pages/components/imported/screenshots');
 	eleventyConfig.addPassthroughCopy('pages/favicon.ico');
-	eleventyConfig.addPassthroughCopy('pages/img');
 	eleventyConfig.addNunjucksShortcode('enhancements', (repo) => {
 		const href = repo ? `${repo}/issues` : 'https://github.com/BrightspaceUI/documentation/issues';
 		return `Looking for an enhancement not listed here? <d2l-link href="${href}">Create a GitHub issue!</d2l-link>`;

@@ -4,14 +4,97 @@
 		<script type="module">
 			import '@brightspace-ui/core/components/typography/typography.js';
 			import '../pages/assets/status-table.js';
+			const data = {
+				'labs': [
+					{
+						'name': 'Component 1',
+						'issueUrl': 'https://example.com/issues/101',
+						'development': 'In Progress',
+						'fileName': 'component-1',
+						'owner': '#wip-channel'
+					},
+				],
+				'official': [
+					{
+						'name': 'Component A',
+						'issueUrl': 'https://example.com/issues/2',
+						'development': 'Completed',
+						'fileName': 'component-1',
+						'owner': 'Team 3'
+					},
+					{
+						'name': 'Component B',
+						'issueUrl': 'https://example.com/issues/1',
+						'development': 'In Progress',
+						'owner': 'Team 4'
+					},
+				],
+				'request': [
+					{
+						'name': 'B Component',
+						'development': 'In Progress',
+						'issueUrl': 'https://example.com/issues/102',
+						'owner': 'Team 1'
+					},
+					{
+						'name': 'A Component',
+						'development': 'Completed',
+						'issueUrl': 'https://example.com/issues/103',
+						'fileName': 'a-component'
+					},
+					{
+						'name': 'C Component',
+						'development': 'Backlog',
+						'owner': '#slack-channel'
+					},
+					{
+						'name': 'A1Component',
+						'development': 'Deprecated',
+						'owner': 'Team 2'
+					},
+					{
+						'name': 'Z Component',
+						'development': 'asdf',
+						'owner': 'Team 1'
+					}
+				]
+			};
+
+			window.addEventListener('DOMContentLoaded', () => {
+				const tables = document.querySelectorAll('d2l-component-catalog-status-table');
+				tables.forEach((table) => {
+					if (table.id === 'labs') table._components = data['labs'];
+					else if (table.id === 'official') table._components = data['official'];
+					else if (table.id === 'request') table._components = data['request'];
+				});
+			});
+
+
 		</script>
-		<title>Status Table visual-diff tests</title>
+		<title>d2l-component-catalog-status-table visual-diff tests</title>
+		<style>
+			d2l-component-catalog-status-table {
+				padding-bottom: 10px;
+			}
+		</style>
 		<meta name="viewport" content="width=device-width, initial-scale=1.0">
 		<meta charset="UTF-8">
 	</head>
 	<body class="d2l-typography">
 		<div class="visual-diff">
-			<d2l-component-catalog-status-table id="example"></d2l-component-catalog-status-table>
+			<d2l-component-catalog-status-table id="no-tier"></d2l-component-catalog-status-table>
+		</div>
+		<div class="visual-diff">
+			<d2l-component-catalog-status-table id="invalid-tier" tier="other"></d2l-component-catalog-status-table>
+		</div>
+		<div class="visual-diff">
+			<d2l-component-catalog-status-table id="labs" tier="labs"></d2l-component-catalog-status-table>
+		</div>
+		<div class="visual-diff">
+			<d2l-component-catalog-status-table id="request" tier="request"></d2l-component-catalog-status-table>
+		</div>
+		<div class="visual-diff">
+			<d2l-component-catalog-status-table id="official" tier="official"></d2l-component-catalog-status-table>
 		</div>
 	</body>
 </html>
