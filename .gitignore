@@ -4,3 +4,5 @@ node_modules/
 package-lock.json
 pages/_includes/manifest.json
 pages/components/imported/
+test/screenshots/current/
+test/screenshots/golden/
