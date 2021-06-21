@@ -1,0 +1,34 @@
+{% set css %}
+	{% include "css/style.css" %}
+{% endset %}
+<!doctype html>
+<html lang="en">
+<head>
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<title>{%- if eleventyNavigation.title -%}{{ eleventyNavigation.title }}{% else %}{{ title }}{%- endif %}</title>
+	<style>
+		{{ css | cssmin | safe }}
+	</style>
+	<script src="{{assets.getPath("base-imports.js")}}" type="module"></script>
+	<script src="{{assets.getPath("demo-snippet.js")}}" type="module"></script>
+	<script src="{{assets.getPath("navigation.js")}}" type="module"></script>
+</head>
+<body class="d2l-typography">
+	<main>
+		<div class="d2l-component-catalog-side-panel d2l-body-standard">
+			<div class="d2l-component-catalog-band"></div>
+			<a href="/" title="Home">
+				<div class="d2l-component-catalog-title">
+					<img src="/img/logo_slim.png" alt="Home" />
+				</div>
+			</a>
+            {% set navPages = collections.all | eleventyNavigation %}
+			<d2l-component-catalog-navigation nav-items="{{ navPages | dump }}" page-url="{{ page.url }}"></d2l-component-catalog-navigation>
+		</div>
+		<div class="d2l-component-catalog-content d2l-body-compact d2l-component-catalog-content-unresolved">
+			{{ content | safe }}
+		</div>
+	</main>
+</body>
+</html>
