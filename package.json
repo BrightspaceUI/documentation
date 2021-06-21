@@ -16,9 +16,6 @@
     "test:unit": "mocha './test/**/*.test*js'"
   },
   "author": "D2L Corporation",
-  "files": [
-    "/pages"
-  ],
   "license": "Apache-2.0",
   "devDependencies": {
     "@11ty/eleventy": "^0.12",

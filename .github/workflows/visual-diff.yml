@@ -12,6 +12,8 @@ jobs:
           node-version: '14'
       - name: Install Dependencies
         run: npm install
+      - name: Build
+        run: npm run build
       - name: Assume role
         uses: Brightspace/third-party-actions@aws-actions/configure-aws-credentials
         with:
