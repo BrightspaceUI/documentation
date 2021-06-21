@@ -20,7 +20,9 @@ jobs:
           key: npm-${{ hashFiles('**/package-lock.json') }}
       - name: Install dependencies
         if: steps.cache.outputs.cache-hit != 'true'
-        run: npm ci && npm i aws-sdk --no-save
+        run: npm ci
+      - name: Install AWS dependencies
+        run: npm i aws-sdk --no-save
       - name: Build
         run: npm run build:prod
       - name: Assume role
