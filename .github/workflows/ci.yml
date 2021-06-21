@@ -10,8 +10,14 @@ jobs:
       - uses: Brightspace/third-party-actions@actions/setup-node
         with:
           node-version: '14'
+      - uses: Brightspace/third-party-actions@actions/cache
+        id: cache
+        with:
+          path: '**/node_modules'
+          key: npm-${{ hashFiles('**/package-lock.json') }}
       - name: Install dependencies
-        run: npm install
+        if: steps.cache.outputs.cache-hit != 'true'
+        run: npm ci
       - name: Lint (JavaScript)
         run: npm run lint:eslint
       - name: Lint (CSS)
