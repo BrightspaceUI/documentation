@@ -16,13 +16,13 @@ module.exports = function(eleventyConfig) {
 	});
 	eleventyConfig.addNunjucksShortcode('editPage', (repo, componentPath) => {
 		if (!repo || !componentPath) {
-			return;
+			return '';
 		}
 		// ensure the repo or component path have a '/' before concatenation
 		if (repo.slice(-1) !== '/' && componentPath.slice(0) !== '/') {
 			repo += '/';
 		}
-		return `Suggest an <d2l-link href="${`${repo}edit/master/${componentPath}`}">edit</d2l-link> for this page`;
+		return `<div class="d2l-edit-component">Suggest an <d2l-link href="${`${repo}edit/master/${componentPath}`}">edit</d2l-link> for this page</div>`;
 	});
 	eleventyConfig.addShortcode('statusTable', (tier) => {
 		return `<d2l-component-catalog-status-table tier="${tier}"></d2l-component-catalog-status-table>`;
