@@ -1,3 +1,4 @@
+/* eslint-disable */ 
 import { _getDevStatus, parseBody } from '../tools/generate-pages-utils.mjs';
 import assert from 'assert';
 
@@ -167,6 +168,32 @@ ${body}`;
 			expectedFrontMatter.other = 'info';
 			expectedInfo.development = 'Completed';
 			expectedInfo.baseInstallLocation = '@brightspace-ui/core';
+			assert.deepEqual(parseBody(issueBase), { frontMatter: expectedFrontMatter, info: expectedInfo, issueBody: `\n${body}` });
+		});
+		it('Should have repo variable in frontMatter', () => {
+			const body = `# My Second Component
+
+This is my other component info`;
+			issueBase.body = `<!--
+---
+repo: https://repo.com/
+---
+-->
+${body}`;
+			expectedFrontMatter.repo = 'https://repo.com/';
+			assert.deepEqual(parseBody(issueBase), { frontMatter: expectedFrontMatter, info: expectedInfo, issueBody: `\n${body}` });
+		});
+		it('Repo in frontMatter should have trailing /', () => {
+			const body = `# My Second Component
+
+This is my other component info`;
+			issueBase.body = `<!--
+---
+repo: https://repo.com
+---
+-->
+${body}`;
+			expectedFrontMatter.repo = 'https://repo.com/';
 			assert.deepEqual(parseBody(issueBase), { frontMatter: expectedFrontMatter, info: expectedInfo, issueBody: `\n${body}` });
 		});
 	});

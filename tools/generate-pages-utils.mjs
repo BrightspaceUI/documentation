@@ -47,6 +47,7 @@ export function parseBody(issue) {
 	let info = {
 		issueUrl: issue.html_url
 	};
+
 	let frontMatter = {
 		layout: 'layouts/component-issue',
 		title: issue.title,
@@ -60,8 +61,10 @@ export function parseBody(issue) {
 
 		if (commentContent) info = Object.assign(info, matter(`---\n${commentContent}\n---`).data);
 
-		matterComment.data.repo = ensureTrailingSlash(matterComment.data.repo);
-
+		const repo = ensureTrailingSlash(matterComment.data.repo);
+		if (repo) {
+			matterComment.data.repo = repo;
+		}
 		if (Object.keys(matterComment.data).length > 0) {
 			frontMatter = {
 				...frontMatter,
