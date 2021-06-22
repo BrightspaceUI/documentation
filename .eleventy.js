@@ -22,7 +22,7 @@ module.exports = function(eleventyConfig) {
 		if (repo.slice(-1) !== '/' && componentPath.slice(0) !== '/') {
 			repo += '/';
 		}
-		return `<div class="d2l-edit-component">Suggest an <d2l-link href="${`${repo}edit/master/${componentPath}`}">edit</d2l-link> for this page</div>`;
+		return `<div class="d2l-edit-component-page">Suggest an <d2l-link href="${`${repo}edit/master/${componentPath}`}">edit</d2l-link> for this page</div>`;
 	});
 	eleventyConfig.addShortcode('statusTable', (tier) => {
 		return `<d2l-component-catalog-status-table tier="${tier}"></d2l-component-catalog-status-table>`;
