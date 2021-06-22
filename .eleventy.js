@@ -15,6 +15,9 @@ module.exports = function(eleventyConfig) {
 		return `Looking for more details on the component or want to add your input? <d2l-link href="${issueUrl}">Check out the GitHub Issue</d2l-link>`;
 	});
 	eleventyConfig.addNunjucksShortcode('editPage', (repo, componentPath) => {
+		if (!repo || !componentPath) {
+			return;
+		}
 		// ensure the repo or component path have a '/' before concatenation
 		if (repo.slice(-1) !== '/' && componentPath.slice(0) !== '/') {
 			repo += '/';
