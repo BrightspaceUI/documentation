@@ -9,6 +9,8 @@ assignees: ''
 <!--
 ---
 layout: layouts/component
+repo: "<url ending in '/'>"
+devMarkdown: "<markdown file path (e.g., README.md)>"
 keywords:
   - <possible search terms>
 eleventyNavigation:
@@ -18,12 +20,10 @@ eleventyNavigation:
 tags:
   - <Document Heading (e.g., Button)>: <tag name (e.g., d2l-button)>
     <Document Heading 2>: <tag name 2>
-repo: "<url>"
 ---
 
 baseInstallLocation: "<npm install location (e.g., @brightspace-ui/core)>"
 components: ["<component file path (e.g., src/my-component.js)>"]
-devMarkdown: "<markdown file path (e.g., README.md)>"
 owner: "<team name or #slack-channel>"
 development: <In Progress | Completed>
 -->
