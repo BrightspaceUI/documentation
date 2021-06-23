@@ -25,13 +25,45 @@ export class ComponentCatalogDemoAttributeTable extends LitElement {
 	static get styles() {
 		return [heading4Styles, selectStyles, tableStyles, css`
 			:host {
+
 				display: block;
 			}
+
 			:host([hidden]) {
 				display: none;
 			}
+			
+			table {
+				border: 1px solid #dfe6ef;
+				border-radius: 10px;
+			}
+
+			.d2l-table > thead > tr > th {
+				background-color: var(--d2l-color-sylvite);
+				font-weight: bold;
+			}
+
+			th.d2l-table-cell-last {
+				border-radius: 0 10px 0 0;
+			}
+
+			th.d2l-table-cell-first {
+				border-radius: 10px 0 0 0;
+			}
+
+			d2l-table-wrapper > table > tbody > tr {
+				--d2l-table-cell-padding: 5px 15px 5px 15px;
+			}
+
+			.d2l-property-name {
+				background-color: var(--d2l-color-amethyst-plus-2);
+				border-radius: 0.3rem;
+				font-size: 0.7rem;
+				padding: 0.1rem 0.2rem;
+			}
 			td.d2l-table-cell-first,
 			td.d2l-design-system-component-type {
+				text-transform: capitalize;
 				white-space: nowrap;
 			}
 			td d2l-input-text {
@@ -62,7 +94,7 @@ export class ComponentCatalogDemoAttributeTable extends LitElement {
 			const demoValueRow = this.interactive ? html`<td>${demoValue}</td>` : null;
 			return html`
 				<tr>
-					<th scope="row">${info.name}</th>
+					<th scope="row"><span class="d2l-property-name">${info.name}</span></th>
 					<td class="d2l-design-system-component-type">${demoType}</td>
 					<td>${info.description}</td>
 					<td>${infoDefault}</td>
@@ -73,7 +105,7 @@ export class ComponentCatalogDemoAttributeTable extends LitElement {
 		const demoValueHeading = this.interactive ? html`<th>Demo Value</th>` : null;
 		return html`
 			<h3 class="d2l-heading-4">Properties</h3>
-			<d2l-table-wrapper>
+			<d2l-table-wrapper type="light">
 				<table class="d2l-table">
 					<thead>
 						<tr>
