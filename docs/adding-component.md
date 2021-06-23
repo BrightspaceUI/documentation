@@ -1,10 +1,10 @@
-# Adding a Component
+# Adding a Component to the Site
 
 Components with pages in the Daylight site are generally those that are considered official components. These component pages are generated from the component's README.
 
-Other components that are a work in progress have pages that are generated from their issue in this repo.
+Other components that are a work in progress have pages that are generated from their issue in this repo. If the component is not considered an official component then follow the steps mentioned in [Creating the Component Issue](#creating-the-component-issue) for the component type.
 
-The main pieces of adding a component page to the Daylight site for an official component are:
+The main steps to add a component page to the Daylight site for an **official component** are:
 - [Preparing the component](#preparing-the-component) (in the component's repo)
 - [Creating the component issue](#creating-the-component-issue) (in this repo)
 
@@ -12,7 +12,7 @@ The main pieces of adding a component page to the Daylight site for an official 
 
 ### Component Code
 
-Add JSDOC comments to your components. See [input-text](https://github.com/BrightspaceUI/core/blob/master/components/inputs/input-text.js) as an example. Include each of the following where applicable:
+Add JSDoc comments to your component. See [input-text](https://github.com/BrightspaceUI/core/blob/master/components/inputs/input-text.js) as an example. Include each of the following where applicable:
 - Description
 - `@slot` (slots)
 - `@fires` (events)
@@ -20,7 +20,9 @@ Add JSDOC comments to your components. See [input-text](https://github.com/Brigh
 
 ### Generating custom-elements.json
 
-1. Ensure your `release.yml` GitHub action has a step that generates custom-elements.json. For example:
+The `custom-elements.json` file is used for the component's properties, slots, and events.
+
+1. Ensure the `release.yml` GitHub action has a step that generates c`ustom-elements.json`. For example:
 ```
 - name: Create custom-elements.json
   run: npx wca analyze \"{components,templates}/**/*.js\" --format json --outFile custom-elements.json
@@ -39,6 +41,7 @@ Add JSDOC comments to your components. See [input-text](https://github.com/Brigh
 - Live demo (see [Code Blocks](#code-blocks))
 - Any other content that should appear in the document, potentially also including a secondary demo or other code block (see [Code Blocks](#code-blocks)).
 - Content that should not appear in the Daylight site (see [Hidden Content](#hidden-content))
+3. When these changes are merged, ensure a release happens in order for the Daylight site to pick up the changes.
 
 #### Best Practices
 
@@ -57,7 +60,8 @@ The content of the best practices section should be formatted as:
 
 #### Code Blocks
 
-Code-hidden demo: This demo shows only the visual portion of the component(s) without the code. It is generally used at the top of a component page.
+**Code-hidden demo:** This demo shows only the visual portion of the component(s) without the code. It is generally used at the top of a component page.
+
 Add the comment `<!-- docs: demo -->` within the code block. For example:
 ```
 ```html
@@ -69,7 +73,8 @@ Add the comment `<!-- docs: demo -->` within the code block. For example:
 \`\`\`
 ```
 
-Interactive demo (maximum of 1 per component): This demo includes the properties, slots, and events tables, and allows for the user to modify properties in these table(s) which then affects the demo.
+**Interactive demo**: (maximum of 1 per component) This demo includes the properties, slots, and events tables, and allows for the user to modify properties in these table(s) which then affects the demo.
+
 Add the comment `<!-- docs: live demo -->` within the code block at the top and `$attributes` on the component tag. For example:
 ```
 ```html
@@ -84,7 +89,8 @@ size:<'small'|'medium'|'large'|'xlarge'>
 \`\`\`
 ```
 
-Secondary demo: This demo shows the component(s) and the code but does not allow any modification. This can be used to show different varients of a component but should be used sporadically generally in order to call out significant varients.
+**Secondary demo:** This demo shows the component(s) and the code but does not allow any modification. This can be used to show different varients of a component but should be used sporadically generally in order to call out significant varients.
+
 Add the comment `<!-- docs: code demo -->` within the code block at the top. For example:
 ```
 ```html
@@ -96,11 +102,11 @@ Add the comment `<!-- docs: code demo -->` within the code block at the top. For
 \`\`\`
 ```
 
-Other code blocks with no docs comment will be rendered as code blocks.
+**Code blocks:** Other code blocks with no docs comment will be rendered as code blocks.
 
 #### Hidden Content
 
-This includes information such as installation instructions and testing instructions. Wrap tese sections in `<!-- docs: start hidden content -->` and `<!-- docs: end hidden content -->`. For example:
+This includes information such as installation and testing instructions. Wrap these sections in `<!-- docs: start hidden content -->` and `<!-- docs: end hidden content -->`. For example:
 
 ```
 <!-- docs: start hidden content -->
@@ -118,7 +124,7 @@ This section should not appear in the component catalog.
 
 ### Requested Component
 
-If you have a component idea that you would like to suggest then you can [submit a GitHub issue](https://github.com/BrightspaceUI/documentation/issues/new?assignees=&labels=Requested+Component&template=component-request.md&title=%3CComponent+Name%3E) for it.
+If you have a component idea that you would like to suggest then you can [submit a GitHub issue](https://github.com/BrightspaceUI/documentation/issues/new?assignees=&labels=Requested+Component&template=component-request.md&title=%3CComponent+Name%3E) for it. These component requests will appear in the Daylight site in the status pages, and will have pages generated from their issues.
 
 ### Labs Component
 
