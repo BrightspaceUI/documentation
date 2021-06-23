@@ -4,7 +4,7 @@ layout: layouts/demo
 
 # Component Catalogue - Demo Page
 
-### Interactive demo - Includes text variations for coloring
+### Interactive demo - Includes text variations for coloring [demo-snippet]
 
 ```html
 <!-- docs: live demo name:d2l-button -->
