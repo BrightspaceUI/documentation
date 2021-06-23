@@ -15,9 +15,6 @@ eleventyNavigation:
   key: <component name, lower case and hyphenated (e.g., menu-item)>
   title: <component name, capitalized (e.g., Menu Item)>
   parent: <component type>
-tags:
-  - <Document Heading (e.g., Button)>: <tag name (e.g., d2l-button)>
-    <Document Heading 2>: <tag name 2>
 ---
 
 repo: "<url>"
