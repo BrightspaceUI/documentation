@@ -22,10 +22,10 @@ Add JSDoc comments to your component. See [input-text](https://github.com/Bright
 
 The `custom-elements.json` file is used for the component's properties, slots, and events.
 
-1. Ensure the `release.yml` GitHub action has a step that generates c`ustom-elements.json`. For example:
+1. Ensure the `release.yml` GitHub action has a step that generates `custom-elements.json`. For example:
 ```
 - name: Create custom-elements.json
-  run: npx wca analyze \"{components,templates}/**/*.js\" --format json --outFile custom-elements.json
+  run: npx wca analyze \"src/*.js\" --format json --outFile custom-elements.json
 ```
 2. In `package.json` add `custom-elements.json` to `"files"` array.
 
