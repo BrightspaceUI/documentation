@@ -40,3 +40,11 @@ npx mocha './test/**/*.visual-diff.js' -t 10000 --require esm -g some-pattern
 # update visual-diff goldens
 npx mocha './test/**/*.visual-diff.js' -t 10000 --require esm --golden
 ```
+
+## Requesting a Component
+
+If the component you are interested in has not yet been created or requested, complete the ["Component - Request" issue template](https://github.com/BrightspaceUI/documentation/issues/new?assignees=&labels=Requested+Component&template=component-request.md&title=%3CComponent+Name%3E).
+
+## Creating Documentation
+
+[Adding a component](docs/adding-component.md)
