@@ -85,13 +85,9 @@ describe('generate-pages', () => {
 			issueBase.body = `<!--
 ---
 layout: layouts/component
-tags:
-  - Component 1: d2l-component-1
-    Component 2: d2l-component-2
 ---
 -->`;
 			expectedFrontMatter.layout = 'layouts/component';
-			expectedFrontMatter.tags = [{ 'Component 1': 'd2l-component-1', 'Component 2': 'd2l-component-2' }];
 			assert.deepEqual(parseBody(issueBase), { frontMatter: expectedFrontMatter, info: expectedInfo, issueBody: '' });
 		});
 
