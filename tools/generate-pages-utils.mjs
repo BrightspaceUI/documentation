@@ -15,6 +15,13 @@ export function _getDevStatus(labels, state, issueState) {
 	}
 }
 
+function ensureTrailingSlash(url) {
+	if (url && url.slice(-1) !== '/') {
+		return `${url}/`;
+	}
+	return url;
+}
+
 export function parseBody(issue) {
 	/**
 	 * issue body is formatted as follows with all pieces optional:
@@ -40,6 +47,7 @@ export function parseBody(issue) {
 	let info = {
 		issueUrl: issue.html_url
 	};
+
 	let frontMatter = {
 		layout: 'layouts/component-issue',
 		title: issue.title,
@@ -52,6 +60,11 @@ export function parseBody(issue) {
 		const commentContent = matterComment.content;
 
 		if (commentContent) info = Object.assign(info, matter(`---\n${commentContent}\n---`).data);
+
+		const repo = ensureTrailingSlash(matterComment.data.repo);
+		if (repo) {
+			matterComment.data.repo = repo;
+		}
 		if (Object.keys(matterComment.data).length > 0) {
 			frontMatter = {
 				...frontMatter,

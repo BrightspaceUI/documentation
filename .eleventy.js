@@ -8,11 +8,17 @@ module.exports = function(eleventyConfig) {
 	eleventyConfig.addPassthroughCopy('pages/components/imported/screenshots');
 	eleventyConfig.addPassthroughCopy('pages/favicon.ico');
 	eleventyConfig.addNunjucksShortcode('enhancements', (repo) => {
-		const href = repo ? `${repo}/issues` : 'https://github.com/BrightspaceUI/documentation/issues';
+		const href = repo ? `${repo}issues` : 'https://github.com/BrightspaceUI/documentation/issues';
 		return `Looking for an enhancement not listed here? <d2l-link href="${href}">Create a GitHub issue!</d2l-link>`;
 	});
 	eleventyConfig.addNunjucksShortcode('issue', (issueUrl) => {
 		return `Looking for more details on the component or want to add your input? <d2l-link href="${issueUrl}">Check out the GitHub Issue</d2l-link>`;
+	});
+	eleventyConfig.addNunjucksShortcode('editPage', (repo, componentPath) => {
+		if (!repo || !componentPath) {
+			return '';
+		}
+		return `<div class="d2l-edit-component-page">Suggest an <d2l-link href="${`${repo}edit/master/${componentPath}`}">edit</d2l-link> for this page</div>`;
 	});
 	eleventyConfig.addShortcode('statusTable', (tier) => {
 		return `<d2l-component-catalog-status-table tier="${tier}"></d2l-component-catalog-status-table>`;

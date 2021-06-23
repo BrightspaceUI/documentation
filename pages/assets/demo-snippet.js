@@ -156,6 +156,7 @@ class ComponentCatalogDemoSnippetWrapper extends LitElement {
 
 	render() {
 		const codeSnippet = this.code;
+
 		return html`
 			${ !this.hideDemo ? html`
 				<d2l-component-catalog-demo-resizable-preview
@@ -169,7 +170,7 @@ class ComponentCatalogDemoSnippetWrapper extends LitElement {
 				<div class="d2l-button-container">
 					<!-- Add button items to the overlay and pass through props -->
 				</div>
-				${ !this.hideCode ? html`<pre class="language-${this.languge}"><code class="language-${this.languge}">${unsafeHTML(this._highlightedCodeSnippet)}</code></pre>` : null }
+				${ !this.hideCode ? html`<pre class="language-${this.language}"><code class="language-${this.language}">${unsafeHTML(this._highlightedCodeSnippet)}</code></pre>` : null }
 			</div>
 			${ this.interactive ? html`
 				<d2l-component-catalog-demo-attribute-table

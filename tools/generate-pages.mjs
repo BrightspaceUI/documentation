@@ -86,7 +86,7 @@ function _getInfoGeneratePage(issue) {
 	const { frontMatter, info, issueBody } = parseBody(issue);
 	const output = { name: frontMatter.title, issueUrl: info.issueUrl, development: info.development, fileName: frontMatter.fileName, owner: info.owner };
 
-	if (!info.devMarkdown || !info.baseInstallLocation) {
+	if (!frontMatter.devMarkdown || !info.baseInstallLocation) {
 		console.warn(`WARNING: Component issue for ${issue.title} DOES NOT CONTAIN "devMarkdown" OR "baseInstallLocation"`);
 		_generatePage(frontMatter, issueBody);
 		return output;
@@ -102,7 +102,7 @@ function _getInfoGeneratePage(issue) {
 		});
 	}
 
-	const devMarkdownPath = path.join(info.baseInstallLocation, info.devMarkdown);
+	const devMarkdownPath = path.join(info.baseInstallLocation, frontMatter.devMarkdown);
 	const dirname = path.dirname(devMarkdownPath);
 	const screenshotPath1 = path.join(dirname, 'screenshots');
 	const screenshotPath2 = path.join(dirname, '../screenshots'); // some repos have screenshots in a sibling directory to docs

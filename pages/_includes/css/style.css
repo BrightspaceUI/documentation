@@ -8,6 +8,13 @@ main {
 	display: flex;
 	min-height: 100vh;
 }
+
+.d2l-edit-component-page {
+	font-size: 0.8rem;
+	font-weight: bold;
+	margin-top: 15px;
+}
+
 div.d2l-component-catalog-content.d2l-component-catalog-content-unresolved {
 	opacity: 0;
 }
