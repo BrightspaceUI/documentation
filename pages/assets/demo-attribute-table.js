@@ -20,7 +20,7 @@ export class ComponentCatalogDemoAttributeTable extends LitElement {
 		return {
 			interactive: { type: Boolean },
 			tagName: { type: String, attribute: 'tag-name', reflect: true },
-			_componentInfo: { type: Array }
+			_componentInfo: { type: Object }
 		};
 	}
 	static get styles() {
