@@ -19,7 +19,8 @@ export class ComponentCatalogDemoAttributeTable extends LitElement {
 	static get properties() {
 		return {
 			interactive: { type: Boolean },
-			tagName: { type: String, attribute: 'tag-name', reflect: true }
+			tagName: { type: String, attribute: 'tag-name', reflect: true },
+			_componentInfo: { type: Array }
 		};
 	}
 	static get styles() {
@@ -43,12 +44,16 @@ export class ComponentCatalogDemoAttributeTable extends LitElement {
 		`];
 	}
 
+	firstUpdated(changedProperties) {
+		super.firstUpdated(changedProperties);
+
+		this._componentInfo = components.find((component) =>  component.name === this.tagName);
+	}
+
 	render() {
+		if (!this._componentInfo) return;
 
-		const componentInfo = components.find((component) =>  component.name === this.tagName);
-		if (!componentInfo) return;
-
-		const rows = componentInfo.attributes.map((info) => {
+		const rows = this._componentInfo.attributes.map((info) => {
 			const infoDefault = info.default ? info.default.replace(/\\"/g, '') : null;
 			let demoType = info.type;
 			let demoValue = null;

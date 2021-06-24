@@ -1,0 +1,261 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<script type="module">
+			import '@brightspace-ui/core/components/typography/typography.js';
+			import '../pages/assets/demo-attribute-table.js';
+			const validInfo = {
+				"name": "d2l-real-component",
+				"path": "./components/path.js",
+				"description": "A super real component",
+				"attributes": [
+					{
+						"name": "button-text",
+						"description": "Text that is displayed within the button. If no text is provided the button is not displayed.",
+						"type": "string"
+					},
+					{
+						"name": "position",
+						"description": "The coordinates",
+						"type": "object"
+					},
+					{
+						"name": "items",
+						"description": "The items",
+						"type": "array"
+					},
+					{
+						"name": "type",
+						"description": "Type being displayed",
+						"type": "'default'|'critical'|'success'|'warning'",
+						"default": "\"\\\"default\\\"\""
+					},
+					{
+						"name": "hide-close-button",
+						"description": "Hide the close button to prevent users from manually closing",
+						"type": "boolean",
+						"default": "false"
+					},
+					{
+						"name": "number-of-things",
+						"description": "How many things",
+						"type": "number"
+					}
+				],
+				"properties": [
+					{
+						"name": "buttonText",
+						"attribute": "button-text",
+						"description": "Text that is displayed within the button. If no text is provided the button is not displayed.",
+						"type": "string"
+					},
+					{
+						"name": "position",
+						"description": "The coordinates",
+						"type": "object"
+					},
+					{
+						"name": "items",
+						"description": "The items",
+						"type": "array"
+					},
+					{
+						"name": "type",
+						"attribute": "type",
+						"description": "Type of the alert being displayed",
+						"type": "'default'|'critical'|'success'|'warning'",
+						"default": "\"\\\"default\\\"\""
+					},
+					{
+						"name": "hideCloseButton",
+						"attribute": "hide-close-button",
+						"description": "Hide the close button to prevent users from manually closing",
+						"type": "boolean",
+						"default": "false"
+					},
+					{
+						"name": "numberOfThings",
+						"attribute": "number-of-things",
+						"description": "How many things",
+						"type": "number"
+					}
+				],
+				"events": [
+					{
+						"name": "d2l-real-component-event",
+						"description": "Dispatched when the event happens"
+					}
+				],
+				"slots": [
+					{
+						"name": "",
+						"description": "Default content placed inside of the component"
+					},
+					{
+						"name": "other",
+						"description": "Other content placed inside of the component"
+					}
+				]
+			};
+			const interactiveInfo = {
+				"name": "d2l-real-component",
+				"path": "./components/path.js",
+				"description": "A super real component",
+				"attributes": [
+					{
+						"name": "button-text",
+						"description": "Text that is displayed within the button. If no text is provided the button is not displayed.",
+						"type": "string",
+						"default": "My text"
+					},
+					{
+						"name": "other-text",
+						"type": "string"
+					},
+					{
+						"name": "position",
+						"description": "The coordinates",
+						"type": "object"
+					},
+					{
+						"name": "items",
+						"description": "The items",
+						"type": "array"
+					},
+					{
+						"name": "type",
+						"description": "Type being displayed",
+						"type": "'default'|'critical'|'success'|'warning'",
+						"default": "\"\\\"default\\\"\""
+					},
+					{
+						"name": "type2",
+						"description": "Type being displayed",
+						"type": "'default'|'critical'|'success'|'warning'",
+					},
+					{
+						"name": "hide-close-button",
+						"description": "Hide the close button to prevent users from manually closing",
+						"type": "boolean",
+						"default": "false"
+					},
+					{
+						"name": "number-of-things",
+						"description": "How many things",
+						"type": "number"
+					},
+					{
+						"name": "number-of-things2",
+						"description": "How many things",
+						"type": "number",
+						"default": "4"
+					}
+				],
+				"properties": [
+					{
+						"name": "buttonText",
+						"attribute": "button-text",
+						"description": "Text that is displayed within the button. If no text is provided the button is not displayed.",
+						"type": "string",
+						"default": "My text"
+					},
+					{
+						"name": "otherText",
+						"attribute": "other-text",
+						"type": "string"
+					},
+					{
+						"name": "position",
+						"description": "The coordinates",
+						"type": "object"
+					},
+					{
+						"name": "items",
+						"description": "The items",
+						"type": "array"
+					},
+					{
+						"name": "type",
+						"attribute": "type",
+						"description": "Type of the alert being displayed",
+						"type": "'default'|'critical'|'success'|'warning'",
+						"default": "\"\\\"default\\\"\""
+					},
+					{
+						"name": "type2",
+						"attribute": "type2",
+						"description": "Type being displayed",
+						"type": "'default'|'critical'|'success'|'warning'",
+					},
+					{
+						"name": "hideCloseButton",
+						"attribute": "hide-close-button",
+						"description": "Hide the close button to prevent users from manually closing",
+						"type": "boolean",
+						"default": "false"
+					},
+					{
+						"name": "numberOfThings",
+						"attribute": "number-of-things",
+						"description": "How many things",
+						"type": "number"
+					},
+					{
+						"name": "numberOfThings2",
+						"attribute": "number-of-things2",
+						"description": "How many things",
+						"type": "number",
+						"default": "4"
+					}
+				],
+				"events": [
+					{
+						"name": "d2l-real-component-event",
+						"description": "Dispatched when the event happens"
+					}
+				],
+				"slots": [
+					{
+						"name": "",
+						"description": "Default content placed inside of the component"
+					},
+					{
+						"name": "other",
+						"description": "Other content placed inside of the component"
+					}
+				]
+			};
+
+			window.addEventListener('DOMContentLoaded', () => {
+				const tables = document.querySelectorAll('d2l-component-catalog-demo-attribute-table');
+				tables.forEach((table) => {
+					if (table.id === 'invalid-tag') table._componentInfo = undefined;
+					else if (table.id === 'valid-tag') table._componentInfo = validInfo;
+					else if (table.id === 'interactive') table._componentInfo = interactiveInfo;
+				});
+			});
+		</script>
+		<title>d2l-component-catalog-demo-attribute-table visual-diff tests</title>
+		<style>
+			d2l-component-catalog-demo-attribute-table {
+				padding-bottom: 10px;
+			}
+		</style>
+		<meta name="viewport" content="width=device-width, initial-scale=1.0">
+		<meta charset="UTF-8">
+	</head>
+	<body class="d2l-typography">
+		<div class="visual-diff">
+			<d2l-component-catalog-demo-attribute-table id="no-tag"></d2l-component-catalog-demo-attribute-table>
+		</div>
+		<div class="visual-diff">
+			<d2l-component-catalog-demo-attribute-table id="invalid-tag" tag="d2l-fake-component"></d2l-component-catalog-demo-attribute-table>
+		</div>
+		<div class="visual-diff">
+			<d2l-component-catalog-demo-attribute-table id="valid-tag" tag="d2l-real-component"></d2l-component-catalog-demo-attribute-table>
+		</div>
+		<div class="visual-diff">
+			<d2l-component-catalog-demo-attribute-table id="interactive" tag="d2l-real-component" interactive></d2l-component-catalog-demo-attribute-table>
+		</div>
+	</body>
+</html>
