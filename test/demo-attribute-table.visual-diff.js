@@ -30,7 +30,6 @@ describe('d2l-component-catalog-demo-attribute-table', () => {
 	it('Invalid tag', async function() {
 		const rect = await visualDiff.getRect(page, '#invalid-tag');
 		await visualDiff.screenshotAndCompare(page, this.test.fullTitle(), { clip: rect });
-
 	});
 
 	it('Valid tag', async function() {
