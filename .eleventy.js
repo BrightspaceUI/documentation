@@ -100,9 +100,11 @@ module.exports = function(eleventyConfig) {
 	const defaultTextRule = markdownIt.renderer.rules.text;
 	markdownIt.renderer.rules.text = (tokens, idx, options, env, slf) => {
 		const content = tokens[idx].content;
-		// Note: if tags are formatted like eleventyNavigation then we get error "entry.data.tags is not iterable" when parsing
-		if (env.tags && Object.keys(env.tags[0]).includes(content)) {
-			const tag = env.tags[0][content];
+		const subTitleMatch = content.match(/\[(.*?)\]/);
+		if (subTitleMatch) {
+			const subtitleMarkdown = subTitleMatch[0];
+			const tag = subtitleMarkdown.slice(1, -1); // remove the square brackets
+			tokens[idx].content = content.split(subtitleMarkdown).join(''); // Get the rest of the title to add back to the document
 			return `
 				${defaultTextRule(tokens, idx, options, env, slf)}
 				<div class="d2l-component-catalog-tag d2l-body-standard">

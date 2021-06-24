@@ -17,9 +17,6 @@ eleventyNavigation:
   key: <component name, lower case and hyphenated (e.g., menu-item), used as page basename in url>
   title: <component name, capitalized (e.g., Menu Item), used as title in navigation>
   parent: <component type, lower case and hyphenated (e.g. actions), used for navigation hierarchy>
-tags:
-  - <Document Heading (e.g., Button)>: <tag name (e.g., d2l-button)>
-    <Document Heading 2>: <tag name 2>
 ---
 
 baseInstallLocation: "<npm install location (e.g., @brightspace-ui/core)>"
