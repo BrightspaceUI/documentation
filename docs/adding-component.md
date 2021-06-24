@@ -35,7 +35,7 @@ The `custom-elements.json` file is used for the component's properties, slots, a
 2. Order the document as follows:
 - Title
 - Description
-- Demo with code hidden that displays all components within that page (e.g., for Button page would should all button versions such as regular, subtle, icon). See [Code Blocks](#code-blocks).
+- Demo with code hidden that displays a preview of all components described within that page (e.g., for the Button page it would show all button versions such as regular, subtle, icon). See [Code Blocks](#code-blocks).
 - Design content (could include Best Practices (see [Best Practices](#best-practices)), Accessibility, and Responsive Behaviour)
 - Component heading with tag beside it (e.g., `## Button [d2l-button]`)
 - Live demo (see [Code Blocks](#code-blocks))
@@ -65,7 +65,9 @@ The content of the best practices section should be formatted as:
 Add the comment `<!-- docs: demo -->` within the code block. For example:
 ```
 ```html
-<!-- docs: demo -->
+<!-- docs: demo
+size:<'small'|'medium'|'large'|'xlarge'>
+-->
 <script type="module">
   import '@brightspace-ui/core/components/button/button.js';
 </script>
@@ -94,7 +96,9 @@ size:<'small'|'medium'|'large'|'xlarge'>
 Add the comment `<!-- docs: code demo -->` within the code block at the top. For example:
 ```
 ```html
-<!-- docs: code demo -->
+<!-- docs: code demo
+size:<'small'|'medium'|'large'|'xlarge'>
+-->
 <script type="module">
   import '@brightspace-ui/core/components/button/button.js';
 </script>
@@ -135,9 +139,5 @@ Labs components generally do not have complete documentation pages in the Daylig
 Once the [Preparing the Component](#preparing-the-component) steps have been completed, [open a GitHub issue](https://github.com/BrightspaceUI/documentation/issues/new?assignees=&labels=Official+Component&template=component-documented.md&title=%3CComponent+Name%3E).
 
 Notes:
-- Open the issue then close it if documentation and development are complete.
+- Issues in the documentation repository should be closed if documentation and development are complete.
 - If the component is ready for the production site, add the `Published` label. This will open a PR so that you can preview the component's page.
-- `eleventyNavigation`:
-	- `key`: Used for the file's basename in the url (since we might want it to be different than the filename)
-	- `title`: Title that appears in the navigation and as the page title. Should correspond to markdown H1.
-	- `parent`: Parent in website hierarychy. Likely corresponds to type. Casing does matter.

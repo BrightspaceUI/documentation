@@ -14,9 +14,9 @@ devMarkdown: "<markdown file path (e.g., README.md)>"
 keywords:
   - <possible search terms>
 eleventyNavigation:
-  key: <component name, lower case and hyphenated (e.g., menu-item)>
-  title: <component name, capitalized (e.g., Menu Item)>
-  parent: <component type>
+  key: <component name, lower case and hyphenated (e.g., menu-item), used as page basename in url>
+  title: <component name, capitalized (e.g., Menu Item), used as title in navigation>
+  parent: <component type, lower case and hyphenated (e.g. actions), used for navigation hierarchy>
 tags:
   - <Document Heading (e.g., Button)>: <tag name (e.g., d2l-button)>
     <Document Heading 2>: <tag name 2>
