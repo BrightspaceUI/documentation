@@ -6,7 +6,7 @@ import 'playground-elements/playground-code-editor';
 import 'prismjs/prism.js';
 import { css, html, LitElement } from 'lit-element';
 import { ifDefined } from 'lit-html/directives/if-defined.js';
-import { parseImports } from './utils.js';
+import { parseImports } from './utils.mjs';
 import { themeStyles } from './code-style.js';
 import { unsafeHTML } from 'lit-html/directives/unsafe-html';
 
