@@ -6,6 +6,7 @@ export const customTableStyles = css`
 		border: 1px solid #dfe6ef;
 		border-radius: 0.3rem;
 		border-spacing: 0;
+		min-width: 500px;
 		width: 100%;
 	}
 

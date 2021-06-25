@@ -1,12 +1,13 @@
 import '@brightspace-ui/core/components/inputs/input-number.js';
 import '@brightspace-ui/core/components/inputs/input-text.js';
+import '@brightspace-ui/core/components/scroll-wrapper/scroll-wrapper.js';
 import '@brightspace-ui/core/components/switch/switch.js';
 import { css, html, LitElement } from 'lit-element';
 import { default as components } from '../../.generated/custom-elements-all.js';
+import { customTableStyles } from './table-style.js';
 import { heading4Styles } from '@brightspace-ui/core/components/typography/styles.js';
 import { ifDefined } from 'lit-html/directives/if-defined.js';
 import { selectStyles } from '@brightspace-ui/core/components/inputs/input-select-styles.js';
-import { customTableStyles } from './table-style.js';
 const validTypes = [
 	'array',
 	'boolean',
@@ -28,7 +29,6 @@ export class ComponentCatalogDemoAttributeTable extends LitElement {
 
 				display: block;
 			}
-
 			:host([hidden]) {
 				display: none;
 			}
@@ -74,20 +74,22 @@ export class ComponentCatalogDemoAttributeTable extends LitElement {
 		const demoValueHeading = this.interactive ? html`<th>Demo Value</th>` : null;
 		return html`
 			<h3 class="d2l-heading-4">Properties</h3>
-			<table class="d2l-attribute-table">
-				<thead>
-					<tr>
-						<th>Property</th>
-						<th>Type</th>
-						<th>Description</th>
-						<th>Default</th>
-						${demoValueHeading}
-					</tr>
-				</thead>
-				<tbody>
-					${rows}
-				</tbody>
-			</table>
+			<d2l-scroll-wrapper>
+				<table class="d2l-attribute-table">
+					<thead>
+						<tr>
+							<th>Property</th>
+							<th>Type</th>
+							<th>Description</th>
+							<th>Default</th>
+							${demoValueHeading}
+						</tr>
+					</thead>
+					<tbody>
+						${rows}
+					</tbody>
+				</table>
+			</d2l-scroll-wrapper>
 		`;
 	}
 
