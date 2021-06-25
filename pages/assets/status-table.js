@@ -1,6 +1,7 @@
 import '@brightspace-ui/core/components/colors/colors.js';
 import '@brightspace-ui/core/components/icons/icon.js';
 import '@brightspace-ui/core/components/link/link.js';
+import '@brightspace-ui/core/components/scroll-wrapper/scroll-wrapper.js';
 import { CC_STATES, DEV_STATES, TIERS } from '../../tools/states.mjs';
 import { css, html, LitElement } from 'lit-element';
 import { default as components } from '../../.generated/component-issue-data.js';
@@ -97,16 +98,18 @@ class ComponentCatalogStatusTable extends LitElement {
 		});
 
 		return html`
-			<table class="d2l-status-table">
-				<thead>
-					<th>Component</th>
-					<th>Status</th>
-					<th>Questions?</th>
-				</thead>
-				<tbody>
-					${rows}
-				</tbody>
-			</table>
+			<d2l-scroll-wrapper>
+				<table class="d2l-cc-custom-table d2l-status-table">
+					<thead>
+						<th>Component</th>
+						<th>Status</th>
+						<th>Questions?</th>
+					</thead>
+					<tbody>
+						${rows}
+					</tbody>
+				</table>
+			</d2l-scroll-wrapper>
 		`;
 	}
 }

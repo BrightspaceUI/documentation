@@ -75,7 +75,7 @@ export class ComponentCatalogDemoAttributeTable extends LitElement {
 		return html`
 			<h3 class="d2l-heading-4">Properties</h3>
 			<d2l-scroll-wrapper>
-				<table class="d2l-attribute-table">
+				<table class="d2l-cc-custom-table d2l-attribute-table">
 					<thead>
 						<tr>
 							<th>Property</th>
@@ -122,7 +122,6 @@ export class ComponentCatalogDemoAttributeTable extends LitElement {
 						@change="${this._onNumberChange}"
 						data-name="${attributeName}"
 						label="${attributeName}"
-						label-hidden
 						value="${ifDefined(value)}">
 					</d2l-input-number>`;
 			case 'string':
