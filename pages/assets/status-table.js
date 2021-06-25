@@ -43,6 +43,11 @@ class ComponentCatalogStatusTable extends LitElement {
 			:host([hidden]) {
 				display: none;
 			}
+
+			.d2l-status-table {
+				margin-top: 1rem;
+			}
+
 			.d2l-component-catalog-status-table-stable {
 				align-items: center;
 				color: var(--d2l-color-olivine);
