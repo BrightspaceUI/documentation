@@ -65,6 +65,8 @@ export function parseBody(issue) {
 		if (repo) {
 			matterComment.data.repo = repo;
 		}
+		matterComment.data.branchName  = matterComment.data.branchName || 'master';
+
 		if (Object.keys(matterComment.data).length > 0) {
 			frontMatter = {
 				...frontMatter,

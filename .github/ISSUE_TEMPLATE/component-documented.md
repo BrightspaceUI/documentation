@@ -11,6 +11,7 @@ assignees: ''
 layout: layouts/component
 repo: "<url ending in '/'>"
 devMarkdown: "<markdown file path (e.g., README.md)>"
+branchName: master
 keywords:
   - <possible search terms>
 eleventyNavigation:
@@ -18,7 +19,6 @@ eleventyNavigation:
   title: <component name, capitalized (e.g., Menu Item), used as title in navigation>
   parent: <component type, lower case and hyphenated (e.g. actions), used for navigation hierarchy>
 ---
-
 baseInstallLocation: "<npm install location (e.g., @brightspace-ui/core)>"
 components: ["<component file path (e.g., src/my-component.js)>"]
 owner: "<team name or #slack-channel>"
