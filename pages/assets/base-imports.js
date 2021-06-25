@@ -1,12 +1,12 @@
 import '@brightspace-ui/core/components/colors/colors.js';
 import '@brightspace-ui/core/components/link/link.js';
 import '@brightspace-ui/core/components/typography/typography.js';
-import { tableStyles } from '@brightspace-ui/core/components/table/table-wrapper.js';
+import { customTableStyles } from './table-style.js';
 
 if (document.getElementById('d2l-table-style-shared') === null) {
 	const style = document.createElement('style');
 	style.id = 'd2l-table-style-shared';
-	style.appendChild(document.createTextNode(tableStyles.cssText));
+	style.appendChild(document.createTextNode(customTableStyles.cssText));
 	document.head.appendChild(style);
 }
 
