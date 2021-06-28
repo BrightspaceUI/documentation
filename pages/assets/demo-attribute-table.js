@@ -1,12 +1,13 @@
 import '@brightspace-ui/core/components/inputs/input-number.js';
 import '@brightspace-ui/core/components/inputs/input-text.js';
+import '@brightspace-ui/core/components/scroll-wrapper/scroll-wrapper.js';
 import '@brightspace-ui/core/components/switch/switch.js';
 import { css, html, LitElement } from 'lit-element';
 import { default as components } from '../../.generated/custom-elements-all.js';
+import { customTableStyles } from './table-style.js';
 import { heading4Styles } from '@brightspace-ui/core/components/typography/styles.js';
 import { ifDefined } from 'lit-html/directives/if-defined.js';
 import { selectStyles } from '@brightspace-ui/core/components/inputs/input-select-styles.js';
-import { tableStyles } from '@brightspace-ui/core/components/table/table-wrapper.js';
 const validTypes = [
 	'array',
 	'boolean',
@@ -18,25 +19,26 @@ const validTypes = [
 export class ComponentCatalogDemoAttributeTable extends LitElement {
 	static get properties() {
 		return {
+			hideSlots: { type: String, attribute: 'hide-slots', reflect: true },
 			interactive: { type: Boolean },
 			tagName: { type: String, attribute: 'tag-name', reflect: true },
-			hideSlots: { type: String, attribute: 'hide-slots', reflect: true }
+			_componentInfo: { type: Object }
 		};
 	}
 	static get styles() {
-		return [heading4Styles, selectStyles, tableStyles, css`
+		return [heading4Styles, selectStyles, customTableStyles, css`
 			:host {
+
 				display: block;
 			}
 			:host([hidden]) {
 				display: none;
 			}
-			td.d2l-table-cell-first,
-			td.d2l-design-system-component-type {
-				white-space: nowrap;
-			}
-			td d2l-input-text {
-				min-width: 200px;
+			.d2l-property-name {
+				background-color: var(--d2l-color-amethyst-plus-2);
+				border-radius: 0.3rem;
+				font-size: 0.7rem;
+				padding: 0.1rem 0.2rem;
 			}
 			h2.d2l-heading-4 {
 				margin-bottom: 0.5rem;
@@ -44,12 +46,16 @@ export class ComponentCatalogDemoAttributeTable extends LitElement {
 		`];
 	}
 
+	firstUpdated(changedProperties) {
+		super.firstUpdated(changedProperties);
+
+		this._componentInfo = components.find((component) =>  component.name === this.tagName);
+	}
+
 	render() {
+		if (!this._componentInfo) return;
 
-		const componentInfo = components.find((component) =>  component.name === this.tagName);
-		if (!componentInfo) return;
-
-		const rows = componentInfo.attributes.map((info) => {
+		const rows = this._componentInfo.attributes.map((info) => {
 			const infoDefault = info.default ? info.default.replace(/\\"/g, '') : null;
 			let demoType = info.type;
 			let demoValue = null;
@@ -63,7 +69,7 @@ export class ComponentCatalogDemoAttributeTable extends LitElement {
 			const demoValueRow = this.interactive ? html`<td>${demoValue}</td>` : null;
 			return html`
 				<tr>
-					<th scope="row">${info.name}</th>
+					<th scope="row"><span class="d2l-property-name">${info.name}</span></th>
 					<td class="d2l-design-system-component-type">${demoType}</td>
 					<td>${info.description}</td>
 					<td>${infoDefault}</td>
@@ -84,8 +90,8 @@ export class ComponentCatalogDemoAttributeTable extends LitElement {
 		const demoValueHeading = this.interactive ? html`<th>Demo Value</th>` : null;
 		return html`
 			<h3 class="d2l-heading-4">Properties</h3>
-			<d2l-table-wrapper>
-				<table class="d2l-table">
+			<d2l-scroll-wrapper>
+				<table class="d2l-cc-custom-table d2l-attribute-table">
 					<thead>
 						<tr>
 							<th>Property</th>
@@ -99,10 +105,10 @@ export class ComponentCatalogDemoAttributeTable extends LitElement {
 						${rows}
 					</tbody>
 				</table>
-			</d2l-table-wrapper>
+			</d2l-scroll-wrapper>
 			<h3 class="d2l-heading-4">Slots</h3>
-			<d2l-table-wrapper>
-				<table class="d2l-table">
+			<d2l-scroll-wrapper>
+				<table class="d2l-cc-custom-table d2l-slots-table">
 					<thead>
 						<tr>
 							<th>Name</th>
@@ -113,7 +119,7 @@ export class ComponentCatalogDemoAttributeTable extends LitElement {
 						${slotRows}
 					</tbody>
 				</table>
-			</d2l-table-wrapper>
+			</d2l-scroll-wrapper>
 		`;
 	}
 
@@ -146,7 +152,6 @@ export class ComponentCatalogDemoAttributeTable extends LitElement {
 						@change="${this._onNumberChange}"
 						data-name="${attributeName}"
 						label="${attributeName}"
-						label-hidden
 						value="${ifDefined(value)}">
 					</d2l-input-number>`;
 			case 'string':
