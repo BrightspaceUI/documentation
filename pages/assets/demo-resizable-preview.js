@@ -78,10 +78,10 @@ class ComponentCatalogDemoResizablePreview extends LitElement {
 			}
 
 			:host([resizable]) .d2l-slider {
-				border-radius: 0 0.3rem 0.3rem 0;
+				border-radius: 0 10px 10px 0;
 			}
 			:host([attached]) .d2l-slider {
-				border-radius: 0 0.3rem 0 0;
+				border-radius: 0 10px 0 0;
 			}
 			.d2l-slider {
 				align-items: center;
@@ -104,14 +104,14 @@ class ComponentCatalogDemoResizablePreview extends LitElement {
 				display: none;
 			}
 			playground-preview {
-				border-radius: 0.3rem;
+				border-radius: 10px;
 				height: 100%;
 			}
 			:host([resizable]) playground-preview {
-				border-radius: 0.3rem 0 0 0.3rem;
+				border-radius: 10px 0 0 10px;
 			}
 			:host([attached]) playground-preview {
-				border-radius: 0.3rem 0.3rem 0 0;
+				border-radius: 10px 10px 0 0;
 			}
 		`;
 	}
@@ -154,7 +154,7 @@ class ComponentCatalogDemoResizablePreview extends LitElement {
 			</style>
 			<body class="d2l-typography">
 				<!-- todo: provide layout options for components-->
-				<div id="demo-element" style="z-index: 100;" class="layout hide">
+				<div id="demo-element" class="layout hide">
 					${this.code}
 				</div>
 			</body>`;
