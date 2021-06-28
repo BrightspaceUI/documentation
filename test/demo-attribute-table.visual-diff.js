@@ -42,4 +42,9 @@ describe('d2l-component-catalog-demo-attribute-table', () => {
 		await visualDiff.screenshotAndCompare(page, this.test.fullTitle(), { clip: rect });
 	});
 
+	it('Hide slots table', async function() {
+		const rect = await visualDiff.getRect(page, '#hide-slots');
+		await visualDiff.screenshotAndCompare(page, this.test.fullTitle(), { clip: rect });
+	});
+
 });
