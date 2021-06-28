@@ -19,7 +19,8 @@ export class ComponentCatalogDemoAttributeTable extends LitElement {
 	static get properties() {
 		return {
 			interactive: { type: Boolean },
-			tagName: { type: String, attribute: 'tag-name', reflect: true }
+			tagName: { type: String, attribute: 'tag-name', reflect: true },
+			hideSlots: { type: String, attribute: 'hide-slots', reflect: true }
 		};
 	}
 	static get styles() {
@@ -70,6 +71,16 @@ export class ComponentCatalogDemoAttributeTable extends LitElement {
 				</tr>
 			`;
 		});
+
+		const slotRows = componentInfo.slots.map((slotInfo) => {
+			return html`
+			<tr>
+				<th scope="row">${slotInfo.name || 'Default'}</th>
+				<td class="d2l-design-system-component-type">${slotInfo.description}</td>
+			</tr>
+		`;
+		});
+
 		const demoValueHeading = this.interactive ? html`<th>Demo Value</th>` : null;
 		return html`
 			<h3 class="d2l-heading-4">Properties</h3>
@@ -86,6 +97,20 @@ export class ComponentCatalogDemoAttributeTable extends LitElement {
 					</thead>
 					<tbody>
 						${rows}
+					</tbody>
+				</table>
+			</d2l-table-wrapper>
+			<h3 class="d2l-heading-4">Slots</h3>
+			<d2l-table-wrapper>
+				<table class="d2l-table">
+					<thead>
+						<tr>
+							<th>Name</th>
+							<th>Description</th>
+						</tr>
+					</thead>
+					<tbody>
+						${slotRows}
 					</tbody>
 				</table>
 			</d2l-table-wrapper>
