@@ -91,10 +91,10 @@ module.exports = function(eleventyConfig) {
 	};
 
 	markdownIt.renderer.rules.table_open = () => {
-		return '<d2l-table-wrapper><table class="d2l-table">';
+		return '<d2l-scroll-wrapper><table class="d2l-cc-custom-table d2l-markdown-table">';
 	};
 	markdownIt.renderer.rules.table_close = () => {
-		return '</table></d2l-table-wrapper>';
+		return '</table></d2l-scroll-wrapper>';
 	};
 
 	const defaultTextRule = markdownIt.renderer.rules.text;

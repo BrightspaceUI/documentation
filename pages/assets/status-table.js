@@ -1,10 +1,11 @@
 import '@brightspace-ui/core/components/colors/colors.js';
 import '@brightspace-ui/core/components/icons/icon.js';
 import '@brightspace-ui/core/components/link/link.js';
+import '@brightspace-ui/core/components/scroll-wrapper/scroll-wrapper.js';
 import { CC_STATES, DEV_STATES, TIERS } from '../../tools/states.mjs';
 import { css, html, LitElement } from 'lit-element';
 import { default as components } from '../../.generated/component-issue-data.js';
-import { tableStyles } from '@brightspace-ui/core/components/table/table-wrapper.js';
+import { customTableStyles } from './table-style.js';
 
 function getStatus(devStatus) {
 	switch (devStatus) {
@@ -35,16 +36,18 @@ class ComponentCatalogStatusTable extends LitElement {
 	}
 
 	static get styles() {
-		return [tableStyles, css`
+		return [customTableStyles, css`
 			:host {
 				display: block;
 			}
 			:host([hidden]) {
 				display: none;
 			}
-			d2l-table-wrapper {
-				padding-top: 1rem;
+
+			.d2l-status-table {
+				margin-top: 1rem;
 			}
+
 			.d2l-component-catalog-status-table-stable {
 				align-items: center;
 				color: var(--d2l-color-olivine);
@@ -100,8 +103,8 @@ class ComponentCatalogStatusTable extends LitElement {
 		});
 
 		return html`
-			<d2l-table-wrapper>
-				<table class="d2l-table">
+			<d2l-scroll-wrapper>
+				<table class="d2l-cc-custom-table d2l-status-table">
 					<thead>
 						<th>Component</th>
 						<th>Status</th>
@@ -111,7 +114,7 @@ class ComponentCatalogStatusTable extends LitElement {
 						${rows}
 					</tbody>
 				</table>
-			</d2l-table-wrapper>
+			</d2l-scroll-wrapper>
 		`;
 	}
 }

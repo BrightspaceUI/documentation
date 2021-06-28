@@ -77,6 +77,7 @@ class ComponentCatalogDemoSnippetWrapper extends LitElement {
 			}
 
 			.d2l-editor-wrapper {
+				min-width: 300px;
 				position: relative;
 			}
 

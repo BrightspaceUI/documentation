@@ -120,9 +120,8 @@ d2l-component-catalog-interactive-demo {
 	color: var(--d2l-color-cinnabar);
 	content: "\00D7";
 }
-
 :not(pre) > code {
-	background-color: var(--d2l-color-sylvite);
+	background-color: var(--d2l-color-amethyst-plus-2);
 	border-radius: 0.3rem;
 	font-size: 0.7rem;
 	padding: 0.1rem 0.2rem;
