@@ -64,3 +64,12 @@ layout: layouts/demo
 </script>
 <d2l-button>Button</d2l-button>
 ```
+
+### Example Markdown table from README
+
+| Property | Type | Description |
+|---|---|---|
+| `for-target` | String, required | id of the target element to display backdrop behind |
+| `no-animate-hide` | Boolean | Disables the fade-out transition while the backdrop is being hidden |
+| `shown` | Boolean | Used to control whether the backdrop is shown |
+| `slow-transition` | Boolean | Increases the fade transition time to 1200ms (default is 200ms) |
