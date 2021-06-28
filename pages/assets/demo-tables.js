@@ -16,7 +16,7 @@ const validTypes = [
 	'string'
 ];
 
-export class ComponentCatalogDemoAttributeTable extends LitElement {
+export class ComponentCatalogDemoTables extends LitElement {
 	static get properties() {
 		return {
 			hideSlots: { type: Boolean, attribute: 'hide-slots', reflect: true },
@@ -214,4 +214,4 @@ export class ComponentCatalogDemoAttributeTable extends LitElement {
 	}
 
 }
-customElements.define('d2l-component-catalog-demo-attribute-table', ComponentCatalogDemoAttributeTable);
+customElements.define('d2l-component-catalog-demo-tables', ComponentCatalogDemoTables);
