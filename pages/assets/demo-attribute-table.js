@@ -19,7 +19,7 @@ const validTypes = [
 export class ComponentCatalogDemoAttributeTable extends LitElement {
 	static get properties() {
 		return {
-			hideSlots: { type: String, attribute: 'hide-slots', reflect: true },
+			hideSlots: { type: Boolean, attribute: 'hide-slots', reflect: true },
 			interactive: { type: Boolean },
 			tagName: { type: String, attribute: 'tag-name', reflect: true },
 			_componentInfo: { type: Object }
@@ -45,7 +45,10 @@ export class ComponentCatalogDemoAttributeTable extends LitElement {
 			}
 		`];
 	}
-
+	constructor() {
+		super();
+		this.hideSlots = false;
+	}
 	firstUpdated(changedProperties) {
 		super.firstUpdated(changedProperties);
 
@@ -78,7 +81,7 @@ export class ComponentCatalogDemoAttributeTable extends LitElement {
 			`;
 		});
 
-		const slotRows = componentInfo.slots.map((slotInfo) => {
+		const slotRows = this._componentInfo.slots.map((slotInfo) => {
 			return html`
 			<tr>
 				<th scope="row">${slotInfo.name || 'Default'}</th>
@@ -106,7 +109,7 @@ export class ComponentCatalogDemoAttributeTable extends LitElement {
 					</tbody>
 				</table>
 			</d2l-scroll-wrapper>
-			<h3 class="d2l-heading-4">Slots</h3>
+			${!this.hideSlots ? html`<h3 class="d2l-heading-4">Slots</h3>
 			<d2l-scroll-wrapper>
 				<table class="d2l-cc-custom-table d2l-slots-table">
 					<thead>
@@ -119,7 +122,7 @@ export class ComponentCatalogDemoAttributeTable extends LitElement {
 						${slotRows}
 					</tbody>
 				</table>
-			</d2l-scroll-wrapper>
+			</d2l-scroll-wrapper>` : null}
 		`;
 	}
 
