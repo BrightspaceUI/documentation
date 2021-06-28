@@ -77,17 +77,16 @@ export class ComponentCatalogDemoAttributeTable extends LitElement {
 					<td>${info.description}</td>
 					<td>${infoDefault}</td>
 					${demoValueRow}
-				</tr>
-			`;
+				</tr>`;
 		});
 
 		const slotRows = this._componentInfo.slots.map((slotInfo) => {
 			return html`
-			<tr>
-				<th scope="row">${slotInfo.name || 'Default'}</th>
-				<td class="d2l-design-system-component-type">${slotInfo.description}</td>
-			</tr>
-		`;
+				<tr>
+					<th scope="row"><span class="d2l-property-name">${slotInfo.name || 'Default'}</span></th>
+					<td class="d2l-design-system-component-type">${slotInfo.description}</td>
+				</tr>
+			`;
 		});
 
 		const demoValueHeading = this.interactive ? html`<th>Demo Value</th>` : null;
@@ -109,21 +108,20 @@ export class ComponentCatalogDemoAttributeTable extends LitElement {
 					</tbody>
 				</table>
 			</d2l-scroll-wrapper>
-			${!this.hideSlots ? html`<h3 class="d2l-heading-4">Slots</h3>
-			<d2l-scroll-wrapper>
-				<table class="d2l-cc-custom-table d2l-slots-table">
-					<thead>
-						<tr>
-							<th>Name</th>
-							<th>Description</th>
-						</tr>
-					</thead>
-					<tbody>
-						${slotRows}
-					</tbody>
-				</table>
-			</d2l-scroll-wrapper>` : null}
-		`;
+			${!this.hideSlots && slotRows.length ? html`<h3 class="d2l-heading-4">Slots</h3>
+				<d2l-scroll-wrapper>
+					<table class="d2l-cc-custom-table d2l-slots-table">
+						<thead>
+							<tr>
+								<th>Name</th>
+								<th>Description</th>
+							</tr>
+						</thead>
+						<tbody>
+							${slotRows}
+						</tbody>
+					</table>
+				</d2l-scroll-wrapper>` : null}`;
 	}
 
 	_dispatchChangeEvent(details) {

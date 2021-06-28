@@ -225,6 +225,29 @@
 					}
 				]
 			};
+			const noSlotsComponent = {
+				"name": "d2l-no-slots-component",
+				"path": "./components/path.js",
+				"description": "A super real component with no slots",
+				"attributes": [
+					{
+						"name": "button-text",
+						"description": "Text that is displayed within the button. If no text is provided the button is not displayed.",
+						"type": "string",
+						"default": "My text"
+					}
+				],
+				"properties": [
+					{
+						"name": "buttonText",
+						"attribute": "button-text",
+						"description": "Text that is displayed within the button. If no text is provided the button is not displayed.",
+						"type": "string",
+						"default": "My text",
+					},
+				],
+				"slots": []
+			};
 
 			window.addEventListener('DOMContentLoaded', () => {
 				const tables = document.querySelectorAll('d2l-component-catalog-demo-attribute-table');
@@ -233,6 +256,7 @@
 					else if (table.id === 'valid-tag') table._componentInfo = validInfo;
 					else if (table.id === 'interactive') table._componentInfo = interactiveInfo;
 					else if (table.id === 'hide-slots') table._componentInfo = interactiveInfo;
+					else if (table.id === 'no-slots') table._componentInfo = noSlotsComponent;
 				});
 			});
 		</script>
@@ -257,6 +281,9 @@
 		</div>
 		<div class="visual-diff">
 			<d2l-component-catalog-demo-attribute-table id="interactive" tag="d2l-real-component" interactive></d2l-component-catalog-demo-attribute-table>
+		</div>
+		<div class="visual-diff">
+			<d2l-component-catalog-demo-attribute-table id="no-slots" tag="d2l-no-slot-component"></d2l-component-catalog-demo-attribute-table>
 		</div>
 		<div class="visual-diff">
 			<d2l-component-catalog-demo-attribute-table id="hide-slots" tag="d2l-real-component" hide-slots></d2l-component-catalog-demo-attribute-table>
