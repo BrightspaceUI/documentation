@@ -65,7 +65,7 @@ layout: layouts/demo
 <d2l-button>Button</d2l-button>
 ```
 
-### Example Makrdown table from README
+### Example Markdown table from README
 
 | Property | Type | Description |
 |---|---|---|

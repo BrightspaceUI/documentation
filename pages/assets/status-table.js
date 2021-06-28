@@ -5,7 +5,7 @@ import '@brightspace-ui/core/components/scroll-wrapper/scroll-wrapper.js';
 import { CC_STATES, DEV_STATES, TIERS } from '../../tools/states.mjs';
 import { css, html, LitElement } from 'lit-element';
 import { default as components } from '../../.generated/component-issue-data.js';
-import { customTableStyles } from './table-style';
+import { customTableStyles } from './table-style.js';
 
 function getStatus(devStatus) {
 	switch (devStatus) {

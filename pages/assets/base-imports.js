@@ -1,7 +1,7 @@
 import '@brightspace-ui/core/components/colors/colors.js';
 import '@brightspace-ui/core/components/link/link.js';
-import '@brightspace-ui/core/components/typography/typography.js';
 import '@brightspace-ui/core/components/scroll-wrapper/scroll-wrapper.js';
+import '@brightspace-ui/core/components/typography/typography.js';
 import { customTableStyles } from './table-style.js';
 
 if (document.getElementById('d2l-table-style-shared') === null) {
