@@ -1,6 +1,5 @@
 import '@brightspace-ui/core/components/colors/colors.js';
 import '@brightspace-ui/core/components/demo/demo-snippet.js';
-import './demo-tables.js';
 import './demo-resizable-preview.js';
 import 'playground-elements/playground-code-editor';
 import 'prismjs/prism.js';
@@ -9,6 +8,7 @@ import { parseConfigurationValue, parseImports } from './utils.mjs';
 import { ifDefined } from 'lit-html/directives/if-defined.js';
 import { themeStyles } from './code-style.js';
 import { unsafeHTML } from 'lit-html/directives/unsafe-html';
+import { validTypes } from './demo-tables.js';
 
 class ComponentCatalogDemoSnippetWrapper extends LitElement {
 	static get properties() {
@@ -91,13 +91,13 @@ class ComponentCatalogDemoSnippetWrapper extends LitElement {
 				for (const attribute in this._attributes) {
 					const { type, value } = this._attributes[attribute];
 					switch (type) {
-						case 'string':
+						case validTypes.string:
 							attributes.push(`${attribute}="${value}"`);
 							break;
-						case 'boolean':
+						case validTypes.boolean:
 							attributes.push(`${attribute}`);
 							break;
-						case 'number':
+						case validTypes.number:
 							attributes.push(`${attribute}=${value}`);
 							break;
 						default:

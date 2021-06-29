@@ -8,7 +8,7 @@ import { customTableStyles } from './table-style.js';
 import { heading4Styles } from '@brightspace-ui/core/components/typography/styles.js';
 import { ifDefined } from 'lit-html/directives/if-defined.js';
 import { selectStyles } from '@brightspace-ui/core/components/inputs/input-select-styles.js';
-const validTypes = {
+export const validTypes = {
 	array: 'array',
 	boolean: 'boolean',
 	number: 'number',
