@@ -57,13 +57,15 @@ export class ComponentCatalogDemoTables extends LitElement {
 
 		this._componentInfo = components.find((component) =>  component.name === this.tagName);
 
-		this._componentInfo.attributes.sort((a, b) => {
-			if (a.description && a.description.includes('REQUIRED:')) return -1;
-			else if (b.description && b.description.includes('REQUIRED:')) return 1;
-			else if (a.name < b.name) return -1;
-			else if (b.name < a.name) return 1;
-			else return 0;
-		});
+		if (this._componentInfo && this._componentInfo.attributes) {
+			this._componentInfo.attributes.sort((a, b) => {
+				if (a.description && a.description.includes('REQUIRED:')) return -1;
+				else if (b.description && b.description.includes('REQUIRED:')) return 1;
+				else if (a.name < b.name) return -1;
+				else if (b.name < a.name) return 1;
+				else return 0;
+			});
+		}
 
 		this._defaults = this.defaults ? JSON.parse(this.defaults) : {};
 	}
@@ -131,7 +133,7 @@ export class ComponentCatalogDemoTables extends LitElement {
 					</tbody>
 				</table>
 			</d2l-scroll-wrapper>
-			${!this.hideSlots && slotRows ? html`<h3 class="d2l-heading-4">Slots</h3>
+			${!this.hideSlots && slotRows && slotRows.length ? html`<h3 class="d2l-heading-4">Slots</h3>
 				<d2l-scroll-wrapper>
 					<table class="d2l-cc-custom-table d2l-slots-table">
 						<thead>
