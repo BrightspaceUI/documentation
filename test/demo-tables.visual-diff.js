@@ -1,16 +1,16 @@
 import puppeteer from 'puppeteer';
 import VisualDiff from '@brightspace-ui/visual-diff';
 
-describe('d2l-component-catalog-demo-attribute-table', () => {
+describe('d2l-component-catalog-demo-tables', () => {
 
-	const visualDiff = new VisualDiff('demo-attribute-table', __dirname);
+	const visualDiff = new VisualDiff('demo-tables', __dirname);
 
 	let browser, page;
 
 	before(async() => {
 		browser = await puppeteer.launch();
 		page = await visualDiff.createPage(browser);
-		await page.goto(`${visualDiff.getBaseUrl()}/test/demo-attribute-table.visual-diff.html`, { waitUntil: ['networkidle0', 'load'] });
+		await page.goto(`${visualDiff.getBaseUrl()}/test/demo-tables.visual-diff.html`, { waitUntil: ['networkidle0', 'load'] });
 		await page.bringToFront();
 	});
 
@@ -39,6 +39,16 @@ describe('d2l-component-catalog-demo-attribute-table', () => {
 
 	it('Interactive', async function() {
 		const rect = await visualDiff.getRect(page, '#interactive');
+		await visualDiff.screenshotAndCompare(page, this.test.fullTitle(), { clip: rect });
+	});
+
+	it('No slot items', async function() {
+		const rect = await visualDiff.getRect(page, '#no-slots');
+		await visualDiff.screenshotAndCompare(page, this.test.fullTitle(), { clip: rect });
+	});
+
+	it('Hide slots table', async function() {
+		const rect = await visualDiff.getRect(page, '#hide-slots');
 		await visualDiff.screenshotAndCompare(page, this.test.fullTitle(), { clip: rect });
 	});
 

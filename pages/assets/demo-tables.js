@@ -16,9 +16,10 @@ const validTypes = [
 	'string'
 ];
 
-export class ComponentCatalogDemoAttributeTable extends LitElement {
+export class ComponentCatalogDemoTables extends LitElement {
 	static get properties() {
 		return {
+			hideSlots: { type: Boolean, attribute: 'hide-slots', reflect: true },
 			interactive: { type: Boolean },
 			tagName: { type: String, attribute: 'tag-name', reflect: true },
 			_componentInfo: { type: Object }
@@ -44,7 +45,10 @@ export class ComponentCatalogDemoAttributeTable extends LitElement {
 			}
 		`];
 	}
-
+	constructor() {
+		super();
+		this.hideSlots = false;
+	}
 	firstUpdated(changedProperties) {
 		super.firstUpdated(changedProperties);
 
@@ -73,9 +77,18 @@ export class ComponentCatalogDemoAttributeTable extends LitElement {
 					<td>${info.description}</td>
 					<td>${infoDefault}</td>
 					${demoValueRow}
+				</tr>`;
+		});
+
+		const slotRows = this._componentInfo.slots.map((slotInfo) => {
+			return html`
+				<tr>
+					<th scope="row"><span class="d2l-property-name">${slotInfo.name || 'Default'}</span></th>
+					<td class="d2l-design-system-component-type">${slotInfo.description}</td>
 				</tr>
 			`;
 		});
+
 		const demoValueHeading = this.interactive ? html`<th>Demo Value</th>` : null;
 		return html`
 			<h3 class="d2l-heading-4">Properties</h3>
@@ -95,7 +108,20 @@ export class ComponentCatalogDemoAttributeTable extends LitElement {
 					</tbody>
 				</table>
 			</d2l-scroll-wrapper>
-		`;
+			${!this.hideSlots && slotRows.length ? html`<h3 class="d2l-heading-4">Slots</h3>
+				<d2l-scroll-wrapper>
+					<table class="d2l-cc-custom-table d2l-slots-table">
+						<thead>
+							<tr>
+								<th>Name</th>
+								<th>Description</th>
+							</tr>
+						</thead>
+						<tbody>
+							${slotRows}
+						</tbody>
+					</table>
+				</d2l-scroll-wrapper>` : null}`;
 	}
 
 	_dispatchChangeEvent(details) {
@@ -188,4 +214,4 @@ export class ComponentCatalogDemoAttributeTable extends LitElement {
 	}
 
 }
-customElements.define('d2l-component-catalog-demo-attribute-table', ComponentCatalogDemoAttributeTable);
+customElements.define('d2l-component-catalog-demo-tables', ComponentCatalogDemoTables);

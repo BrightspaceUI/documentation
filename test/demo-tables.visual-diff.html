@@ -3,7 +3,7 @@
 	<head>
 		<script type="module">
 			import '@brightspace-ui/core/components/typography/typography.js';
-			import '../pages/assets/demo-attribute-table.js';
+			import '../pages/assets/demo-tables.js';
 			const validInfo = {
 				"name": "d2l-real-component",
 				"path": "./components/path.js",
@@ -225,19 +225,44 @@
 					}
 				]
 			};
+			const noSlotsComponent = {
+				"name": "d2l-no-slots-component",
+				"path": "./components/path.js",
+				"description": "A super real component with no slots",
+				"attributes": [
+					{
+						"name": "button-text",
+						"description": "Text that is displayed within the button. If no text is provided the button is not displayed.",
+						"type": "string",
+						"default": "My text"
+					}
+				],
+				"properties": [
+					{
+						"name": "buttonText",
+						"attribute": "button-text",
+						"description": "Text that is displayed within the button. If no text is provided the button is not displayed.",
+						"type": "string",
+						"default": "My text",
+					},
+				],
+				"slots": []
+			};
 
 			window.addEventListener('DOMContentLoaded', () => {
-				const tables = document.querySelectorAll('d2l-component-catalog-demo-attribute-table');
+				const tables = document.querySelectorAll('d2l-component-catalog-demo-tables');
 				tables.forEach((table) => {
 					if (table.id === 'invalid-tag') table._componentInfo = undefined;
 					else if (table.id === 'valid-tag') table._componentInfo = validInfo;
 					else if (table.id === 'interactive') table._componentInfo = interactiveInfo;
+					else if (table.id === 'hide-slots') table._componentInfo = interactiveInfo;
+					else if (table.id === 'no-slots') table._componentInfo = noSlotsComponent;
 				});
 			});
 		</script>
-		<title>d2l-component-catalog-demo-attribute-table visual-diff tests</title>
+		<title>d2l-component-catalog-demo-tables visual-diff tests</title>
 		<style>
-			d2l-component-catalog-demo-attribute-table {
+			d2l-component-catalog-demo-tables {
 				padding-bottom: 10px;
 			}
 		</style>
@@ -246,16 +271,22 @@
 	</head>
 	<body class="d2l-typography">
 		<div class="visual-diff">
-			<d2l-component-catalog-demo-attribute-table id="no-tag"></d2l-component-catalog-demo-attribute-table>
+			<d2l-component-catalog-demo-tables id="no-tag"></d2l-component-catalog-demo-tables>
 		</div>
 		<div class="visual-diff">
-			<d2l-component-catalog-demo-attribute-table id="invalid-tag" tag="d2l-fake-component"></d2l-component-catalog-demo-attribute-table>
+			<d2l-component-catalog-demo-tables id="invalid-tag" tag="d2l-fake-component"></d2l-component-catalog-demo-tables>
 		</div>
 		<div class="visual-diff">
-			<d2l-component-catalog-demo-attribute-table id="valid-tag" tag="d2l-real-component"></d2l-component-catalog-demo-attribute-table>
+			<d2l-component-catalog-demo-tables id="valid-tag" tag="d2l-real-component"></d2l-component-catalog-demo-tables>
 		</div>
 		<div class="visual-diff">
-			<d2l-component-catalog-demo-attribute-table id="interactive" tag="d2l-real-component" interactive></d2l-component-catalog-demo-attribute-table>
+			<d2l-component-catalog-demo-tables id="interactive" tag="d2l-real-component" interactive></d2l-component-catalog-demo-tables>
+		</div>
+		<div class="visual-diff">
+			<d2l-component-catalog-demo-tables id="no-slots" tag="d2l-no-slot-component"></d2l-component-catalog-demo-tables>
+		</div>
+		<div class="visual-diff">
+			<d2l-component-catalog-demo-tables id="hide-slots" tag="d2l-real-component" hide-slots></d2l-component-catalog-demo-tables>
 		</div>
 	</body>
 </html>

@@ -1,6 +1,6 @@
 import '@brightspace-ui/core/components/colors/colors.js';
 import '@brightspace-ui/core/components/demo/demo-snippet.js';
-import './demo-attribute-table.js';
+import './demo-tables.js';
 import './demo-resizable-preview.js';
 import 'playground-elements/playground-code-editor';
 import 'prismjs/prism.js';
@@ -153,11 +153,11 @@ class ComponentCatalogDemoSnippetWrapper extends LitElement {
 				${ !this.hideCode ? html`<pre class="language-${this.language}"><code class="language-${this.language}">${unsafeHTML(this._highlightedCodeSnippet)}</code></pre>` : null }
 			</div>
 			${ this.interactive ? html`
-				<d2l-component-catalog-demo-attribute-table
+				<d2l-component-catalog-demo-tables
 					@property-change=${this._handlePropertyChange}
 					interactive
 					tag-name="${this.tagName}">
-				</d2l-component-catalog-demo-attribute-table>` : null }
+				</d2l-component-catalog-demo-tables>` : null }
 		`;
 	}
 
