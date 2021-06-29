@@ -158,10 +158,10 @@ export class ComponentCatalogDemoTables extends LitElement {
 		const strippedDefaultVal = defaultVal?.replace(/"/g, '');
 		const value = defaultVal ? strippedDefaultVal : undefined;
 		switch (type) {
-			case 'array':
-			case 'object':
+			case validTypes.array:
+			case validTypes.object:
 				return;
-			case 'boolean':
+			case validTypes.boolean:
 				return html`
 					<d2l-switch
 						@change="${this._onSwitchChange}"
@@ -170,7 +170,7 @@ export class ComponentCatalogDemoTables extends LitElement {
 						text="${attributeName}"
 						text-position="hidden">
 					</d2l-switch>`;
-			case 'number':
+			case validTypes.number:
 				return html`
 					<d2l-input-number
 						@change="${this._onNumberChange}"
@@ -178,7 +178,7 @@ export class ComponentCatalogDemoTables extends LitElement {
 						label="${attributeName}"
 						value="${ifDefined(value)}">
 					</d2l-input-number>`;
-			case 'string':
+			case validTypes.string:
 				return html`
 					<d2l-input-text
 						@change="${this._onStringChange}"
@@ -209,7 +209,7 @@ export class ComponentCatalogDemoTables extends LitElement {
 		}
 	}
 	_getEventDetails(e, type) {
-		const value = type === 'boolean' ? e.target.hasAttribute('on') : e.target.value;
+		const value = type === validTypes.boolean ? e.target.hasAttribute('on') : e.target.value;
 		return {
 			name: e.target.getAttribute('data-name'),
 			type: type,
@@ -217,22 +217,22 @@ export class ComponentCatalogDemoTables extends LitElement {
 		};
 	}
 	_onNumberChange(e) {
-		const eventDetails = this._getEventDetails(e, 'number');
+		const eventDetails = this._getEventDetails(e, validTypes.number);
 		this._dispatchChangeEvent(eventDetails);
 	}
 
 	_onSelectChange(e) {
-		const eventDetails = this._getEventDetails(e, 'string');
+		const eventDetails = this._getEventDetails(e, validTypes.string);
 		this._dispatchChangeEvent(eventDetails);
 	}
 
 	_onStringChange(e) {
-		const eventDetails = this._getEventDetails(e, 'string');
+		const eventDetails = this._getEventDetails(e, validTypes.string);
 		this._dispatchChangeEvent(eventDetails);
 	}
 
 	_onSwitchChange(e) {
-		const eventDetails = this._getEventDetails(e, 'boolean');
+		const eventDetails = this._getEventDetails(e, validTypes.boolean);
 		this._dispatchChangeEvent(eventDetails);
 	}
 
