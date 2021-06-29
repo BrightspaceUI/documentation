@@ -51,7 +51,7 @@ module.exports = function(eleventyConfig) {
 					let headingClass = token.attrGet('class') || '';
 					if (token.tag === 'h1') headingClass += ' d2l-heading-1';
 					else if (token.tag === 'h2') headingClass += ' d2l-heading-2';
-					else if (token.tag === 'h3') headingClass += ' d2l-heading-3';
+					else if (token.tag === 'h3') headingClass += ' d2l-heading-4';
 					token.attrSet('class', headingClass);
 					break;
 				}

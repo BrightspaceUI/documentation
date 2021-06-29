@@ -77,12 +77,13 @@ size:<'small'|'medium'|'large'|'xlarge'>
 
 **Interactive demo**: (maximum of 1 per component) This demo includes the properties, slots, and events tables, and allows for the user to modify properties in these table(s) which then affects the demo.
 
-Add the comment `<!-- docs: live demo -->` within the code block at the top and `$attributes` on the component tag. For example:
+Add the comment `<!-- docs: live demo -->` within the code block at the top and `$attributes` on the component tag. Note that if `defaults` is being used in order to set default demo values, the demo information pieces must be separated by newlines rather than be inline (e.g., `<!-- docs: live demo name:d2l-button -->`). For example:
 ```
 ```html
 <!-- docs: live demo
 name:<component-tag, e.g., d2l-button>
-size:<'small'|'medium'|'large'|'xlarge'>
+size:<'small'|'medium'|'large'|'xlarge'
+defaults:{"<attribute>": <value: "string"|boolean|number>}>
 -->
 <script type="module">
   import '@brightspace-ui/core/components/button/button.js';

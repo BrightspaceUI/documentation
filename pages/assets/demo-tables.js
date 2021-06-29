@@ -8,21 +8,23 @@ import { customTableStyles } from './table-style.js';
 import { heading4Styles } from '@brightspace-ui/core/components/typography/styles.js';
 import { ifDefined } from 'lit-html/directives/if-defined.js';
 import { selectStyles } from '@brightspace-ui/core/components/inputs/input-select-styles.js';
-const validTypes = [
-	'array',
-	'boolean',
-	'number',
-	'object',
-	'string'
-];
+const validTypes = {
+	array: 'array',
+	boolean: 'boolean',
+	number: 'number',
+	object: 'object',
+	string: 'string'
+};
 
 export class ComponentCatalogDemoTables extends LitElement {
 	static get properties() {
 		return {
+			defaults: { type: String },
 			hideSlots: { type: Boolean, attribute: 'hide-slots', reflect: true },
 			interactive: { type: Boolean },
 			tagName: { type: String, attribute: 'tag-name', reflect: true },
-			_componentInfo: { type: Object }
+			_componentInfo: { type: Object },
+			_defaults: { type: Object }
 		};
 	}
 	static get styles() {
@@ -49,10 +51,21 @@ export class ComponentCatalogDemoTables extends LitElement {
 		super();
 		this.hideSlots = false;
 	}
+
 	firstUpdated(changedProperties) {
 		super.firstUpdated(changedProperties);
 
 		this._componentInfo = components.find((component) =>  component.name === this.tagName);
+
+		this._componentInfo.attributes.sort((a, b) => {
+			if (a.description && a.description.includes('REQUIRED:')) return -1;
+			else if (b.description && b.description.includes('REQUIRED:')) return 1;
+			else if (a.name < b.name) return -1;
+			else if (b.name < a.name) return 1;
+			else return 0;
+		});
+
+		this._defaults = this.defaults ? JSON.parse(this.defaults) : {};
 	}
 
 	render() {
@@ -62,13 +75,23 @@ export class ComponentCatalogDemoTables extends LitElement {
 			const infoDefault = info.default ? info.default.replace(/\\"/g, '') : null;
 			let demoType = info.type;
 			let demoValue = null;
+			let initialValue = infoDefault;
 
 			if (info.type && info.type.includes('|')) {
 				demoType = info.type.replace(/\|/g, ' | ');
-				demoValue = this._getDemoValueOptions(demoType, info.name, infoDefault);
-			} else {
-				demoValue = validTypes.includes(demoType) ? this._getDemoValueOptions(demoType, info.name, infoDefault) : null;
 			}
+
+			if (this.interactive) {
+				if (Object.values(validTypes).includes(demoType)) {
+					const defaultForName = this._defaults[info.name];
+					if (defaultForName) initialValue = info.type !== 'string' ? `"${defaultForName}"` : defaultForName;
+					else initialValue = infoDefault;
+				}
+
+				demoValue = this._getDemoValueOptions(demoType, info.name, initialValue);
+
+			}
+
 			const demoValueRow = this.interactive ? html`<td>${demoValue}</td>` : null;
 			return html`
 				<tr>
@@ -80,14 +103,14 @@ export class ComponentCatalogDemoTables extends LitElement {
 				</tr>`;
 		});
 
-		const slotRows = this._componentInfo.slots.map((slotInfo) => {
+		const slotRows = this._componentInfo.slots ? this._componentInfo.slots.map((slotInfo) => {
 			return html`
 				<tr>
 					<th scope="row"><span class="d2l-property-name">${slotInfo.name || 'Default'}</span></th>
 					<td class="d2l-design-system-component-type">${slotInfo.description}</td>
 				</tr>
 			`;
-		});
+		}) : null;
 
 		const demoValueHeading = this.interactive ? html`<th>Demo Value</th>` : null;
 		return html`
@@ -108,7 +131,7 @@ export class ComponentCatalogDemoTables extends LitElement {
 					</tbody>
 				</table>
 			</d2l-scroll-wrapper>
-			${!this.hideSlots && slotRows.length ? html`<h3 class="d2l-heading-4">Slots</h3>
+			${!this.hideSlots && slotRows ? html`<h3 class="d2l-heading-4">Slots</h3>
 				<d2l-scroll-wrapper>
 					<table class="d2l-cc-custom-table d2l-slots-table">
 						<thead>
@@ -186,7 +209,7 @@ export class ComponentCatalogDemoTables extends LitElement {
 		}
 	}
 	_getEventDetails(e, type) {
-		const value = type === 'Boolean' ? e.target.hasAttribute('on') : e.target.value;
+		const value = type === 'boolean' ? e.target.hasAttribute('on') : e.target.value;
 		return {
 			name: e.target.getAttribute('data-name'),
 			type: type,
@@ -194,22 +217,22 @@ export class ComponentCatalogDemoTables extends LitElement {
 		};
 	}
 	_onNumberChange(e) {
-		const eventDetails = this._getEventDetails(e, 'Number');
+		const eventDetails = this._getEventDetails(e, 'number');
 		this._dispatchChangeEvent(eventDetails);
 	}
 
 	_onSelectChange(e) {
-		const eventDetails = this._getEventDetails(e, 'String');
+		const eventDetails = this._getEventDetails(e, 'string');
 		this._dispatchChangeEvent(eventDetails);
 	}
 
 	_onStringChange(e) {
-		const eventDetails = this._getEventDetails(e, 'String');
+		const eventDetails = this._getEventDetails(e, 'string');
 		this._dispatchChangeEvent(eventDetails);
 	}
 
 	_onSwitchChange(e) {
-		const eventDetails = this._getEventDetails(e, 'Boolean');
+		const eventDetails = this._getEventDetails(e, 'boolean');
 		this._dispatchChangeEvent(eventDetails);
 	}
 
