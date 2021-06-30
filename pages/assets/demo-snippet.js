@@ -1,14 +1,14 @@
 import '@brightspace-ui/core/components/colors/colors.js';
 import '@brightspace-ui/core/components/demo/demo-snippet.js';
-import './demo-tables.js';
 import './demo-resizable-preview.js';
 import 'playground-elements/playground-code-editor';
 import 'prismjs/prism.js';
 import { css, html, LitElement } from 'lit-element';
+import { parseConfigurationValue, parseImports } from './utils.mjs';
 import { ifDefined } from 'lit-html/directives/if-defined.js';
-import { parseImports } from './utils.mjs';
 import { themeStyles } from './code-style.js';
 import { unsafeHTML } from 'lit-html/directives/unsafe-html';
+import { validTypes } from './demo-tables.js';
 
 class ComponentCatalogDemoSnippetWrapper extends LitElement {
 	static get properties() {
@@ -91,13 +91,13 @@ class ComponentCatalogDemoSnippetWrapper extends LitElement {
 				for (const attribute in this._attributes) {
 					const { type, value } = this._attributes[attribute];
 					switch (type) {
-						case 'String':
+						case validTypes.string:
 							attributes.push(`${attribute}="${value}"`);
 							break;
-						case 'Boolean':
+						case validTypes.boolean:
 							attributes.push(`${attribute}`);
 							break;
-						case 'Number':
+						case validTypes.number:
 							attributes.push(`${attribute}=${value}`);
 							break;
 						default:
@@ -115,22 +115,35 @@ class ComponentCatalogDemoSnippetWrapper extends LitElement {
 		return codeSnippet;
 	}
 
+	get defaults() {
+		const defaults = parseConfigurationValue('defaults', this.demoSnippet, true);
+		return defaults;
+	}
+
 	get imports() {
 		return parseImports(this.demoSnippet);
 	}
 
 	get size() {
-		const size = this._parseConfigurationValue('size');
+		const size = parseConfigurationValue('size', this.demoSnippet);
 		return size;
 	}
 
 	get tagName() {
-		const name = this._parseConfigurationValue('name');
+		const name = parseConfigurationValue('name', this.demoSnippet);
 		return name;
 	}
 
 	connectedCallback() {
 		super.connectedCallback();
+
+		if (this.defaults) {
+			const defaults = JSON.parse(this.defaults);
+			Object.keys(defaults).forEach((key) => {
+				const value = defaults[key];
+				this._updateAttributes({ name: key, type: typeof(value), value });
+			});
+		}
 		this._highlightedCodeSnippet = Prism.highlight(this.code, Prism.languages[this.language], this.language);
 	}
 
@@ -154,6 +167,7 @@ class ComponentCatalogDemoSnippetWrapper extends LitElement {
 			</div>
 			${ this.interactive ? html`
 				<d2l-component-catalog-demo-tables
+					defaults="${ifDefined(this.defaults)}"
 					@property-change=${this._handlePropertyChange}
 					interactive
 					tag-name="${this.tagName}">
@@ -171,30 +185,18 @@ class ComponentCatalogDemoSnippetWrapper extends LitElement {
 	}
 
 	_handlePropertyChange(event) {
-		const { name, type, value } = event.detail;
+		this._updateAttributes(event.detail);
+		this.requestUpdate();
+	}
+
+	_updateAttributes(detail) {
+		const { name, type, value } = detail;
 		if (value === '' || !value) {
 			delete this._attributes[name];
 			this._attributes = { ...this._attributes };
 		} else {
 			this._attributes = { ...this._attributes, [name]: { type, value } };
 		}
-		this.requestUpdate();
-	}
-
-	_parseConfigurationValue(tag) {
-		let value;
-		if (this.demoSnippet.includes(`${tag}:`)) {
-			let section = this.demoSnippet.split(`${tag}:`)[1];
-			section = section.split('-->')[0];
-			// Get configuration values from inline
-			if (section.includes(' ')) {
-				value = section.split(' ')[0];
-			} else {
-				// Get configuration values on mulitple lines
-				value = section.split('\n')[0];
-			}
-		}
-		return value;
 	}
 
 }
