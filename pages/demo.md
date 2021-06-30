@@ -39,7 +39,11 @@ layout: layouts/demo
 ### Interactive demo - size
 
 ```html
-<!-- docs: live demo name:d2l-button size:medium -->
+<!-- docs: live demo 
+name:d2l-button
+size:medium
+defaults:{"disabled":true}
+-->
 <script type="module">
 	import '@brightspace-ui/core/components/button/button.js';
 </script>
