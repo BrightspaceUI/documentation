@@ -40,8 +40,9 @@ module.exports = function(eleventyConfig) {
 				}
 				case 'link_open': {
 					token.tag = 'd2l-link';
-					const href = token.attrGet('href');
-					if (href.includes('.md')) token.attrObj.href = href.replace(/.md/, '.html');
+					// TODO: re-add once pages exist in Daylight to be linked to, for now just keep link the same
+					// const href = token.attrGet('href');
+					// if (href.includes('.md')) token.attrObj.href = href.replace(/.md/, '.html');
 					break;
 				}
 				case 'link_close':
