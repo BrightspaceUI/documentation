@@ -6,13 +6,13 @@ export function parseConfigurationValue(tag, demoSnippet, requireSplitOnNewlines
 	let value;
 
 	if (requireSplitOnNewlines && !demoSnippet.includes('\n')) {
-		throw new Error('Snippet info should not be divided by spaces if using "defaults" due to parsing. Use multi-line method.');
+		throw new Error('Snippet info should be divided by newlines.');
 	}
 
 	if (demoSnippet.includes(`${tag}:`)) {
-		const splitsOnNewlines = demoSnippet.includes('\n');
-		let section = demoSnippet.split(`${tag}:`)[1];
-		section = section.split('-->')[0];
+		let section = demoSnippet.split('-->')[0];
+		const splitsOnNewlines = section.includes('\n');
+		section = section.split(`${tag}:`)[1];
 
 		if (splitsOnNewlines) {
 			if (section.includes('\n')) value = section.split('\n')[0];

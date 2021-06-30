@@ -82,7 +82,7 @@ Add the comment `<!-- docs: live demo -->` within the code block at the top and 
 ```html
 <!-- docs: live demo
 name:<component-tag, e.g., d2l-button>
-size:<'small'|'medium'|'large'|'xlarge'
+size:<'small'|'medium'|'large'|'xlarge'>
 defaults:{"<attribute>": <value: "string"|boolean|number>}>
 -->
 <script type="module">

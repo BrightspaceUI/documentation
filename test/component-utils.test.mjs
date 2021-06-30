@@ -98,6 +98,13 @@ import '@brightspace-ui/core/components/button/button.js?module';\n`
 			assert.equal(parseConfigurationValue('size', snippet), 'small');
 		});
 
+		it('should return correct result when inline with code', () => {
+			const snippet = `<!-- docs: demo name:d2l-component size:small -->
+<d2l-component></d2l-component>`;
+			assert.equal(parseConfigurationValue('name', snippet), 'd2l-component');
+			assert.equal(parseConfigurationValue('size', snippet), 'small');
+		});
+
 		it('should return nothing when tag not present', () => {
 			const snippet = '<!-- docs: demo name:d2l-component size:small -->';
 			assert.equal(parseConfigurationValue('tag2', snippet), undefined);
@@ -113,6 +120,16 @@ import '@brightspace-ui/core/components/button/button.js?module';\n`
 name:d2l-component
 size:small
 -->`;
+			assert.equal(parseConfigurationValue('name', snippet), 'd2l-component');
+			assert.equal(parseConfigurationValue('size', snippet), 'small');
+		});
+
+		it('should return correct result when multi-line with code', () => {
+			const snippet = `<!-- docs: demo
+name:d2l-component
+size:small
+-->
+<d2l-component></d2l-component>`;
 			assert.equal(parseConfigurationValue('name', snippet), 'd2l-component');
 			assert.equal(parseConfigurationValue('size', snippet), 'small');
 		});
