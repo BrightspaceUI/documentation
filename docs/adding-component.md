@@ -62,12 +62,12 @@ The content of the best practices section should be formatted as:
 
 **Code-hidden demo:** This demo shows only the visual portion of the component(s) without the code. It is generally used at the top of a component page.
 
-Add the comment `<!-- docs: demo -->` within the code block. For example:
+Add the comment `<!-- docs: demo -->` directly before the code block. For example:
 ```
-```html
 <!-- docs: demo
 size:<'small'|'medium'|'large'|'xlarge'>
 -->
+```html
 <script type="module">
   import '@brightspace-ui/core/components/button/button.js';
 </script>
@@ -77,14 +77,14 @@ size:<'small'|'medium'|'large'|'xlarge'>
 
 **Interactive demo**: (maximum of 1 per component) This demo includes the properties, slots, and events tables, and allows for the user to modify properties in these table(s) which then affects the demo.
 
-Add the comment `<!-- docs: live demo -->` within the code block at the top and `$attributes` on the component tag. Note that if `defaults` is being used in order to set default demo values, the demo information pieces must be separated by newlines rather than be inline (e.g., `<!-- docs: live demo name:d2l-button -->`). For example:
+Add the comment `<!-- docs: live demo -->` directly before the code block and `$attributes` on the component tag. Note that if `defaults` is being used in order to set default demo values, the demo information pieces must be separated by newlines rather than be inline (e.g., `<!-- docs: live demo name:d2l-button -->`). For example:
 ```
-```html
 <!-- docs: live demo
 name:<component-tag, e.g., d2l-button>
 size:<'small'|'medium'|'large'|'xlarge'>
 defaults:{"<attribute>": <value: "string"|boolean|number>}>
 -->
+```html
 <script type="module">
   import '@brightspace-ui/core/components/button/button.js';
 </script>
@@ -94,12 +94,12 @@ defaults:{"<attribute>": <value: "string"|boolean|number>}>
 
 **Secondary demo:** This demo shows the component(s) and the code but does not allow any modification. This can be used to show different varients of a component but should be used sporadically generally in order to call out significant varients.
 
-Add the comment `<!-- docs: code demo -->` within the code block at the top. For example:
+Add the comment `<!-- docs: code demo -->` directly before the code block. For example:
 ```
-```html
 <!-- docs: code demo
 size:<'small'|'medium'|'large'|'xlarge'>
 -->
+```html
 <script type="module">
   import '@brightspace-ui/core/components/button/button.js';
 </script>

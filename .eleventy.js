@@ -5,6 +5,7 @@ const { escapeHtml } = require('markdown-it/lib/common/utils');
 const { parseConfigurationValue } = require('./tools/eleventy-utils');
 
 module.exports = function(eleventyConfig) {
+	let inCodeBlock = false;
 	eleventyConfig.addPassthroughCopy('img');
 	eleventyConfig.addPassthroughCopy('pages/components/imported/screenshots');
 	eleventyConfig.addPassthroughCopy('pages/favicon.ico');
@@ -67,6 +68,10 @@ module.exports = function(eleventyConfig) {
 
 	markdownIt.renderer.rules.fence = (tokens, idx) => {
 		const content = tokens[idx].content;
+		if (!inCodeBlock) {
+			return `<d2l-component-catalog-demo-snippet code-only>${escapeHtml(content)}</d2l-component-catalog-demo-snippet>`;
+		}
+		inCodeBlock = false;
 		return `${escapeHtml(content)}</d2l-component-catalog-demo-snippet>`;
 	};
 
@@ -98,6 +103,7 @@ module.exports = function(eleventyConfig) {
 	markdownIt.renderer.rules.html_block = (tokens, idx, options, env, slf) => {
 		const content = tokens[idx].content;
 		if (content.includes('<!-- docs: live demo')) {
+			inCodeBlock = true;
 			const tag = parseConfigurationValue('name', content);
 			if (!tag) return '<d2l-component-catalog-demo-snippet resizable hide-code>';
 			const size = parseConfigurationValue('size', content);
@@ -106,11 +112,13 @@ module.exports = function(eleventyConfig) {
 			if (size) openingTag += ` size="${size}" `;
 			if (defaults) openingTag += ` defaults='${defaults}'`;
 			return `${openingTag}>`;
-		} else if (content.includes('<!-- docs: code demo -->'))
+		} else if (content.includes('<!-- docs: code demo -->')) {
+			inCodeBlock = true;
 			return '<d2l-component-catalog-demo-snippet resizable>';
-		else if (content.includes('<!-- docs: demo -->'))
+		} else if (content.includes('<!-- docs: demo -->')) {
+			inCodeBlock = true;
 			return '<d2l-component-catalog-demo-snippet resizable hide-code>';
-		else if (content.includes('<!-- docs: start hidden content -->'))
+		} else if (content.includes('<!-- docs: start hidden content -->'))
 			return '<div style="display: none;">';
 		else if (content.includes('<!-- docs: end'))
 			return '</div>';

@@ -13,6 +13,9 @@ import { validTypes } from './demo-tables.js';
 class ComponentCatalogDemoSnippetWrapper extends LitElement {
 	static get properties() {
 		return {
+			/**
+			 * Default values for demo attributes. Formatted as a stringified object.
+			 */
 			defaults: { type: String },
 			/**
 			* Hide the read-only code view
@@ -34,9 +37,17 @@ class ComponentCatalogDemoSnippetWrapper extends LitElement {
 			* Is the preview resizable
 			*/
 			resizable : { type: Boolean, reflect: true },
+			/**
+			* Size of the IFrame demo portion
+			* @type {'small'|'medium'|'large'|'xlarge'}
+			*/
 			size: { type: String },
+			/**
+			 * The tag of the component being showcased in the demo which has its properties shown (if interactive)
+			 */
 			tagName: { attribute: 'tag-name', type: String },
-			_attributes: { type: Object, reflect: true }
+			_attributes: { type: Object, reflect: true },
+			_demoSnippet:  { type: String },
 		};
 	}
 	static get styles() {
@@ -80,8 +91,8 @@ class ComponentCatalogDemoSnippetWrapper extends LitElement {
 
 	get code() {
 		// remove comment lines from code snippet
-		if (!this.demoSnippet) return '';
-		const lines = this.demoSnippet.split('-->');
+		if (!this._demoSnippet) return '';
+		const lines = this._demoSnippet.split('-->');
 		const codeSnippet = lines.length === 1 ? lines[0] : lines[1]; // if there was no `-->` found lines[1] will be null
 		if (this.interactive) {
 			const splitItems = codeSnippet.split('$attributes');
@@ -116,7 +127,7 @@ class ComponentCatalogDemoSnippetWrapper extends LitElement {
 	}
 
 	get imports() {
-		return parseImports(this.demoSnippet);
+		return parseImports(this._demoSnippet);
 	}
 
 	connectedCallback() {
@@ -133,7 +144,7 @@ class ComponentCatalogDemoSnippetWrapper extends LitElement {
 	}
 
 	render() {
-		if (!this.demoSnippet) return html`<slot @slotchange="${this._handleSlotChange}"></slot>`;
+		if (!this._demoSnippet) return html`<slot @slotchange="${this._handleSlotChange}"></slot>`;
 		const codeSnippet = this.code;
 
 		return html`
@@ -178,7 +189,7 @@ class ComponentCatalogDemoSnippetWrapper extends LitElement {
 	_handleSlotChange() {
 		const slot = this.shadowRoot.querySelector('slot');
 		if (slot && slot.assignedNodes().length > 0) {
-			this.demoSnippet = slot.assignedNodes()[0].textContent;
+			this._demoSnippet = slot.assignedNodes()[0].textContent;
 			this._highlightedCodeSnippet = Prism.highlight(this.code, Prism.languages[this.language], this.language);
 		}
 	}
