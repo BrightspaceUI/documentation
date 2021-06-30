@@ -13,6 +13,7 @@ import { validTypes } from './demo-tables.js';
 class ComponentCatalogDemoSnippetWrapper extends LitElement {
 	static get properties() {
 		return {
+			defaults: { type: String },
 			/**
 			* Code from the markdown to manipulate before previewing in the IFrame
 			*/
@@ -37,6 +38,8 @@ class ComponentCatalogDemoSnippetWrapper extends LitElement {
 			* Is the preview resizable
 			*/
 			resizable : { type: Boolean, reflect: true },
+			size: { type: String },
+			tagName: { attribute: 'tag-name', type: String },
 			_attributes: { type: Object, reflect: true }
 		};
 	}
@@ -81,6 +84,7 @@ class ComponentCatalogDemoSnippetWrapper extends LitElement {
 
 	get code() {
 		// remove comment lines from code snippet
+		if (!this.demoSnippet) return '';
 		const lines = this.demoSnippet.split('-->');
 		const codeSnippet = lines.length === 1 ? lines[0] : lines[1]; // if there was no `-->` found lines[1] will be null
 		if (this.interactive) {
@@ -115,29 +119,15 @@ class ComponentCatalogDemoSnippetWrapper extends LitElement {
 		return codeSnippet;
 	}
 
-	get defaults() {
-		const defaults = parseConfigurationValue('defaults', this.demoSnippet, true);
-		return defaults;
-	}
-
 	get imports() {
 		return parseImports(this.demoSnippet);
-	}
-
-	get size() {
-		const size = parseConfigurationValue('size', this.demoSnippet);
-		return size;
-	}
-
-	get tagName() {
-		const name = parseConfigurationValue('name', this.demoSnippet);
-		return name;
 	}
 
 	connectedCallback() {
 		super.connectedCallback();
 
 		if (this.defaults) {
+			console.log("parsing " + this.defaults)
 			const defaults = JSON.parse(this.defaults);
 			Object.keys(defaults).forEach((key) => {
 				const value = defaults[key];
@@ -148,6 +138,7 @@ class ComponentCatalogDemoSnippetWrapper extends LitElement {
 	}
 
 	render() {
+		if (!this.demoSnippet) return html`<slot @slotchange="${this._handleSlotChange}"></slot>`;
 		const codeSnippet = this.code;
 
 		return html`
@@ -187,6 +178,14 @@ class ComponentCatalogDemoSnippetWrapper extends LitElement {
 	_handlePropertyChange(event) {
 		this._updateAttributes(event.detail);
 		this.requestUpdate();
+	}
+
+	_handleSlotChange() {
+		const slot = this.shadowRoot.querySelector('slot');
+		if (slot && slot.assignedNodes().length > 0) {
+			this.demoSnippet = slot.assignedNodes()[0].textContent;
+			this._highlightedCodeSnippet = Prism.highlight(this.code, Prism.languages[this.language], this.language);
+		}
 	}
 
 	_updateAttributes(detail) {

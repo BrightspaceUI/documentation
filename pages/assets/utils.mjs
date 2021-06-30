@@ -5,6 +5,8 @@ const defaultImports = [
 export function parseConfigurationValue(tag, demoSnippet, requireSplitOnNewlines) {
 	let value;
 
+	if (!demoSnippet) return undefined;
+
 	if (requireSplitOnNewlines && !demoSnippet.includes('\n')) {
 		throw new Error('Snippet info should not be divided by spaces if using "defaults" due to parsing. Use multi-line method.');
 	}
