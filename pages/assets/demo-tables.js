@@ -59,7 +59,15 @@ export class ComponentCatalogDemoTables extends LitElement {
 
 		if (this._componentInfo && this._componentInfo.attributes) {
 			this._componentInfo.attributes.sort((a, b) => {
-				if (a.description && a.description.includes('REQUIRED:')) return -1;
+				if (a.description && a.description.includes('REQUIRED:')) {
+					if (b.description && b.description.includes('REQUIRED:')) {
+						if (a.name < b.name) return -1;
+						else if (a.name > b.name) return 1;
+						else return 0;
+					} else {
+						return -1;
+					}
+				}
 				else if (b.description && b.description.includes('REQUIRED:')) return 1;
 				else if (a.name < b.name) return -1;
 				else if (b.name < a.name) return 1;
