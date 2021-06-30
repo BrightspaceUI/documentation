@@ -4,8 +4,8 @@ import './demo-resizable-preview.js';
 import 'playground-elements/playground-code-editor';
 import 'prismjs/prism.js';
 import { css, html, LitElement } from 'lit-element';
-import { parseConfigurationValue, parseImports } from './utils.mjs';
 import { ifDefined } from 'lit-html/directives/if-defined.js';
+import { parseImports } from './utils.mjs';
 import { themeStyles } from './code-style.js';
 import { unsafeHTML } from 'lit-html/directives/unsafe-html';
 import { validTypes } from './demo-tables.js';
@@ -127,7 +127,6 @@ class ComponentCatalogDemoSnippetWrapper extends LitElement {
 		super.connectedCallback();
 
 		if (this.defaults) {
-			console.log("parsing " + this.defaults)
 			const defaults = JSON.parse(this.defaults);
 			Object.keys(defaults).forEach((key) => {
 				const value = defaults[key];

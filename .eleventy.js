@@ -2,30 +2,7 @@
 const cleanCSS = require('clean-css');
 const eleventyNavigationPlugin = require('@11ty/eleventy-navigation');
 const { escapeHtml } = require('markdown-it/lib/common/utils');
-
-function parseConfigurationValue(tag, demoSnippet, requireSplitOnNewlines) {
-	let value;
-
-	if (!demoSnippet) return undefined;
-
-	if (requireSplitOnNewlines && !demoSnippet.includes('\n')) {
-		throw new Error('Snippet info should not be divided by spaces if using "defaults" due to parsing. Use multi-line method.');
-	}
-
-	if (demoSnippet.includes(`${tag}:`)) {
-		const splitsOnNewlines = demoSnippet.includes('\n');
-		let section = demoSnippet.split(`${tag}:`)[1];
-		section = section.split('-->')[0];
-
-		if (splitsOnNewlines) {
-			if (section.includes('\n')) value = section.split('\n')[0];
-			else value = section; // last one and --> was on last line instead of below
-		} else {
-			value = section.split(' ')[0];
-		}
-	}
-	return value ? value.trim() : undefined;
-}
+const { parseConfigurationValue } = require('./tools/eleventy-utils');
 
 module.exports = function(eleventyConfig) {
 	eleventyConfig.addPassthroughCopy('img');
@@ -89,30 +66,7 @@ module.exports = function(eleventyConfig) {
 
 	markdownIt.renderer.rules.fence = (tokens, idx) => {
 		const content = tokens[idx].content;
-		// if (content.includes('<!-- docs: live demo') || content.includes('<!-- docs: demo -->') || content.includes('<!-- docs: code demo -->')) {
-		// 	if (content.includes('<!-- docs: live demo')) {
-		// 		return `
-		// 			<d2l-component-catalog-demo-snippet interactive resizable demo-snippet="${escapeHtml(content)}">
-		// 			</d2l-component-catalog-demo-snippet>
-		// 		`;
-		// 	} else if (content.includes('<!-- docs: code demo -->')) {
-
-		// 		return `
-		// 			<d2l-component-catalog-demo-snippet resizable demo-snippet="${escapeHtml(content)}">
-		// 			</d2l-component-catalog-demo-snippet>
-		// 		`;
-
-		// 	} else {
-		// 		return `
-		// 			<d2l-component-catalog-demo-snippet resizable hide-code demo-snippet="${escapeHtml(content)}">
-		// 			</d2l-component-catalog-demo-snippet>
-		// 		`;
-		// 	}
-		// } else {
-		// 	// Code only snippets
-		// 	return `<d2l-component-catalog-demo-snippet code-only demo-snippet="${escapeHtml(content)}"></d2l-component-catalog-demo-snippet>`;
-		// }
-		return escapeHtml(content);
+		return `${escapeHtml(content)}</d2l-component-catalog-demo-snippet>`;
 	};
 
 	markdownIt.renderer.rules.table_open = () => {
@@ -144,21 +98,17 @@ module.exports = function(eleventyConfig) {
 		const content = tokens[idx].content;
 		if (content.includes('<!-- docs: live demo')) {
 			const tag = parseConfigurationValue('name', content);
+			if (!tag) return '<d2l-component-catalog-demo-snippet resizable hide-code>';
 			const size = parseConfigurationValue('size', content);
-			const defaults = parseConfigurationValue('defaults', content);
-			return `<d2l-component-catalog-demo-snippet
-				interactive
-				resizable
-				tag-name="${tag}"
-				size="${size}"
-				defaults="${JSON.stringify(defaults)}">
-			`;
+			const defaults = parseConfigurationValue('defaults', content, true);
+			let openingTag = `<d2l-component-catalog-demo-snippet resizable interactive tag-name="${tag}" `;
+			if (size) openingTag += ` size="${size}" `;
+			if (defaults) openingTag += ` defaults='${defaults}'`;
+			return `${openingTag}>`;
 		} else if (content.includes('<!-- docs: code demo -->'))
 			return '<d2l-component-catalog-demo-snippet resizable>';
 		else if (content.includes('<!-- docs: demo -->'))
 			return '<d2l-component-catalog-demo-snippet resizable hide-code>';
-		else if (content.includes('<!-- docs: demo end -->'))
-			return '</d2l-component-catalog-demo-snippet>';
 		else if (content.includes('<!-- docs: start hidden content -->'))
 			return '<div style="display: none;">';
 		else if (content.includes('<!-- docs: end'))
