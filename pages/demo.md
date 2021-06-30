@@ -6,8 +6,8 @@ layout: layouts/demo
 
 ### Interactive demo - Includes text variations for coloring [demo-snippet]
 
-```html
 <!-- docs: live demo name:d2l-button -->
+```html
 <script type="module">
 	/*
 		Block comment
@@ -38,12 +38,12 @@ layout: layouts/demo
 ```
 ### Interactive demo - size
 
-```html
-<!-- docs: live demo 
+<!-- docs: live demo
 name:d2l-button
 size:medium
 defaults:{"disabled":true}
 -->
+```html
 <script type="module">
 	import '@brightspace-ui/core/components/button/button.js';
 </script>
@@ -52,8 +52,8 @@ defaults:{"disabled":true}
 
 ### Demo - non-interactive
 
-```html
 <!-- docs: demo -->
+```html
 <script type="module">
 	import '@brightspace-ui/core/components/button/button.js';
 </script>
