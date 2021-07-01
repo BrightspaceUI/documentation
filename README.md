@@ -47,5 +47,5 @@ If the component you are interested in has not yet been created or requested, co
 
 ## Creating Documentation
 
-[Adding a component](docs/adding-component.md)
-[Editing a page using GitHub workflow](docs/editing-page.md)
+* [Adding a component](docs/adding-component.md)
+* [Editing a page using GitHub workflow](docs/editing-page.md)
