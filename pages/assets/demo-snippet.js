@@ -79,6 +79,11 @@ class ComponentCatalogDemoSnippetWrapper extends LitElement {
 		this.resizable = false;
 	}
 
+	get autoSize() {
+		const autoSize = parseConfigurationValue('auto', this.demoSnippet);
+		return autoSize;
+	}
+
 	get code() {
 		// remove comment lines from code snippet
 		const lines = this.demoSnippet.split('-->');
@@ -154,10 +159,12 @@ class ComponentCatalogDemoSnippetWrapper extends LitElement {
 			${ !this.hideDemo ? html`
 				<d2l-component-catalog-demo-resizable-preview
 					?attached=${!this.hideCode}
+					?auto-size=${this.size && this.autoSize}
 					code=${codeSnippet}
 					imports=${this.imports}
 					?resizable=${this.resizable}
-					size=${ifDefined(this.size)}>
+					size=${ifDefined(this.size)}
+					tag-name="${this.tagName}">
 				</d2l-component-catalog-demo-resizable-preview>` : null}
 			<div class="d2l-editor-wrapper">
 				<div class="d2l-button-container">

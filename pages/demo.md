@@ -7,7 +7,7 @@ layout: layouts/demo
 ### Interactive demo - Includes text variations for coloring [demo-snippet]
 
 ```html
-<!-- docs: live demo name:d2l-button -->
+<!-- docs: live demo name:d2l-button auto:false size:medium -->
 <script type="module">
 	/*
 		Block comment
@@ -36,44 +36,3 @@ layout: layouts/demo
 </style>
 <d2l-button $attributes>Button</d2l-button>
 ```
-### Interactive demo - size
-
-```html
-<!-- docs: live demo 
-name:d2l-button
-size:medium
-defaults:{"disabled":true}
--->
-<script type="module">
-	import '@brightspace-ui/core/components/button/button.js';
-</script>
-<d2l-button $attributes>Button</d2l-button>
-```
-
-### Demo - non-interactive
-
-```html
-<!-- docs: demo -->
-<script type="module">
-	import '@brightspace-ui/core/components/button/button.js';
-</script>
-<d2l-button>Button</d2l-button>
-```
-
-### Code - Inline code snippet
-
-```html
-<script type="module">
-	import '@brightspace-ui/core/components/button/button.js';
-</script>
-<d2l-button>Button</d2l-button>
-```
-
-### Example Markdown table from README
-
-| Property | Type | Description |
-|---|---|---|
-| `for-target` | String, required | id of the target element to display backdrop behind |
-| `no-animate-hide` | Boolean | Disables the fade-out transition while the backdrop is being hidden |
-| `shown` | Boolean | Used to control whether the backdrop is shown |
-| `slow-transition` | Boolean | Increases the fade transition time to 1200ms (default is 200ms) |
