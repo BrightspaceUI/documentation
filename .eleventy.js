@@ -2,8 +2,10 @@
 const cleanCSS = require('clean-css');
 const eleventyNavigationPlugin = require('@11ty/eleventy-navigation');
 const { escapeHtml } = require('markdown-it/lib/common/utils');
+const { parseConfigurationValue } = require('./tools/eleventy-utils');
 
 module.exports = function(eleventyConfig) {
+	let inCodeBlock = false;
 	eleventyConfig.addPassthroughCopy('img');
 	eleventyConfig.addPassthroughCopy('pages/components/imported/screenshots');
 	eleventyConfig.addPassthroughCopy('pages/favicon.ico');
@@ -40,8 +42,9 @@ module.exports = function(eleventyConfig) {
 				}
 				case 'link_open': {
 					token.tag = 'd2l-link';
-					const href = token.attrGet('href');
-					if (href.includes('.md')) token.attrObj.href = href.replace(/.md/, '.html');
+					// TODO: re-add once pages exist in Daylight to be linked to, for now just keep link the same
+					// const href = token.attrGet('href');
+					// if (href.includes('.md')) token.attrObj.href = href.replace(/.md/, '.html');
 					break;
 				}
 				case 'link_close':
@@ -65,29 +68,11 @@ module.exports = function(eleventyConfig) {
 
 	markdownIt.renderer.rules.fence = (tokens, idx) => {
 		const content = tokens[idx].content;
-		if (content.includes('<!-- docs: live demo') || content.includes('<!-- docs: demo -->') || content.includes('<!-- docs: code demo -->')) {
-			if (content.includes('<!-- docs: live demo')) {
-				return `
-					<d2l-component-catalog-demo-snippet interactive resizable demo-snippet="${escapeHtml(content)}">
-					</d2l-component-catalog-demo-snippet>
-				`;
-			} else if (content.includes('<!-- docs: code demo -->')) {
-
-				return `
-					<d2l-component-catalog-demo-snippet resizable demo-snippet="${escapeHtml(content)}">
-					</d2l-component-catalog-demo-snippet>
-				`;
-
-			} else {
-				return `
-					<d2l-component-catalog-demo-snippet resizable hide-code demo-snippet="${escapeHtml(content)}">
-					</d2l-component-catalog-demo-snippet>
-				`;
-			}
-		} else {
-			// Code only snippets
-			return `<d2l-component-catalog-demo-snippet code-only demo-snippet="${escapeHtml(content)}"></d2l-component-catalog-demo-snippet>`;
+		if (!inCodeBlock) {
+			return `<d2l-component-catalog-demo-snippet code-only>${escapeHtml(content)}</d2l-component-catalog-demo-snippet>`;
 		}
+		inCodeBlock = false;
+		return `${escapeHtml(content)}</d2l-component-catalog-demo-snippet>`;
 	};
 
 	markdownIt.renderer.rules.table_open = () => {
@@ -117,7 +102,23 @@ module.exports = function(eleventyConfig) {
 	const defaultHtmlRule = markdownIt.renderer.rules.html_block;
 	markdownIt.renderer.rules.html_block = (tokens, idx, options, env, slf) => {
 		const content = tokens[idx].content;
-		if (content.includes('<!-- docs: start hidden content -->'))
+		if (content.includes('<!-- docs: live demo')) {
+			inCodeBlock = true;
+			const tag = parseConfigurationValue('name', content);
+			if (!tag) return '<d2l-component-catalog-demo-snippet resizable hide-code>';
+			const size = parseConfigurationValue('size', content);
+			const defaults = parseConfigurationValue('defaults', content, true);
+			let openingTag = `<d2l-component-catalog-demo-snippet resizable interactive tag-name="${tag}" `;
+			if (size) openingTag += ` size="${size}" `;
+			if (defaults) openingTag += ` defaults='${defaults}'`;
+			return `${openingTag}>`;
+		} else if (content.includes('<!-- docs: code demo -->')) {
+			inCodeBlock = true;
+			return '<d2l-component-catalog-demo-snippet resizable>';
+		} else if (content.includes('<!-- docs: demo -->')) {
+			inCodeBlock = true;
+			return '<d2l-component-catalog-demo-snippet resizable hide-code>';
+		} else if (content.includes('<!-- docs: start hidden content -->'))
 			return '<div style="display: none;">';
 		else if (content.includes('<!-- docs: end'))
 			return '</div>';
