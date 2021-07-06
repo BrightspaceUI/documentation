@@ -102,22 +102,25 @@ module.exports = function(eleventyConfig) {
 	const defaultHtmlRule = markdownIt.renderer.rules.html_block;
 	markdownIt.renderer.rules.html_block = (tokens, idx, options, env, slf) => {
 		const content = tokens[idx].content;
-		if (content.includes('<!-- docs: live demo')) {
+		if (content.includes('<!-- docs: demo')) {
 			inCodeBlock = true;
-			const tag = parseConfigurationValue('name', content);
-			if (!tag) return '<d2l-component-catalog-demo-snippet resizable hide-code>';
+			let openingTag = '<d2l-component-catalog-demo-snippet resizable ';
 			const size = parseConfigurationValue('size', content);
-			const defaults = parseConfigurationValue('defaults', content, true);
-			let openingTag = `<d2l-component-catalog-demo-snippet resizable interactive tag-name="${tag}" `;
 			if (size) openingTag += ` size="${size}" `;
-			if (defaults) openingTag += ` defaults='${defaults}'`;
-			return `${openingTag}>`;
-		} else if (content.includes('<!-- docs: code demo -->')) {
-			inCodeBlock = true;
-			return '<d2l-component-catalog-demo-snippet resizable>';
-		} else if (content.includes('<!-- docs: demo -->')) {
-			inCodeBlock = true;
-			return '<d2l-component-catalog-demo-snippet resizable hide-code>';
+
+			if (content.includes('<!-- docs: demo live')) {
+				const tag = parseConfigurationValue('name', content);
+				if (!tag) return `${openingTag} hide-code>`;
+
+				openingTag += ` resizable interactive tag-name="${tag}" `;
+				const defaults = parseConfigurationValue('defaults', content, true);
+				if (defaults) openingTag += ` defaults='${defaults}'`;
+				return `${openingTag}>`;
+			} else if (content.includes('<!-- docs: demo code')) {
+				return `${openingTag}>`;
+			} else if (content.includes('<!-- docs: demo')) {
+				return `${openingTag} hide-code>`;
+			}
 		} else if (content.includes('<!-- docs: start hidden content -->'))
 			return '<div style="display: none;">';
 		else if (content.includes('<!-- docs: end'))

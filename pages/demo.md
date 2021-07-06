@@ -6,7 +6,7 @@ layout: layouts/demo
 
 ### Interactive demo - Includes text variations for coloring [demo-snippet]
 
-<!-- docs: live demo name:d2l-button -->
+<!-- docs: demo live name:d2l-button -->
 ```html
 <script type="module">
 	/*
@@ -16,7 +16,7 @@ layout: layouts/demo
 	import '@brightspace-ui/core/components/button/button-subtle.js';
 	import '@brightspace-ui/core/components/button/button-icon.js';
 
-	// A normal comment 
+	// A normal comment
 	function fun() {
 		console.log("Test Function");
 		const x = 4 * 5;
@@ -25,7 +25,7 @@ layout: layouts/demo
 </script>
 <style>
 	@import url(https://fonts.googleapis.com/css?family=Questrial);
-	
+
 	html {
 		padding: 0 !important;
 	}
@@ -38,7 +38,7 @@ layout: layouts/demo
 ```
 ### Interactive demo - size
 
-<!-- docs: live demo
+<!-- docs: demo live
 name:d2l-button
 size:medium
 defaults:{"disabled":true}
@@ -53,6 +53,16 @@ defaults:{"disabled":true}
 ### Demo - non-interactive
 
 <!-- docs: demo -->
+```html
+<script type="module">
+	import '@brightspace-ui/core/components/button/button.js';
+</script>
+<d2l-button>Button</d2l-button>
+```
+
+### Demo - non-interactive w/ code
+
+<!-- docs: demo code size:large-->
 ```html
 <script type="module">
 	import '@brightspace-ui/core/components/button/button.js';
