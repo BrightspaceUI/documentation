@@ -16,7 +16,7 @@ describe('component-utils', () => {
 import '@brightspace-ui/core/components/button/button.js?module';\n`
 			}, {
 				name: 'interactive demo snippet',
-				snippet: `<!-- docs: live demo
+				snippet: `<!-- docs: demo live
 name:<component-tag, e.g., d2l-button>
 size:<'small'|'medium'|'large'|'xlarge'>
 -->
@@ -28,7 +28,7 @@ size:<'small'|'medium'|'large'|'xlarge'>
 import '@brightspace-ui/core/components/button/button.js?module';\n`
 			}, {
 				name: 'secondary demo snippet',
-				snippet: `<!-- docs: code demo -->
+				snippet: `<!-- docs: demo code -->
 <script type="module">
 	import '@brightspace-ui/core/components/button/button.js';
 </script>
