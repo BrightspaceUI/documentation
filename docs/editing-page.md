@@ -4,7 +4,7 @@ We use markdown files for our page content. These files are stored in GitHub. Th
 
 To edit a page:
 1. At the bottom of each page in the Daylight site is text stating "Suggest an edit for this page" where "edit" is a link to the edit workflow. Click edit.
-2. Edit will take you to a page that looks like the one below. Make the changes that you would like to make. You can then select the "Preview" tab near the top to preview your changes.
+2. Edit will take you to a page that looks like the one below. Make the changes that you would like to make. You can then select the "Preview" tab near the top to preview your changes. Note that this preview may look different from the appearance on the Daylight site, especially if it is in a section that has special parsing (e.g., the Best Practices section).
 ![Button edit page](./screenshots/edit-page.png?raw=true)
 3. Once your changes look good, the commit workflow will appear on either the right side or at the bottom under the editor. You likely will be able to leave everything as is (just make sure that "Create a new branch for this commit and start a pull request." is the selected radio button). Click "Commit Changes".
 ![Button commit workflow](./screenshots/commit-changes.png?raw=true)
