@@ -90,40 +90,7 @@ class ComponentCatalogDemoSnippetWrapper extends LitElement {
 	}
 
 	get code() {
-		// remove comment lines from code snippet
-		if (!this._demoSnippet) return '';
-		const lines = this._demoSnippet.split('-->');
-		const codeSnippet = lines.length === 1 ? lines[0] : lines[1]; // if there was no `-->` found lines[1] will be null
-		if (this.interactive) {
-			const splitItems = codeSnippet.split('$attributes');
-			if (splitItems.length === 2) {
-
-				const attributes = [];
-				for (const attribute in this._attributes) {
-					const { type, value } = this._attributes[attribute];
-					switch (type) {
-						case validTypes.string:
-							attributes.push(`${attribute}="${value}"`);
-							break;
-						case validTypes.boolean:
-							attributes.push(`${attribute}`);
-							break;
-						case validTypes.number:
-							attributes.push(`${attribute}=${value}`);
-							break;
-						default:
-							break;
-					}
-				}
-				attributes.sort();
-				const attributesText = attributes.length === 0 ? '' : ` ${attributes.join(' ')}`;
-				// Append the code snippet back together with our edited attributes
-				const withAttributes = `${splitItems[0].trim()}${attributesText}${splitItems[1]}`;
-				return `${withAttributes}`;
-			}
-		}
-
-		return codeSnippet;
+		return getCode(this._demoSnippet, this.interactive, this._attributes);
 	}
 
 	get imports() {

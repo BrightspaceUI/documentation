@@ -1,5 +1,5 @@
+import { getCode, parseImports } from '../pages/assets/utils.mjs';
 import assert from 'assert';
-import { parseImports } from '../pages/assets/utils.mjs';
 
 describe('component-utils', () => {
 	describe('parseImports', () => {
@@ -88,6 +88,50 @@ import '@brightspace-ui/core/components/button/button.js?module';\n`
 			it(`should return correct result when ${test.name}`, () => {
 				assert.equal(parseImports(test.snippet), test.expected);
 			});
+		});
+	});
+
+	describe.only('getCode', () => {
+		const comment = `<!-- docs: demo live
+name:d2l-button
+-->`;
+		const basicCode = `<script type="module">
+	import '@brightspace-ui/core/components/button/button.js';
+</script>
+<d2l-button>Button</d2l-button>`;
+		const codeAttributes = '<d2l-button $attributes></d2l-button>';
+
+		it('should return empty string when empty snippet', () => {
+			assert.equal(getCode(), '');
+		});
+
+		it('should return code when just code', () => {
+			assert.equal(getCode(basicCode), basicCode);
+		});
+
+		it('should return code when comment and code', () => {
+			const code = `${comment}${basicCode}`;
+			assert.equal(getCode(code), basicCode);
+		});
+
+		it('should return unmodified code when not interactive', () => {
+			assert.equal(getCode(codeAttributes), codeAttributes);
+		});
+
+		it('should return code when interactive', () => {
+			assert.equal(getCode(codeAttributes, true), '<d2l-button></d2l-button>');
+		});
+
+		it('should return expected code when attributes', () => {
+			const attributes = {
+				'text': { type: 'string', value: 'My button' },
+				'disabled': { type: 'boolean', value: true },
+				'primary': { type: 'boolean', value: false },
+				'sum': { type: 'number', value: 12 },
+				'other': { type: 'invalid', value: 'thing' }
+			};
+			const expected = '<d2l-button disabled sum=12 text="My button"></d2l-button>';
+			assert.equal(getCode(codeAttributes, true, attributes), expected);
 		});
 	});
 
