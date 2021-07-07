@@ -138,16 +138,16 @@ class ComponentCatalogDemoResizablePreview extends LitElement {
 			<style>
 				/* todo?: add this to md template and provide configuration for different item alignments? */
 				html {
-					margin: 20px;
 					font-size: 20px;
+					margin: 20px;
 				}
 				.layout {
-					display: flex;
-					justify-content: space-evenly;
 					align-items: center;
+					display: flex;
 					flex-wrap: wrap;
-					width: 100%;
 					height: 100%;
+					justify-content: space-evenly;
+					width: 100%;
 				}
 				.hide {
 					display:none;
