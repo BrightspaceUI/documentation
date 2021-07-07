@@ -139,6 +139,7 @@ class ComponentCatalogDemoResizablePreview extends LitElement {
 				/* todo?: add this to md template and provide configuration for different item alignments? */
 				html {
 					margin: 20px;
+					font-size: 20px;
 				}
 				.layout {
 					display: flex;
@@ -196,13 +197,13 @@ class ComponentCatalogDemoResizablePreview extends LitElement {
 					<playground-preview id="preview" style=${styleMap(previewStyles)} project='demo' filename=${PREVIEW_FILE_NAME}></playground-preview>
 					<d2l-offscreen id="instructions">Use the left or right arrow keys to resize the preview demo area.</d2l-offscreen>
 					${this.resizable ? html`
-						<div 
-							class="d2l-slider" 
-							tabindex="0" 
-							@pointerdown=${this._onResizeSliderPointerDown} 
+						<div
+							class="d2l-slider"
+							tabindex="0"
+							@pointerdown=${this._onResizeSliderPointerDown}
 							@keydown=${this._onKeyPress}
 							aria-label="Resizable demo slider"
-							aria-describedby="instructions" 
+							aria-describedby="instructions"
 							aria-orientation="vertical">
 							<svg width="5" height="18" viewBox="0 0 5 18" xmlns="http://www.w3.org/2000/svg">
 								<g fill="#6E7376" fill-rule="evenodd">
