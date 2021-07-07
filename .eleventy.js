@@ -113,8 +113,13 @@ module.exports = function(eleventyConfig) {
 				if (!tag) return `${openingTag} hide-code>`;
 
 				openingTag += ` resizable interactive tag-name="${tag}" `;
+
 				const defaults = parseConfigurationValue('defaults', content, true);
 				if (defaults) openingTag += ` defaults='${defaults}'`;
+
+				const allInstancesInteractive = parseConfigurationValue('allInstancesInteractive', content);
+				if (allInstancesInteractive === 'true') openingTag += ' all-instances-interactive';
+
 				return `${openingTag}>`;
 			} else if (content.includes('<!-- docs: demo code')) {
 				return `${openingTag}>`;

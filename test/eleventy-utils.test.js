@@ -80,5 +80,18 @@ defaults: {"type":"type1", "other": true}
 			assert.equal(parseConfigurationValue('size', snippet, true), 'small');
 			assert.equal(parseConfigurationValue('defaults', snippet, true), '{"type":"type1", "other": true}');
 		});
+
+		it('should return correct result when multi-line with defaults and allInstancesInteractive', () => {
+			const snippet = `<!-- docs: demo
+name: d2l-component
+size: small
+allInstancesInteractive:true
+defaults: {"type":"type1", "other": true}
+-->`;
+			assert.equal(parseConfigurationValue('name', snippet, true), 'd2l-component');
+			assert.equal(parseConfigurationValue('size', snippet, true), 'small');
+			assert.equal(parseConfigurationValue('allInstancesInteractive', snippet, true), 'true');
+			assert.equal(parseConfigurationValue('defaults', snippet, true), '{"type":"type1", "other": true}');
+		});
 	});
 });

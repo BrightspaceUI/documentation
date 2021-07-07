@@ -1,18 +1,22 @@
 import '@brightspace-ui/core/components/colors/colors.js';
 import '@brightspace-ui/core/components/demo/demo-snippet.js';
 import './demo-resizable-preview.js';
+import './demo-tables.js';
 import 'playground-elements/playground-code-editor';
 import 'prismjs/prism.js';
 import { css, html, LitElement } from 'lit-element';
+import { getCode, parseImports } from './utils.mjs';
 import { ifDefined } from 'lit-html/directives/if-defined.js';
-import { parseImports } from './utils.mjs';
 import { themeStyles } from './code-style.js';
 import { unsafeHTML } from 'lit-html/directives/unsafe-html';
-import { validTypes } from './demo-tables.js';
 
 class ComponentCatalogDemoSnippetWrapper extends LitElement {
 	static get properties() {
 		return {
+			/**
+			 * If true then all instances of tagName component are affected by property table changes, else only the first
+			 */
+			allInstancesInteractive: { type: Boolean, attribute: 'all-instances-interactive' },
 			/**
 			 * Default values for demo attributes. Formatted as a stringified object.
 			 */
@@ -82,6 +86,7 @@ class ComponentCatalogDemoSnippetWrapper extends LitElement {
 	constructor() {
 		super();
 		this._attributes = {};
+		this.allInstancesInteractive = false;
 		this.hideCode = false;
 		this.hideDemo = false;
 		this.interactive = false;
@@ -90,7 +95,7 @@ class ComponentCatalogDemoSnippetWrapper extends LitElement {
 	}
 
 	get code() {
-		return getCode(this._demoSnippet, this.interactive, this._attributes);
+		return getCode(this._demoSnippet, this.interactive, this._attributes, this.tagName, this.allInstancesInteractive);
 	}
 
 	get imports() {

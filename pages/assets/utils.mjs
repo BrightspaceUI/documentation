@@ -10,41 +10,40 @@ export const validTypes = {
 	string: 'string'
 };
 
-export function getCode(snippet, interactive, currAttributes) {
+export function getCode(snippet, interactive, currAttributes, tagName, allInstancesInteractive) {
 	// remove comment lines from code snippet
 	if (!snippet) return '';
 	const lines = snippet.split('-->');
 	const codeSnippet = lines.length === 1 ? lines[0] : lines[1]; // if there was no `-->` found lines[1] will be null
-	if (interactive) {
-		const splitItems = codeSnippet.split('$attributes');
-		if (splitItems.length === 2) {
 
-			const attributes = [];
-			for (const attribute in currAttributes) {
-				const { type, value } = currAttributes[attribute];
-				switch (type) {
-					case validTypes.string:
-						attributes.push(`${attribute}="${value}"`);
-						break;
-					case validTypes.boolean:
-						if (value)
-							attributes.push(`${attribute}`);
-						break;
-					case validTypes.number:
-						attributes.push(`${attribute}=${value}`);
-						break;
-					default:
-						break;
-				}
-			}
-			attributes.sort();
-			const attributesText = attributes.length === 0 ? '' : ` ${attributes.join(' ')}`;
-			// Append the code snippet back together with our edited attributes
-			const withAttributes = `${splitItems[0].trim()}${attributesText}${splitItems[1]}`;
-			return `${withAttributes}`;
+	if (!interactive) return codeSnippet;
+
+	const attributes = [];
+	for (const attribute in currAttributes) {
+		const { type, value } = currAttributes[attribute];
+		switch (type) {
+			case validTypes.string:
+				attributes.push(`${attribute}="${value}"`);
+				break;
+			case validTypes.boolean:
+				if (value)
+					attributes.push(`${attribute}`);
+				break;
+			case validTypes.number:
+				attributes.push(`${attribute}=${value}`);
+				break;
+			default:
+				break;
 		}
 	}
-	return codeSnippet;
+	attributes.sort();
+	const attributesText = attributes.length === 0 ? '' : ` ${attributes.join(' ')}`;
+	const includesSpace = codeSnippet.includes(`<${tagName} `);
+	const replaceString = includesSpace ? `<${tagName}` : `<${tagName}>`;
+	const re = allInstancesInteractive ? new RegExp(replaceString, 'g') : replaceString;
+	return includesSpace
+		? codeSnippet.replace(re, `<${tagName}${attributesText}`)
+		: codeSnippet.replace(re, `<${tagName}${attributesText}>`);
 }
 
 export const parseImports = (allContent) => {

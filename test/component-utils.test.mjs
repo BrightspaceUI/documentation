@@ -91,15 +91,18 @@ import '@brightspace-ui/core/components/button/button.js?module';\n`
 		});
 	});
 
-	describe.only('getCode', () => {
+	describe('getCode', () => {
+		const attributes = {
+			'text': { type: 'string', value: 'My button' },
+			'disabled': { type: 'boolean', value: true },
+			'primary': { type: 'boolean', value: false },
+			'sum': { type: 'number', value: 12 },
+			'other': { type: 'invalid', value: 'thing' }
+		};
+		const basicCode = '<d2l-button>Button</d2l-button>';
 		const comment = `<!-- docs: demo live
 name:d2l-button
 -->`;
-		const basicCode = `<script type="module">
-	import '@brightspace-ui/core/components/button/button.js';
-</script>
-<d2l-button>Button</d2l-button>`;
-		const codeAttributes = '<d2l-button $attributes></d2l-button>';
 
 		it('should return empty string when empty snippet', () => {
 			assert.equal(getCode(), '');
@@ -114,24 +117,44 @@ name:d2l-button
 			assert.equal(getCode(code), basicCode);
 		});
 
-		it('should return unmodified code when not interactive', () => {
-			assert.equal(getCode(codeAttributes), codeAttributes);
+		it('should return code when interactive', () => {
+			assert.equal(getCode(basicCode, true), basicCode);
 		});
 
-		it('should return code when interactive', () => {
-			assert.equal(getCode(codeAttributes, true), '<d2l-button></d2l-button>');
+		it('should return unmodified code when attributes but no tagName', () => {
+			assert.equal(getCode(basicCode, true, attributes), basicCode);
 		});
 
 		it('should return expected code when attributes', () => {
-			const attributes = {
-				'text': { type: 'string', value: 'My button' },
-				'disabled': { type: 'boolean', value: true },
-				'primary': { type: 'boolean', value: false },
-				'sum': { type: 'number', value: 12 },
-				'other': { type: 'invalid', value: 'thing' }
-			};
-			const expected = '<d2l-button disabled sum=12 text="My button"></d2l-button>';
-			assert.equal(getCode(codeAttributes, true, attributes), expected);
+			const expected = '<d2l-button disabled sum=12 text="My button">Button</d2l-button>';
+			assert.equal(getCode(basicCode, true, attributes, 'd2l-button'), expected);
+		});
+
+		it('should return expected code when attributes and code has space', () => {
+			const code = '<d2l-button other>Button</d2l-button>';
+			const expected = '<d2l-button disabled sum=12 text="My button" other>Button</d2l-button>';
+			assert.equal(getCode(code, true, attributes, 'd2l-button'), expected);
+		});
+
+		it('should only replace first instance', () => {
+			const code = `<d2l-button>Button</d2l-button>
+<d2l-button>Button 2</d2l-button>`;
+			const expected = `<d2l-button disabled sum=12 text="My button">Button</d2l-button>
+<d2l-button>Button 2</d2l-button>`;
+			assert.equal(getCode(code, true, attributes, 'd2l-button'), expected);
+		});
+
+		it('should replace both instances when all is true', () => {
+			const code = `<d2l-button>Button</d2l-button>
+<d2l-button>Button 2</d2l-button>`;
+			const expected = `<d2l-button disabled sum=12 text="My button">Button</d2l-button>
+<d2l-button disabled sum=12 text="My button">Button 2</d2l-button>`;
+			assert.equal(getCode(code, true, attributes, 'd2l-button', true), expected);
+		});
+
+		it('should not replace when tag part of longer tag', () => {
+			const code = '<d2l-button-elem>Button</d2l-button-elem>';
+			assert.equal(getCode(code, true, attributes, 'd2l-button', true), code);
 		});
 	});
 
