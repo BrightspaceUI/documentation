@@ -4,8 +4,8 @@ import './demo-resizable-preview.js';
 import 'playground-elements/playground-code-editor';
 import 'prismjs/prism.js';
 import { css, html, LitElement } from 'lit-element';
-import { parseConfigurationValue, parseImports } from './utils.mjs';
 import { ifDefined } from 'lit-html/directives/if-defined.js';
+import { parseImports } from './utils.mjs';
 import { themeStyles } from './code-style.js';
 import { unsafeHTML } from 'lit-html/directives/unsafe-html';
 import { validTypes } from './demo-tables.js';
@@ -14,9 +14,9 @@ class ComponentCatalogDemoSnippetWrapper extends LitElement {
 	static get properties() {
 		return {
 			/**
-			* Code from the markdown to manipulate before previewing in the IFrame
-			*/
-			demoSnippet:  { type: String, attribute: 'demo-snippet' },
+			 * Default values for demo attributes. Formatted as a stringified object.
+			 */
+			defaults: { type: String },
 			/**
 			* Hide the read-only code view
 			*/
@@ -37,7 +37,17 @@ class ComponentCatalogDemoSnippetWrapper extends LitElement {
 			* Is the preview resizable
 			*/
 			resizable : { type: Boolean, reflect: true },
-			_attributes: { type: Object, reflect: true }
+			/**
+			* Size of the IFrame demo portion
+			* @type {'small'|'medium'|'large'|'xlarge'}
+			*/
+			size: { type: String },
+			/**
+			 * The tag of the component being showcased in the demo which has its properties shown (if interactive)
+			 */
+			tagName: { attribute: 'tag-name', type: String },
+			_attributes: { type: Object, reflect: true },
+			_demoSnippet:  { type: String },
 		};
 	}
 	static get styles() {
@@ -81,7 +91,8 @@ class ComponentCatalogDemoSnippetWrapper extends LitElement {
 
 	get code() {
 		// remove comment lines from code snippet
-		const lines = this.demoSnippet.split('-->');
+		if (!this._demoSnippet) return '';
+		const lines = this._demoSnippet.split('-->');
 		const codeSnippet = lines.length === 1 ? lines[0] : lines[1]; // if there was no `-->` found lines[1] will be null
 		if (this.interactive) {
 			const splitItems = codeSnippet.split('$attributes');
@@ -115,23 +126,8 @@ class ComponentCatalogDemoSnippetWrapper extends LitElement {
 		return codeSnippet;
 	}
 
-	get defaults() {
-		const defaults = parseConfigurationValue('defaults', this.demoSnippet, true);
-		return defaults;
-	}
-
 	get imports() {
-		return parseImports(this.demoSnippet);
-	}
-
-	get size() {
-		const size = parseConfigurationValue('size', this.demoSnippet);
-		return size;
-	}
-
-	get tagName() {
-		const name = parseConfigurationValue('name', this.demoSnippet);
-		return name;
+		return parseImports(this._demoSnippet);
 	}
 
 	connectedCallback() {
@@ -148,6 +144,7 @@ class ComponentCatalogDemoSnippetWrapper extends LitElement {
 	}
 
 	render() {
+		if (!this._demoSnippet) return html`<slot @slotchange="${this._handleSlotChange}"></slot>`;
 		const codeSnippet = this.code;
 
 		return html`
@@ -187,6 +184,14 @@ class ComponentCatalogDemoSnippetWrapper extends LitElement {
 	_handlePropertyChange(event) {
 		this._updateAttributes(event.detail);
 		this.requestUpdate();
+	}
+
+	_handleSlotChange() {
+		const slot = this.shadowRoot.querySelector('slot');
+		if (slot && slot.assignedNodes().length > 0) {
+			this._demoSnippet = slot.assignedNodes()[0].textContent;
+			this._highlightedCodeSnippet = Prism.highlight(this.code, Prism.languages[this.language], this.language);
+		}
 	}
 
 	_updateAttributes(detail) {

@@ -2,28 +2,6 @@ const defaultImports = [
 	'import \'@brightspace-ui/core/components/typography/typography.js?module\';\n',
 ];
 
-export function parseConfigurationValue(tag, demoSnippet, requireSplitOnNewlines) {
-	let value;
-
-	if (requireSplitOnNewlines && !demoSnippet.includes('\n')) {
-		throw new Error('Snippet info should be divided by newlines.');
-	}
-
-	if (demoSnippet.includes(`${tag}:`)) {
-		let section = demoSnippet.split('-->')[0];
-		const splitsOnNewlines = section.includes('\n');
-		section = section.split(`${tag}:`)[1];
-
-		if (splitsOnNewlines) {
-			if (section.includes('\n')) value = section.split('\n')[0];
-			else value = section; // last one and --> was on last line instead of below
-		} else {
-			value = section.split(' ')[0];
-		}
-	}
-	return value ? value.trim() : undefined;
-}
-
 export const parseImports = (allContent) => {
 	const content = /<script.*>([\s\S]*)<\/script>/g.exec(allContent);
 	if (!content || content.length !== 2 || content[1] === '') return '';

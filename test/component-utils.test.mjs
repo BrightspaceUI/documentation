@@ -1,5 +1,5 @@
-import { parseConfigurationValue, parseImports } from '../pages/assets/utils.mjs';
 import assert from 'assert';
+import { parseImports } from '../pages/assets/utils.mjs';
 
 describe('component-utils', () => {
 	describe('parseImports', () => {
@@ -16,7 +16,7 @@ describe('component-utils', () => {
 import '@brightspace-ui/core/components/button/button.js?module';\n`
 			}, {
 				name: 'interactive demo snippet',
-				snippet: `<!-- docs: live demo
+				snippet: `<!-- docs: demo live
 name:<component-tag, e.g., d2l-button>
 size:<'small'|'medium'|'large'|'xlarge'>
 -->
@@ -28,7 +28,7 @@ size:<'small'|'medium'|'large'|'xlarge'>
 import '@brightspace-ui/core/components/button/button.js?module';\n`
 			}, {
 				name: 'secondary demo snippet',
-				snippet: `<!-- docs: code demo -->
+				snippet: `<!-- docs: demo code -->
 <script type="module">
 	import '@brightspace-ui/core/components/button/button.js';
 </script>
@@ -88,86 +88,6 @@ import '@brightspace-ui/core/components/button/button.js?module';\n`
 			it(`should return correct result when ${test.name}`, () => {
 				assert.equal(parseImports(test.snippet), test.expected);
 			});
-		});
-	});
-
-	describe('parseConfigurationValue', () => {
-		it('should return correct result when inline', () => {
-			const snippet = '<!-- docs: demo name:d2l-component size:small -->';
-			assert.equal(parseConfigurationValue('name', snippet), 'd2l-component');
-			assert.equal(parseConfigurationValue('size', snippet), 'small');
-		});
-
-		it('should return correct result when inline with code', () => {
-			const snippet = `<!-- docs: demo name:d2l-component size:small -->
-<d2l-component></d2l-component>`;
-			assert.equal(parseConfigurationValue('name', snippet), 'd2l-component');
-			assert.equal(parseConfigurationValue('size', snippet), 'small');
-		});
-
-		it('should return nothing when tag not present', () => {
-			const snippet = '<!-- docs: demo name:d2l-component size:small -->';
-			assert.equal(parseConfigurationValue('tag2', snippet), undefined);
-		});
-
-		it('should throw if inline and requires being split on new lines', () => {
-			const snippet = '<!-- docs: demo name:d2l-component size:small defaults:{"type":"hello"} -->';
-			assert.throws(() => { parseConfigurationValue('name', snippet, true); });
-		});
-
-		it('should return correct result when multi-line', () => {
-			const snippet = `<!-- docs: demo
-name:d2l-component
-size:small
--->`;
-			assert.equal(parseConfigurationValue('name', snippet), 'd2l-component');
-			assert.equal(parseConfigurationValue('size', snippet), 'small');
-		});
-
-		it('should return correct result when multi-line with code', () => {
-			const snippet = `<!-- docs: demo
-name:d2l-component
-size:small
--->
-<d2l-component></d2l-component>`;
-			assert.equal(parseConfigurationValue('name', snippet), 'd2l-component');
-			assert.equal(parseConfigurationValue('size', snippet), 'small');
-		});
-
-		it('should return correct result when multi-line with comment close on last line', () => {
-			const snippet = `<!-- docs: demo
-name:d2l-component
-size:small -->`;
-			assert.equal(parseConfigurationValue('name', snippet), 'd2l-component');
-			assert.equal(parseConfigurationValue('size', snippet), 'small');
-		});
-
-		it('should return correct result when multi-line with space', () => {
-			const snippet = `<!-- docs: demo
-name: d2l-component
-size: small -->`;
-			assert.equal(parseConfigurationValue('name', snippet), 'd2l-component');
-			assert.equal(parseConfigurationValue('size', snippet), 'small');
-		});
-
-		it('should return correct result when multi-line with space', () => {
-			const snippet = `<!-- docs: demo
-name: d2l-component
-size: small
--->`;
-			assert.equal(parseConfigurationValue('name', snippet), 'd2l-component');
-			assert.equal(parseConfigurationValue('size', snippet), 'small');
-		});
-
-		it('should return correct result when multi-line with defaults', () => {
-			const snippet = `<!-- docs: demo
-name: d2l-component
-size: small
-defaults: {"type":"type1", "other": true}
--->`;
-			assert.equal(parseConfigurationValue('name', snippet, true), 'd2l-component');
-			assert.equal(parseConfigurationValue('size', snippet, true), 'small');
-			assert.equal(parseConfigurationValue('defaults', snippet, true), '{"type":"type1", "other": true}');
 		});
 	});
 
