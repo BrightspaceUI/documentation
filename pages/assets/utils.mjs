@@ -38,12 +38,9 @@ export function getCode(snippet, interactive, currAttributes, tagName, allInstan
 	}
 	attributes.sort();
 	const attributesText = attributes.length === 0 ? '' : ` ${attributes.join(' ')}`;
-	const includesSpace = codeSnippet.includes(`<${tagName} `);
-	const replaceString = includesSpace ? `<${tagName}` : `<${tagName}>`;
-	const re = allInstancesInteractive ? new RegExp(replaceString, 'g') : replaceString;
-	return includesSpace
-		? codeSnippet.replace(re, `<${tagName}${attributesText}`)
-		: codeSnippet.replace(re, `<${tagName}${attributesText}>`);
+	const reString = `(<${tagName})(>)|(<${tagName} [^>]+)(>)`;
+	const re = allInstancesInteractive ? new RegExp(reString, 'g') : new RegExp(reString);
+	return codeSnippet.replace(re, `$1$3${attributesText}>`);
 }
 
 export const parseImports = (allContent) => {

@@ -130,12 +130,6 @@ name:d2l-button
 			assert.equal(getCode(basicCode, true, attributes, 'd2l-button'), expected);
 		});
 
-		it('should return expected code when attributes and code has space', () => {
-			const code = '<d2l-button other>Button</d2l-button>';
-			const expected = '<d2l-button disabled sum=12 text="My button" other>Button</d2l-button>';
-			assert.equal(getCode(code, true, attributes, 'd2l-button'), expected);
-		});
-
 		it('should only replace first instance', () => {
 			const code = `<d2l-button>Button</d2l-button>
 <d2l-button>Button 2</d2l-button>`;
@@ -155,6 +149,68 @@ name:d2l-button
 		it('should not replace when tag part of longer tag', () => {
 			const code = '<d2l-button-elem>Button</d2l-button-elem>';
 			assert.equal(getCode(code, true, attributes, 'd2l-button', true), code);
+		});
+
+		describe('when code has existing attributes', () => {
+
+			it('should return expected code', () => {
+				const code = '<d2l-button other another="value">Button</d2l-button>';
+				const expected = '<d2l-button other another="value" disabled sum=12 text="My button">Button</d2l-button>';
+				assert.equal(getCode(code, true, attributes, 'd2l-button'), expected);
+			});
+
+			it('should return expected code when multiple on same line', () => {
+				const code = '<d2l-button other>Button</d2l-button><d2l-button>Button</d2l-button>';
+				const expected = '<d2l-button other disabled sum=12 text="My button">Button</d2l-button><d2l-button>Button</d2l-button>';
+				assert.equal(getCode(code, true, attributes, 'd2l-button'), expected);
+			});
+
+			it('should return expected code when multiple and second has attributes but not replacing all', () => {
+				const code = '<d2l-button other another="thing2">Button</d2l-button><d2l-button attr="value">Button</d2l-button>';
+				const expected = '<d2l-button other another="thing2" disabled sum=12 text="My button">Button</d2l-button><d2l-button attr="value">Button</d2l-button>';
+				assert.equal(getCode(code, true, attributes, 'd2l-button'), expected);
+			});
+
+			it('should return expected code when multiple and second has attributes and replacing all', () => {
+				const code = '<d2l-button other another="thing2">Button</d2l-button><d2l-button-elem></d2l-button-elem><d2l-button attr="value">Button</d2l-button>';
+				const expected = '<d2l-button other another="thing2" disabled sum=12 text="My button">Button</d2l-button><d2l-button-elem></d2l-button-elem><d2l-button attr="value" disabled sum=12 text="My button">Button</d2l-button>';
+				assert.equal(getCode(code, true, attributes, 'd2l-button', true), expected);
+			});
+
+			it('should return expected code when multiple on different lines and second has attributes and replace all', () => {
+				const code = `<d2l-button other>Button</d2l-button>
+<d2l-button attr="value">Button</d2l-button>
+<d2l-button-elem></d2l-button-elem>`;
+				const expected = `<d2l-button other disabled sum=12 text="My button">Button</d2l-button>
+<d2l-button attr="value" disabled sum=12 text="My button">Button</d2l-button>
+<d2l-button-elem></d2l-button-elem>`;
+				assert.equal(getCode(code, true, attributes, 'd2l-button', true), expected);
+			});
+
+			it('should return expected code when multiple on different lines and second has attributes and not replace all', () => {
+				const code = `<d2l-button other another="thing2">Button</d2l-button>
+<d2l-button attr="value">Button</d2l-button>`;
+				const expected = `<d2l-button other another="thing2" disabled sum=12 text="My button">Button</d2l-button>
+<d2l-button attr="value">Button</d2l-button>`;
+				assert.equal(getCode(code, true, attributes, 'd2l-button'), expected);
+			});
+
+			it('should return expected code when multiple on different lines and second does not have attributes and replace all', () => {
+				const code = `<d2l-button other another="thing2">Button</d2l-button>
+<d2l-button>Button</d2l-button>`;
+				const expected = `<d2l-button other another="thing2" disabled sum=12 text="My button">Button</d2l-button>
+<d2l-button disabled sum=12 text="My button">Button</d2l-button>`;
+				assert.equal(getCode(code, true, attributes, 'd2l-button', true), expected);
+			});
+
+			it('should return expected code when multiple on different lines and second does not have attributes and not replace all', () => {
+				const code = `<d2l-button other>Button</d2l-button>
+<d2l-button>Button</d2l-button>`;
+				const expected = `<d2l-button other disabled sum=12 text="My button">Button</d2l-button>
+<d2l-button>Button</d2l-button>`;
+				assert.equal(getCode(code, true, attributes, 'd2l-button'), expected);
+			});
+
 		});
 	});
 
