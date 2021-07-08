@@ -2,6 +2,47 @@ const defaultImports = [
 	'import \'@brightspace-ui/core/components/typography/typography.js?module\';\n',
 ];
 
+export const validTypes = {
+	array: 'array',
+	boolean: 'boolean',
+	number: 'number',
+	object: 'object',
+	string: 'string'
+};
+
+export function getCode(snippet, interactive, currAttributes, tagName, allInstancesInteractive) {
+	// remove comment lines from code snippet
+	if (!snippet) return '';
+	const lines = snippet.split('-->');
+	const codeSnippet = lines.length === 1 ? lines[0] : lines[1]; // if there was no `-->` found lines[1] will be null
+
+	if (!interactive) return codeSnippet;
+
+	const attributes = [];
+	for (const attribute in currAttributes) {
+		const { type, value } = currAttributes[attribute];
+		switch (type) {
+			case validTypes.string:
+				attributes.push(`${attribute}="${value}"`);
+				break;
+			case validTypes.boolean:
+				if (value)
+					attributes.push(`${attribute}`);
+				break;
+			case validTypes.number:
+				attributes.push(`${attribute}=${value}`);
+				break;
+			default:
+				break;
+		}
+	}
+	attributes.sort();
+	const attributesText = attributes.length === 0 ? '' : ` ${attributes.join(' ')}`;
+	const reString = `(<${tagName})(>)|(<${tagName} [^>]+)(>)`;
+	const re = allInstancesInteractive ? new RegExp(reString, 'g') : new RegExp(reString);
+	return codeSnippet.replace(re, `$1$3${attributesText}>`);
+}
+
 export const parseImports = (allContent) => {
 	const content = /<script.*>([\s\S]*)<\/script>/g.exec(allContent);
 	if (!content || content.length !== 2 || content[1] === '') return '';

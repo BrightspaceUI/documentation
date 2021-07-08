@@ -34,7 +34,7 @@ layout: layouts/demo
 		color: #ffffff;
 	}
 </style>
-<d2l-button $attributes>Button</d2l-button>
+<d2l-button>Button</d2l-button>
 ```
 ### Interactive demo - size
 
@@ -47,7 +47,7 @@ defaults:{"disabled":true}
 <script type="module">
 	import '@brightspace-ui/core/components/button/button.js';
 </script>
-<d2l-button $attributes>Button</d2l-button>
+<d2l-button>Button</d2l-button>
 ```
 
 ### Demo - non-interactive
@@ -77,6 +77,51 @@ defaults:{"disabled":true}
 	import '@brightspace-ui/core/components/button/button.js';
 </script>
 <d2l-button>Button</d2l-button>
+```
+
+### Multiple Instances, all affected by properties table changes
+
+<!-- docs: demo live
+name:d2l-menu-item
+allInstancesInteractive:true
+defaults:{"text":"Menu Item"}
+>
+-->
+```html
+<script type="module">
+  import '@brightspace-ui/core/components/menu/menu.js';
+  import '@brightspace-ui/core/components/menu/menu-item.js';
+</script>
+<d2l-menu label="Astronomy">
+  <d2l-menu-item></d2l-menu-item>
+  <d2l-menu-item>
+    <d2l-menu>
+      <d2l-menu-item></d2l-menu-item>
+    </d2l-menu>
+  </d2l-menu-item>
+</d2l-menu>
+```
+
+### Multiple Instances, first instance affected by properties table changes
+
+<!-- docs: demo live
+name:d2l-menu-item
+defaults:{"text":"Menu Item"}
+>
+-->
+```html
+<script type="module">
+  import '@brightspace-ui/core/components/menu/menu.js';
+  import '@brightspace-ui/core/components/menu/menu-item.js';
+</script>
+<d2l-menu label="Astronomy">
+  <d2l-menu-item></d2l-menu-item>
+  <d2l-menu-item text="Another Item">
+    <d2l-menu>
+      <d2l-menu-item text="Inner Item"></d2l-menu-item>
+    </d2l-menu>
+  </d2l-menu-item>
+</d2l-menu>
 ```
 
 ### Example Markdown table from README
