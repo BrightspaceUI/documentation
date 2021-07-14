@@ -6,7 +6,7 @@ layout: layouts/demo
 
 ### Interactive demo - Includes text variations for coloring [demo-snippet]
 
-<!-- docs: live demo name:d2l-button -->
+<!-- docs: live demo name:d2l-button size:small autoSize:true -->
 ```html
 <script type="module">
 	/*

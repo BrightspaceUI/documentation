@@ -2,7 +2,7 @@ name: Deploy
 on:
   push:
     branches:
-      - master
+      - main
 jobs:
   deploy:
     name: Deploy
@@ -34,8 +34,8 @@ jobs:
           role-to-assume: arn:aws:iam::037018655140:role/daylight.d2l.dev-githubactions-access
           role-duration-seconds: 3600
           aws-region: ca-central-1
-      - name: Deploy - master
-        run: aws s3 sync --delete ./_site/ s3://daylight.d2l.dev/branches/master
+      - name: Deploy - main
+        run: aws s3 sync --delete ./_site/ s3://daylight.d2l.dev/branches/main
         env:
           # cred variables set in the "Assume role" step
           AWS_DEFAULT_REGION: ca-central-1

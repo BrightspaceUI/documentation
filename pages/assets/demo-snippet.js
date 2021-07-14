@@ -16,6 +16,10 @@ class ComponentCatalogDemoSnippetWrapper extends LitElement {
 			/**
 			 * Default values for demo attributes. Formatted as a stringified object.
 			 */
+			autoSize: { type: Boolean, attribute: 'auto-size' },
+			/**
+			 * Default values for demo attributes. Formatted as a stringified object.
+			 */
 			defaults: { type: String },
 			/**
 			* Hide the read-only code view
@@ -82,16 +86,12 @@ class ComponentCatalogDemoSnippetWrapper extends LitElement {
 	constructor() {
 		super();
 		this._attributes = {};
+		this.autoSize = false;
 		this.hideCode = false;
 		this.hideDemo = false;
 		this.interactive = false;
 		this.language = 'html';
 		this.resizable = false;
-	}
-
-	get autoSize() {
-		const autoSize = parseConfigurationValue('auto', this.demoSnippet);
-		return autoSize;
 	}
 
 	get code() {
@@ -151,7 +151,7 @@ class ComponentCatalogDemoSnippetWrapper extends LitElement {
 	render() {
 		if (!this._demoSnippet) return html`<slot @slotchange="${this._handleSlotChange}"></slot>`;
 		const codeSnippet = this.code;
-
+		console.log(this.autoSize)
 		return html`
 			${ !this.hideDemo ? html`
 				<d2l-component-catalog-demo-resizable-preview

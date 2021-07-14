@@ -145,6 +145,7 @@ class ComponentCatalogDemoResizablePreview extends LitElement {
 					window.requestAnimationFrame(function() {
 						var demoSizeElement = document.querySelector('${this.tagName}');
 						console.log('test');
+						console.log(window);
 						window.parent.postMessage(demoSizeElement.getBoundingClientRect().height, '*');
 					})` : '' }
 				});

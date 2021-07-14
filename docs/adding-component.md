@@ -12,7 +12,7 @@ The main steps to add a component page to the Daylight site for an **official co
 
 ### Component Code
 
-Add JSDoc comments to your component. See [input-text](https://github.com/BrightspaceUI/core/blob/master/components/inputs/input-text.js) as an example. Include each of the following where applicable:
+Add JSDoc comments to your component. See [input-text](https://github.com/BrightspaceUI/core/blob/main/components/inputs/input-text.js) as an example. Include each of the following where applicable:
 - Description
 - `@slot` (slots)
 - `@fires` (events)
