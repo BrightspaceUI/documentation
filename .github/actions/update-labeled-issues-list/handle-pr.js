@@ -9,7 +9,7 @@ const branchName = process.env['BRANCH_NAME'];
 const issueTitle = process.env['GITHUB_ISSUE_TITLE'];
 const issueUrl = process.env['GITHUB_ISSUE_URL'];
 
-const baseBranchName = 'master';
+const baseBranchName = 'main';
 const labelName = 'Published';
 
 const octokit = new Octokit({
