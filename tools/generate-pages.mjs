@@ -45,7 +45,41 @@ function _copyCustomElements(repos) {
 		}
 		const file = fs.readFileSync(customElementsFilePath).toString();
 		const parsed = JSON.parse(file);
-		tags = tags.concat(parsed.tags);
+		if (!parsed.modules) {
+			if (parsed.tags) tags = tags.concat(parsed.tags);
+			return;
+		}
+
+		parsed.modules.forEach((component) => {
+			if (!component.declarations || component.declarations.length === 0) return;
+			const declarationsFiltered = component.declarations.filter((dec) => dec.kind === 'class');
+			if (declarationsFiltered.length === 0) return;
+
+			const declaration = declarationsFiltered[0];
+			if (!declaration.members) return;
+
+			const attributeMembers = declaration.members.filter((dec) => {
+				if (dec.name === 'properties' && dec.static) return false;
+				return dec.kind === 'field';
+			});
+			attributeMembers.forEach((attributeMember) => {
+				if (attributeMember.attribute) attributeMember.name = attributeMember.attribute;
+				attributeMember.type = attributeMember.type && attributeMember.type.text;
+
+				if (attributeMember.description || !declaration.attributes) return;
+
+				const attributeName = attributeMember.attribute;
+				const attributeData = declaration.attributes.filter((attribute) => attribute.name === attributeName);
+				if (attributeData.length === 1) attributeMember.description = attributeData[0].description;
+			});
+			const info = {
+				name: declaration.tagName,
+				slots: declaration.slots,
+				attributes: attributeMembers,
+				events: declaration.events
+			};
+			tags.push(info);
+		});
 	});
 	_writeJSONToGeneratedFile(tags, FILENAME_CUSTOM_ELEM);
 }

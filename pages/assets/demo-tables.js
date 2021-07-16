@@ -159,8 +159,8 @@ export class ComponentCatalogDemoTables extends LitElement {
 	}
 
 	_getDemoValueOptions(type, attributeName, defaultVal) {
-		const strippedDefaultVal = defaultVal?.replace(/"/g, '');
-		const value = defaultVal ? strippedDefaultVal : undefined;
+		let strippedDefaultVal = defaultVal?.replace(/"/g, '');
+		let value = defaultVal ? strippedDefaultVal : undefined;
 		switch (type) {
 			case validTypes.array:
 			case validTypes.object:
@@ -194,6 +194,10 @@ export class ComponentCatalogDemoTables extends LitElement {
 			default: {
 				// the case of an array of strings
 				let options = type.replace(/'/g, '').split(' | ');
+				if (strippedDefaultVal === undefined) {
+					strippedDefaultVal = '';
+					value = '';
+				}
 
 				// Add empty default values to the dropdown lists
 				if (!options.includes(strippedDefaultVal)) {
