@@ -159,6 +159,7 @@ export class ComponentCatalogDemoTables extends LitElement {
 	}
 
 	_getDemoValueOptions(type, attributeName, defaultVal) {
+		if (!type) return;
 		let strippedDefaultVal = defaultVal?.replace(/"/g, '');
 		let value = defaultVal ? strippedDefaultVal : undefined;
 		switch (type) {

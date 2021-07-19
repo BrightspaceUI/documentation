@@ -69,8 +69,8 @@ function _copyCustomElements(repos) {
 				if (attributeMember.description || !declaration.attributes) return;
 
 				const attributeName = attributeMember.attribute;
-				const attributeData = declaration.attributes.filter((attribute) => attribute.name === attributeName);
-				if (attributeData.length === 1) attributeMember.description = attributeData[0].description;
+				const attributeData = declaration.attributes.find((attribute) => attribute.name === attributeName);
+				if (attributeData) attributeMember.description = attributeData.description;
 			});
 			const info = {
 				name: declaration.tagName,
