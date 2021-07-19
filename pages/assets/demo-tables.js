@@ -97,12 +97,14 @@ export class ComponentCatalogDemoTables extends LitElement {
 			}
 
 			const demoValueRow = this.interactive ? html`<td>${demoValue}</td>` : null;
+			const defaultShown = infoDefault ? infoDefault.replace(/'/g, '') : undefined;
+
 			return html`
 				<tr>
 					<th scope="row"><span class="d2l-property-name">${info.name}</span></th>
 					<td class="d2l-design-system-component-type">${demoType}</td>
 					<td>${info.description}</td>
-					<td>${infoDefault}</td>
+					<td>${defaultShown}</td>
 					${demoValueRow}
 				</tr>`;
 		});
@@ -160,7 +162,7 @@ export class ComponentCatalogDemoTables extends LitElement {
 
 	_getDemoValueOptions(type, attributeName, defaultVal) {
 		if (!type) return;
-		let strippedDefaultVal = defaultVal?.replace(/"/g, '');
+		let strippedDefaultVal = defaultVal?.replace(/"/g, '').replace(/'/g, '');
 		let value = defaultVal ? strippedDefaultVal : undefined;
 		switch (type) {
 			case validTypes.array:
@@ -181,6 +183,7 @@ export class ComponentCatalogDemoTables extends LitElement {
 						@change="${this._onNumberChange}"
 						data-name="${attributeName}"
 						label="${attributeName}"
+						label-hidden
 						value="${ifDefined(value)}">
 					</d2l-input-number>`;
 			case validTypes.string:

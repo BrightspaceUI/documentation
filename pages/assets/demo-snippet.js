@@ -18,6 +18,10 @@ class ComponentCatalogDemoSnippetWrapper extends LitElement {
 			 */
 			allInstancesInteractive: { type: Boolean, attribute: 'all-instances-interactive' },
 			/**
+			 * Corresponds to align-items value for demo content. Defaults to center.
+			 */
+			contentAlignment: { type: String, attribute: 'content-alignment' },
+			/**
 			 * Default values for demo attributes. Formatted as a stringified object.
 			 */
 			defaults: { type: String },
@@ -124,6 +128,7 @@ class ComponentCatalogDemoSnippetWrapper extends LitElement {
 				<d2l-component-catalog-demo-resizable-preview
 					?attached=${!this.hideCode}
 					code=${codeSnippet}
+					content-alignment=${ifDefined(this.contentAlignment)}
 					imports=${this.imports}
 					?resizable=${this.resizable}
 					size=${ifDefined(this.size)}>
