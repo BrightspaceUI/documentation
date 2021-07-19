@@ -109,21 +109,21 @@ module.exports = function(eleventyConfig) {
 
 			const autoSize = parseConfigurationValue('autoSize', content);
 			const size = parseConfigurationValue('size', content);
+			const tag = parseConfigurationValue('name', content);
+
 			if (size) openingTag += ` size="${size}" `;
-			if (autoSize !== false) {
+			if (tag && autoSize !== false) {
 				openingTag += ' auto-size ';
 			}
 
 			if (content.includes('<!-- docs: demo live')) {
 				const defaults = parseConfigurationValue('defaults', content, true);
-				const tag = parseConfigurationValue('name', content);
 
 				if (!tag) return `${openingTag} hide-code>`;
 
 				openingTag += ` resizable interactive tag-name="${tag}" `;
 
 				if (defaults) openingTag += ` defaults='${defaults}'`;
-
 
 				const allInstancesInteractive = parseConfigurationValue('allInstancesInteractive', content);
 				if (allInstancesInteractive === 'true') openingTag += ' all-instances-interactive';

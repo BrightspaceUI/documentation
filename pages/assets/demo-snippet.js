@@ -123,7 +123,6 @@ class ComponentCatalogDemoSnippetWrapper extends LitElement {
 	render() {
 		if (!this._demoSnippet) return html`<slot @slotchange="${this._handleSlotChange}"></slot>`;
 		const codeSnippet = this.code;
-		console.log(this.autoSize)
 		return html`
 			${ !this.hideDemo ? html`
 				<d2l-component-catalog-demo-resizable-preview

@@ -152,9 +152,9 @@ class ComponentCatalogDemoResizablePreview extends LitElement {
 				});
 				// Suppress errors only in production? This will hide any errors with attributes and the module not resolved errors
 				// occuring within the iframe
-				window.onerror = function () {
-					return true;
-				};
+				// window.onerror = function () {
+				// 	return true;
+				// };
 			</script>
 			<script type="module" src="index.js"></script>
 			<style>
