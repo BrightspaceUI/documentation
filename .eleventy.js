@@ -106,17 +106,26 @@ module.exports = function(eleventyConfig) {
 		if (content.includes('<!-- docs: demo')) {
 			inCodeBlock = true;
 			let openingTag = '<d2l-component-catalog-demo-snippet resizable ';
+
+			const autoSize = parseConfigurationValue('autoSize', content);
 			const size = parseConfigurationValue('size', content);
 			if (size) openingTag += ` size="${size}" `;
-
+			console.log('autoSize')
+			console.log(autoSize)
+			if (autoSize !== false) {
+				openingTag += ' autoSize ';
+			}
+			
 			if (content.includes('<!-- docs: demo live')) {
+				const defaults = parseConfigurationValue('defaults', content, true);
 				const tag = parseConfigurationValue('name', content);
+
 				if (!tag) return `${openingTag} hide-code>`;
 
 				openingTag += ` resizable interactive tag-name="${tag}" `;
 
-				const defaults = parseConfigurationValue('defaults', content, true);
 				if (defaults) openingTag += ` defaults='${defaults}'`;
+
 
 				const allInstancesInteractive = parseConfigurationValue('allInstancesInteractive', content);
 				if (allInstancesInteractive === 'true') openingTag += ' all-instances-interactive';
