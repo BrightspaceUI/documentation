@@ -16,12 +16,12 @@ module.exports = function(eleventyConfig) {
 	eleventyConfig.addNunjucksShortcode('issue', (issueUrl) => {
 		return `Looking for more details on the component or want to add your input? <d2l-link href="${issueUrl}">Check out the GitHub Issue</d2l-link>`;
 	});
-	eleventyConfig.addNunjucksShortcode('editPage', (repo, componentPath, branch) => {
+	eleventyConfig.addNunjucksShortcode('editPage', (repo, componentPath, defaultBranch) => {
 		if (!repo || !componentPath) {
 			return '';
 		}
-		const defaultBranch = branch ?? 'main';
-		return `<div class="d2l-edit-component-page">Suggest an <d2l-link href="${`${repo}edit/${defaultBranch}/${componentPath}`}">edit</d2l-link> for this page</div>`;
+		const branchName = defaultBranch ?? 'main';
+		return `<div class="d2l-edit-component-page">Suggest an <d2l-link href="${`${repo}edit/${branchName}/${componentPath}`}">edit</d2l-link> for this page</div>`;
 	});
 	eleventyConfig.addShortcode('statusTable', (tier) => {
 		return `<d2l-component-catalog-status-table tier="${tier}"></d2l-component-catalog-status-table>`;
@@ -103,27 +103,30 @@ module.exports = function(eleventyConfig) {
 	const defaultHtmlRule = markdownIt.renderer.rules.html_block;
 	markdownIt.renderer.rules.html_block = (tokens, idx, options, env, slf) => {
 		const content = tokens[idx].content;
-		if (content.includes('<!-- docs: live demo')) {
+		if (content.includes('<!-- docs: demo')) {
 			inCodeBlock = true;
-			const tag = parseConfigurationValue('name', content);
-			if (!tag) return '<d2l-component-catalog-demo-snippet resizable hide-code>';
+			let openingTag = '<d2l-component-catalog-demo-snippet resizable ';
 			const size = parseConfigurationValue('size', content);
-			const autoSize = parseConfigurationValue('autoSize', content) === 'true';
-			const defaults = parseConfigurationValue('defaults', content, true);
-
-			let openingTag = `<d2l-component-catalog-demo-snippet resizable interactive tag-name="${tag}" `;
-
 			if (size) openingTag += ` size="${size}" `;
-			if (defaults) openingTag += ` defaults='${defaults}'`;
-			if (autoSize) openingTag += ' auto-size';
 
-			return `${openingTag}>`;
-		} else if (content.includes('<!-- docs: code demo -->')) {
-			inCodeBlock = true;
-			return '<d2l-component-catalog-demo-snippet resizable>';
-		} else if (content.includes('<!-- docs: demo -->')) {
-			inCodeBlock = true;
-			return '<d2l-component-catalog-demo-snippet resizable hide-code>';
+			if (content.includes('<!-- docs: demo live')) {
+				const tag = parseConfigurationValue('name', content);
+				if (!tag) return `${openingTag} hide-code>`;
+
+				openingTag += ` resizable interactive tag-name="${tag}" `;
+
+				const defaults = parseConfigurationValue('defaults', content, true);
+				if (defaults) openingTag += ` defaults='${defaults}'`;
+
+				const allInstancesInteractive = parseConfigurationValue('allInstancesInteractive', content);
+				if (allInstancesInteractive === 'true') openingTag += ' all-instances-interactive';
+
+				return `${openingTag}>`;
+			} else if (content.includes('<!-- docs: demo code')) {
+				return `${openingTag}>`;
+			} else if (content.includes('<!-- docs: demo')) {
+				return `${openingTag} hide-code>`;
+			}
 		} else if (content.includes('<!-- docs: start hidden content -->'))
 			return '<div style="display: none;">';
 		else if (content.includes('<!-- docs: end'))

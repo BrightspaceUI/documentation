@@ -163,14 +163,16 @@ class ComponentCatalogDemoResizablePreview extends LitElement {
 				}
 				html, body {
 					margin: 0;
+					font-size: 20px;
+					margin: 20px;
 				}
 				.layout {
-					display: flex;
-					justify-content: space-evenly;
 					align-items: center;
+					display: flex;
 					flex-wrap: wrap;
-					width: 100%;
 					height: 100%;
+					justify-content: space-evenly;
+					width: 100%;
 				}
 				.hide {
 					display:none;
@@ -231,13 +233,13 @@ class ComponentCatalogDemoResizablePreview extends LitElement {
 					<playground-preview id="preview" style=${styleMap(previewStyles)} project='demo' filename=${PREVIEW_FILE_NAME}></playground-preview>
 					<d2l-offscreen id="instructions">Use the left or right arrow keys to resize the preview demo area.</d2l-offscreen>
 					${this.resizable ? html`
-						<div 
-							class="d2l-slider" 
-							tabindex="0" 
-							@pointerdown=${this._onResizeSliderPointerDown} 
+						<div
+							class="d2l-slider"
+							tabindex="0"
+							@pointerdown=${this._onResizeSliderPointerDown}
 							@keydown=${this._onKeyPress}
 							aria-label="Resizable demo slider"
-							aria-describedby="instructions" 
+							aria-describedby="instructions"
 							aria-orientation="vertical">
 							<svg width="5" height="18" viewBox="0 0 5 18" xmlns="http://www.w3.org/2000/svg">
 								<g fill="#6E7376" fill-rule="evenodd">

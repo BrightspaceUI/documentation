@@ -77,9 +77,9 @@ size:<'small'|'medium'|'large'|'xlarge'>
 
 **Interactive demo**: (maximum of 1 per component) This demo includes the properties, slots, and events tables, and allows for the user to modify properties in these table(s) which then affects the demo.
 
-Add the comment `<!-- docs: live demo -->` directly before the code block and `$attributes` on the component tag. Note that if `defaults` is being used in order to set default demo values, the demo information pieces must be separated by newlines rather than be inline (e.g., `<!-- docs: live demo name:d2l-button -->`). For example:
+Add the comment `<!-- docs: demo live -->` directly before the code block. Note that if `defaults` is being used in order to set default demo values, the demo information pieces must be separated by newlines rather than be inline (e.g., `<!-- docs: demo live name:d2l-button -->`). For example:
 ```
-<!-- docs: live demo
+<!-- docs: demo live
 name:<component-tag, e.g., d2l-button>
 size:<'small'|'medium'|'large'|'xlarge'>
 defaults:{"<attribute>": <value: "string"|boolean|number>}>
@@ -88,15 +88,38 @@ defaults:{"<attribute>": <value: "string"|boolean|number>}>
 <script type="module">
   import '@brightspace-ui/core/components/button/button.js';
 </script>
-<d2l-button $attributes></d2l-button>
+<d2l-button></d2l-button>
+\`\`\`
+```
+
+If there are multiple instances of the same component in a demo (e.g., menu-item) and they all should be affected by changes to the properties table, set `allInstancesInteractive` to true. If this is not present and true then only the first instance of the component will be affected by changes to the properties table. For example:
+```
+<!-- docs: demo live
+name:d2l-menu-item
+allInstancesInteractive:true
+>
+-->
+```html
+<script type="module">
+  import '@brightspace-ui/core/components/menu/menu.js';
+  import '@brightspace-ui/core/components/menu/menu-item.js';
+</script>
+<d2l-menu label="Astronomy">
+  <d2l-menu-item text="Introduction"></d2l-menu-item>
+  <d2l-menu-item text="The Solar System">
+    <d2l-menu>
+      <d2l-menu-item text="Formation"></d2l-menu-item>
+    </d2l-menu>
+  </d2l-menu-item>
+</d2l-menu>
 \`\`\`
 ```
 
 **Secondary demo:** This demo shows the component(s) and the code but does not allow any modification. This can be used to show different varients of a component but should be used sporadically generally in order to call out significant varients.
 
-Add the comment `<!-- docs: code demo -->` directly before the code block. For example:
+Add the comment `<!-- docs: demo code -->` directly before the code block. For example:
 ```
-<!-- docs: code demo
+<!-- docs: demo code
 size:<'small'|'medium'|'large'|'xlarge'>
 -->
 ```html
