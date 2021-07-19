@@ -4,6 +4,7 @@ import 'playground-elements/playground-preview';
 import 'playground-elements/playground-project';
 
 import { css, html, LitElement } from 'lit-element';
+import { getUniqueId } from '@brightspace-ui/core/helpers/uniqueId.js';
 import { styleMap } from 'lit-html/directives/style-map.js';
 
 const KEY_CODES = {
@@ -133,7 +134,9 @@ class ComponentCatalogDemoResizablePreview extends LitElement {
 		this.attached = false;
 		this.autoSize = false;
 		this.size = 'small';
+
 		this._handleIFrameMessage = this._handleIFrameMessage.bind(this);
+		this._id = getUniqueId();
 	}
 	get indexHTML() {
 		return `
@@ -141,19 +144,17 @@ class ComponentCatalogDemoResizablePreview extends LitElement {
 				window.addEventListener('load', function () {
 					var demoEl = document.getElementById('demo-element');
 					demoEl.classList.remove('hide');
-					${this.autoSize ? `
+					${this.autoSize && this.tagName ? `
 					window.requestAnimationFrame(function() {
 						var demoSizeElement = document.querySelector('${this.tagName}');
-						console.log('test');
-						console.log(window);
-						window.parent.postMessage(demoSizeElement.getBoundingClientRect().height, '*');
+						window.parent.postMessage({id: "${this._id}", height: demoSizeElement.getBoundingClientRect().height}, '*');
 					})` : '' }
 				});
 				// Suppress errors only in production? This will hide any errors with attributes and the module not resolved errors
 				// occuring within the iframe
-				// window.onerror = function () {
-				// 	return true;
-				// };
+				window.onerror = function () {
+					return true;
+				};
 			</script>
 			<script type="module" src="index.js"></script>
 			<style>
@@ -164,7 +165,6 @@ class ComponentCatalogDemoResizablePreview extends LitElement {
 				html, body {
 					margin: 0;
 					font-size: 20px;
-					margin: 20px;
 				}
 				.layout {
 					align-items: center;
@@ -264,8 +264,10 @@ class ComponentCatalogDemoResizablePreview extends LitElement {
 		super.update(changedProperties);
 	}
 	_handleIFrameMessage(event) {
-		if (event.origin === 'https://unpkg.com') {
-			this._previewHeight = event.data;
+		const { height, id } = event.data;
+
+		if (id === this._id && event.origin === 'https://unpkg.com') {
+			this._previewHeight = height;
 		}
 	}
 	_moveSliderLeft() {

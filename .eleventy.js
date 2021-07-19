@@ -110,12 +110,10 @@ module.exports = function(eleventyConfig) {
 			const autoSize = parseConfigurationValue('autoSize', content);
 			const size = parseConfigurationValue('size', content);
 			if (size) openingTag += ` size="${size}" `;
-			console.log('autoSize')
-			console.log(autoSize)
 			if (autoSize !== false) {
-				openingTag += ' autoSize ';
+				openingTag += ' auto-size ';
 			}
-			
+
 			if (content.includes('<!-- docs: demo live')) {
 				const defaults = parseConfigurationValue('defaults', content, true);
 				const tag = parseConfigurationValue('name', content);
