@@ -128,7 +128,6 @@ module.exports = function(eleventyConfig) {
 			const align = parseConfigurationValue('align', content);
 			if (align) openingTag += ` content-alignment="${align}"`;
 
-
 			if (content.includes('<!-- docs: demo live')) {
 
 				if (!tag) return `${openingTag} hide-code>`;
