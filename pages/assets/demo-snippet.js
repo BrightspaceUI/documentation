@@ -127,7 +127,7 @@ class ComponentCatalogDemoSnippetWrapper extends LitElement {
 			${ !this.hideDemo ? html`
 				<d2l-component-catalog-demo-resizable-preview
 					?attached=${!this.hideCode}
-					?auto-size=${this.size && this.autoSize}
+					?auto-size=${this.autoSize}
 					code=${codeSnippet}
 					imports=${this.imports}
 					?resizable=${this.resizable}

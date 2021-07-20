@@ -151,10 +151,10 @@ class ComponentCatalogDemoResizablePreview extends LitElement {
 					var demoEl = document.getElementById('demo-element');
 					demoEl.classList.remove('hide');
 					${this.autoSize && this.tagName ? `
-						window.requestAnimationFrame(function() {
+						window.setTimeout(function() {
 							var demoSizeElement = document.querySelector('${this.tagName}');
 							window.parent.postMessage({id: "${this._id}", height: demoSizeElement.getBoundingClientRect().height}, '*');
-						})` : '' }
+						}, 20)` : '' }
 				});
 				// Suppress errors only in production? This will hide any errors with attributes and the module not resolved errors
 				// occuring within the iframe
@@ -269,7 +269,6 @@ class ComponentCatalogDemoResizablePreview extends LitElement {
 	}
 	_handleIFrameMessage(event) {
 		const { height, id } = event.data;
-
 		if (id === this._id && event.origin === 'https://unpkg.com') {
 			this._previewHeight = height;
 		}
