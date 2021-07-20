@@ -41,6 +41,7 @@
     "eslint-plugin-sort-class-members": "^1",
     "gray-matter": "^4",
     "lit-analyzer": "^1",
+    "markdown-it-anchor": "^8",
     "markdown-it-modify-token": "^1",
     "mocha": "^9",
     "playground-elements": "^0.10",

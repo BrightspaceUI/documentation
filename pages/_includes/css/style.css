@@ -81,6 +81,19 @@ h1, h2, h3 {
 .d2l-component-catalog-tag-inner {
 	color: var(--d2l-color-malachite-minus-1);
 }
+.header-anchor {
+	display: none;
+	padding-right: 0.5rem;
+	text-decoration: none;
+}
+h2 .header-anchor,
+h3 .header-anchor {
+	margin-left: -1.4rem;
+}
+h2:hover .header-anchor,
+h3:hover .header-anchor {
+	display: block;
+}
 
 /** Specialty Content Sections */
 d2l-component-catalog-interactive-demo {
