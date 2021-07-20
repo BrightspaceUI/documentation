@@ -14,6 +14,7 @@ export class ComponentCatalogDemoTables extends LitElement {
 	static get properties() {
 		return {
 			defaults: { type: String },
+			hideEvents: { type: Boolean, attribute: 'hide-events', reflect: true },
 			hideSlots: { type: Boolean, attribute: 'hide-slots', reflect: true },
 			interactive: { type: Boolean },
 			tagName: { type: String, attribute: 'tag-name', reflect: true },
@@ -43,6 +44,7 @@ export class ComponentCatalogDemoTables extends LitElement {
 	}
 	constructor() {
 		super();
+		this.hideEvents = false;
 		this.hideSlots = false;
 	}
 
@@ -97,21 +99,32 @@ export class ComponentCatalogDemoTables extends LitElement {
 			}
 
 			const demoValueRow = this.interactive ? html`<td>${demoValue}</td>` : null;
+			const defaultShown = infoDefault ? infoDefault.replace(/'/g, '') : undefined;
+
 			return html`
 				<tr>
 					<th scope="row"><span class="d2l-property-name">${info.name}</span></th>
 					<td class="d2l-design-system-component-type">${demoType}</td>
 					<td>${info.description}</td>
-					<td>${infoDefault}</td>
+					<td>${defaultShown}</td>
 					${demoValueRow}
 				</tr>`;
 		});
 
-		const slotRows = this._componentInfo.slots ? this._componentInfo.slots.map((slotInfo) => {
+		const slotRows = (!this.hideSlots && this._componentInfo.slots) ? this._componentInfo.slots.map((slotInfo) => {
 			return html`
 				<tr>
 					<th scope="row"><span class="d2l-property-name">${slotInfo.name || 'Default'}</span></th>
 					<td class="d2l-design-system-component-type">${slotInfo.description}</td>
+				</tr>
+			`;
+		}) : null;
+
+		const eventRows = (!this.hideEvents && this._componentInfo.events) ? this._componentInfo.events.map((info) => {
+			return html`
+				<tr>
+					<th scope="row"><span class="d2l-property-name">${info.name}</span></th>
+					<td class="d2l-design-system-component-type">${info.description}</td>
 				</tr>
 			`;
 		}) : null;
@@ -135,9 +148,9 @@ export class ComponentCatalogDemoTables extends LitElement {
 					</tbody>
 				</table>
 			</d2l-scroll-wrapper>
-			${!this.hideSlots && slotRows && slotRows.length ? html`<h3 class="d2l-heading-4">Slots</h3>
+			${slotRows && slotRows.length ? html`<h3 class="d2l-heading-4">Slots</h3>
 				<d2l-scroll-wrapper>
-					<table class="d2l-cc-custom-table d2l-slots-table">
+					<table class="d2l-cc-custom-table d2l-component-info-table">
 						<thead>
 							<tr>
 								<th>Name</th>
@@ -146,6 +159,20 @@ export class ComponentCatalogDemoTables extends LitElement {
 						</thead>
 						<tbody>
 							${slotRows}
+						</tbody>
+					</table>
+				</d2l-scroll-wrapper>` : null}
+			${eventRows && eventRows.length ? html`<h3 class="d2l-heading-4">Events</h3>
+				<d2l-scroll-wrapper>
+					<table class="d2l-cc-custom-table d2l-component-info-table">
+						<thead>
+							<tr>
+								<th>Name</th>
+								<th>Description</th>
+							</tr>
+						</thead>
+						<tbody>
+							${eventRows}
 						</tbody>
 					</table>
 				</d2l-scroll-wrapper>` : null}`;
@@ -159,8 +186,9 @@ export class ComponentCatalogDemoTables extends LitElement {
 	}
 
 	_getDemoValueOptions(type, attributeName, defaultVal) {
-		const strippedDefaultVal = defaultVal?.replace(/"/g, '');
-		const value = defaultVal ? strippedDefaultVal : undefined;
+		if (!type) return;
+		let strippedDefaultVal = defaultVal?.replace(/"/g, '').replace(/'/g, '');
+		let value = defaultVal ? strippedDefaultVal : undefined;
 		switch (type) {
 			case validTypes.array:
 			case validTypes.object:
@@ -180,6 +208,7 @@ export class ComponentCatalogDemoTables extends LitElement {
 						@change="${this._onNumberChange}"
 						data-name="${attributeName}"
 						label="${attributeName}"
+						label-hidden
 						value="${ifDefined(value)}">
 					</d2l-input-number>`;
 			case validTypes.string:
@@ -194,6 +223,10 @@ export class ComponentCatalogDemoTables extends LitElement {
 			default: {
 				// the case of an array of strings
 				let options = type.replace(/'/g, '').split(' | ');
+				if (strippedDefaultVal === undefined) {
+					strippedDefaultVal = '';
+					value = '';
+				}
 
 				// Add empty default values to the dropdown lists
 				if (!options.includes(strippedDefaultVal)) {
