@@ -14,7 +14,7 @@ export class ComponentCatalogDemoTables extends LitElement {
 	static get properties() {
 		return {
 			defaults: { type: String },
-			hideSlots: { type: Boolean, attribute: 'hide-slots', reflect: true },
+			hideOtherTables: { type: Boolean, attribute: 'hide-other-tables', reflect: true },
 			interactive: { type: Boolean },
 			tagName: { type: String, attribute: 'tag-name', reflect: true },
 			_componentInfo: { type: Object },
@@ -43,7 +43,7 @@ export class ComponentCatalogDemoTables extends LitElement {
 	}
 	constructor() {
 		super();
-		this.hideSlots = false;
+		this.hideOtherTables = false;
 	}
 
 	firstUpdated(changedProperties) {
@@ -118,6 +118,15 @@ export class ComponentCatalogDemoTables extends LitElement {
 			`;
 		}) : null;
 
+		const eventRows = this._componentInfo.events ? this._componentInfo.events.map((info) => {
+			return html`
+				<tr>
+					<th scope="row"><span class="d2l-property-name">${info.name}</span></th>
+					<td class="d2l-design-system-component-type">${info.description}</td>
+				</tr>
+			`;
+		}) : null;
+
 		const demoValueHeading = this.interactive ? html`<th>Demo Value</th>` : null;
 		return html`
 			<h3 class="d2l-heading-4">Properties</h3>
@@ -137,9 +146,24 @@ export class ComponentCatalogDemoTables extends LitElement {
 					</tbody>
 				</table>
 			</d2l-scroll-wrapper>
-			${!this.hideSlots && slotRows && slotRows.length ? html`<h3 class="d2l-heading-4">Slots</h3>
+			${!this.hideOtherTables && eventRows && eventRows.length ? html`<h3 class="d2l-heading-4">Events</h3>
 				<d2l-scroll-wrapper>
-					<table class="d2l-cc-custom-table d2l-slots-table">
+					<table class="d2l-cc-custom-table d2l-component-info-table">
+						<thead>
+							<tr>
+								<th>Name</th>
+								<th>Description</th>
+							</tr>
+						</thead>
+						<tbody>
+							${eventRows}
+						</tbody>
+					</table>
+				</d2l-scroll-wrapper>` : null}
+
+			${!this.hideOtherTables && slotRows && slotRows.length ? html`<h3 class="d2l-heading-4">Slots</h3>
+				<d2l-scroll-wrapper>
+					<table class="d2l-cc-custom-table d2l-component-info-table">
 						<thead>
 							<tr>
 								<th>Name</th>
