@@ -52,4 +52,9 @@ describe('d2l-component-catalog-demo-tables', () => {
 		await visualDiff.screenshotAndCompare(page, this.test.fullTitle(), { clip: rect });
 	});
 
+	it('Hide Events table', async function() {
+		const rect = await visualDiff.getRect(page, '#hide-events');
+		await visualDiff.screenshotAndCompare(page, this.test.fullTitle(), { clip: rect });
+	});
+
 });
