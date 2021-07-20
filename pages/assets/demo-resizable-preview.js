@@ -47,6 +47,7 @@ class ComponentCatalogDemoResizablePreview extends LitElement {
 			*/
 			size: { type: String, reflect: true },
 			/**
+			* Tag name of the component used for selection and setting component height with auto-size
 			*/
 			tagName: { type: String, attribute: 'tag-name', },
 			_previewHeight: { type: Number, reflect: true },
@@ -126,6 +127,11 @@ class ComponentCatalogDemoResizablePreview extends LitElement {
 			:host([attached][resizable]) playground-preview {
 				border-radius: 10px 0 0 0;
 			}
+			@media (prefers-reduced-motion: reduce) {
+				playground-preview {
+					transition: none;
+				}
+			}
 		`;
 	}
 	constructor() {
@@ -145,10 +151,10 @@ class ComponentCatalogDemoResizablePreview extends LitElement {
 					var demoEl = document.getElementById('demo-element');
 					demoEl.classList.remove('hide');
 					${this.autoSize && this.tagName ? `
-					window.requestAnimationFrame(function() {
-						var demoSizeElement = document.querySelector('${this.tagName}');
-						window.parent.postMessage({id: "${this._id}", height: demoSizeElement.getBoundingClientRect().height}, '*');
-					})` : '' }
+						window.requestAnimationFrame(function() {
+							var demoSizeElement = document.querySelector('${this.tagName}');
+							window.parent.postMessage({id: "${this._id}", height: demoSizeElement.getBoundingClientRect().height}, '*');
+						})` : '' }
 				});
 				// Suppress errors only in production? This will hide any errors with attributes and the module not resolved errors
 				// occuring within the iframe
@@ -159,12 +165,12 @@ class ComponentCatalogDemoResizablePreview extends LitElement {
 			<script type="module" src="index.js"></script>
 			<style>
 				/* todo?: add this to md template and provide configuration for different item alignments? */
+				body, html {
+					font-size: 20px;
+					margin: 0;
+				}
 				html {
 					padding: ${DEMO_PADDING}rem;
-				}
-				html, body {
-					margin: 0;
-					font-size: 20px;
 				}
 				.layout {
 					align-items: center;
@@ -202,14 +208,12 @@ class ComponentCatalogDemoResizablePreview extends LitElement {
 
 	render() {
 		const previewStyles = {
-			width: `calc(100% - ${this.resizable ? SLIDER_WIDTH : 0}px)`,
 			height: this._previewHeight ?  `calc(${this._previewHeight}px + ${ 2 * DEMO_PADDING}rem)` : undefined,
-
+			width: `calc(100% - ${this.resizable ? SLIDER_WIDTH : 0}px)`
 		};
 		const previewContainerStyles = {
 			width: this._previewWidth ? `${this._previewWidth}px` : '100%',
 		};
-
 		return html`
 			<div class="d2l-slider-region">
 				<playground-project id='demo'>
