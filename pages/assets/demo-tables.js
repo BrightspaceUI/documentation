@@ -148,21 +148,6 @@ export class ComponentCatalogDemoTables extends LitElement {
 					</tbody>
 				</table>
 			</d2l-scroll-wrapper>
-			${eventRows && eventRows.length ? html`<h3 class="d2l-heading-4">Events</h3>
-				<d2l-scroll-wrapper>
-					<table class="d2l-cc-custom-table d2l-component-info-table">
-						<thead>
-							<tr>
-								<th>Name</th>
-								<th>Description</th>
-							</tr>
-						</thead>
-						<tbody>
-							${eventRows}
-						</tbody>
-					</table>
-				</d2l-scroll-wrapper>` : null}
-
 			${slotRows && slotRows.length ? html`<h3 class="d2l-heading-4">Slots</h3>
 				<d2l-scroll-wrapper>
 					<table class="d2l-cc-custom-table d2l-component-info-table">
@@ -174,6 +159,20 @@ export class ComponentCatalogDemoTables extends LitElement {
 						</thead>
 						<tbody>
 							${slotRows}
+						</tbody>
+					</table>
+				</d2l-scroll-wrapper>` : null}
+			${eventRows && eventRows.length ? html`<h3 class="d2l-heading-4">Events</h3>
+				<d2l-scroll-wrapper>
+					<table class="d2l-cc-custom-table d2l-component-info-table">
+						<thead>
+							<tr>
+								<th>Name</th>
+								<th>Description</th>
+							</tr>
+						</thead>
+						<tbody>
+							${eventRows}
 						</tbody>
 					</table>
 				</d2l-scroll-wrapper>` : null}`;
