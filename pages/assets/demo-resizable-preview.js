@@ -4,13 +4,14 @@ import 'playground-elements/playground-preview';
 import 'playground-elements/playground-project';
 
 import { css, html, LitElement } from 'lit-element';
+import { getUniqueId } from '@brightspace-ui/core/helpers/uniqueId.js';
 import { styleMap } from 'lit-html/directives/style-map.js';
 
 const KEY_CODES = {
 	LEFT: 37,
 	RIGHT: 39
 };
-
+const DEMO_PADDING = 2.1; // padding for the demos in rem
 const LOCK_OPEN_VALUE = 15; // The distance in pixels in which the demo width is automatically snapped to 100% if it is within
 const MINIMUM_WIDTH = 300;
 const PREVIEW_FILE_NAME = 'index.html';
@@ -24,6 +25,10 @@ class ComponentCatalogDemoResizablePreview extends LitElement {
 			*  Is a code editor attached to the preview
 			*/
 			attached : { type: Boolean, reflect: true },
+			/**
+			*  Is a code editor attached to the preview
+			*/
+			autoSize: { type: Boolean, attribute: 'auto-size', reflect: true },
 			/**
 			* Code for the preview IFrame to display
 			*/
@@ -45,7 +50,12 @@ class ComponentCatalogDemoResizablePreview extends LitElement {
 			* @type {'small'|'medium'|'large'|'xlarge'}
 			*/
 			size: { type: String, reflect: true },
-			_previewWidth: { type: Number, reflect: true }
+			/**
+			* Tag name of the component used for selection and setting component height with auto-size
+			*/
+			tagName: { type: String, attribute: 'tag-name', },
+			_previewHeight: { type: Number, reflect: true },
+			_previewWidth: { type: Number, reflect: true },
 		};
 	}
 	static get styles() {
@@ -61,16 +71,16 @@ class ComponentCatalogDemoResizablePreview extends LitElement {
 				width: 100%;
 				z-index: 5;
 			}
-			:host([size="small"]) {
+			:host([size="small"]) playground-preview {
 				height: 200px;
 			}
-			:host([size="medium"]) {
+			:host([size="medium"]) playground-preview {
 				height: 300px;
 			}
-			:host([size="large"]) {
+			:host([size="large"]) playground-preview {
 				height: 400px;
 			}
-			:host([size="xlarge"]) {
+			:host([size="xlarge"]) playground-preview {
 				height: 600px;
 			}
 			.d2l-preview-container {
@@ -110,6 +120,7 @@ class ComponentCatalogDemoResizablePreview extends LitElement {
 			playground-preview {
 				border-radius: 10px;
 				height: 100%;
+				transition: height 0.2s ease;
 			}
 			:host([resizable]) playground-preview {
 				border-radius: 10px 0 0 10px;
@@ -117,13 +128,25 @@ class ComponentCatalogDemoResizablePreview extends LitElement {
 			:host([attached]) playground-preview {
 				border-radius: 10px 10px 0 0;
 			}
+			:host([attached][resizable]) playground-preview {
+				border-radius: 10px 0 0 0;
+			}
+			@media (prefers-reduced-motion: reduce) {
+				playground-preview {
+					transition: none;
+				}
+			}
 		`;
 	}
 	constructor() {
 		super();
 		this.resizable = false;
 		this.attached = false;
+		this.autoSize = false;
 		this.size = 'small';
+
+		this._handleIFrameMessage = this._handleIFrameMessage.bind(this);
+		this._id = getUniqueId();
 	}
 	get indexHTML() {
 		const align = this.contentAlignment || 'center';
@@ -132,6 +155,11 @@ class ComponentCatalogDemoResizablePreview extends LitElement {
 				window.addEventListener('load', function () {
 					var demoEl = document.getElementById('demo-element');
 					demoEl.classList.remove('hide');
+					${this.autoSize && this.tagName ? `
+						window.setTimeout(function() {
+							var demoSizeElement = document.querySelector('${this.tagName}');
+							window.parent.postMessage({id: "${this._id}", height: demoSizeElement.getBoundingClientRect().height}, '*');
+						}, 20)` : '' }
 				});
 				// Suppress errors only in production? This will hide any errors with attributes and the module not resolved errors
 				// occuring within the iframe
@@ -142,9 +170,12 @@ class ComponentCatalogDemoResizablePreview extends LitElement {
 			<script type="module" src="index.js"></script>
 			<style>
 				/* todo?: add this to md template and provide configuration for different item alignments? */
-				html {
+				body, html {
 					font-size: 20px;
-					margin: 20px;
+					margin: 0;
+				}
+				html {
+					padding: ${DEMO_PADDING}rem;
 				}
 				.layout {
 					align-items: ${align};
@@ -165,6 +196,15 @@ class ComponentCatalogDemoResizablePreview extends LitElement {
 				</div>
 			</body>`;
 	}
+	connectedCallback() {
+		super.connectedCallback();
+		window.addEventListener('message', this._handleIFrameMessage);
+	}
+	disconnectedCallback() {
+		super.disconnectedCallback();
+		window.removeEventListener('message', this._handleIFrameMessage);
+	}
+
 	firstUpdated() {
 		this._preview = this.shadowRoot.querySelector('playground-preview');
 		this._project = this.shadowRoot.querySelector('playground-project');
@@ -173,12 +213,12 @@ class ComponentCatalogDemoResizablePreview extends LitElement {
 
 	render() {
 		const previewStyles = {
-			width: `calc(100% - ${this.resizable ? SLIDER_WIDTH : 0}px)`,
+			height: this._previewHeight ?  `calc(${this._previewHeight}px + ${ 2 * DEMO_PADDING}rem)` : undefined,
+			width: `calc(100% - ${this.resizable ? SLIDER_WIDTH : 0}px)`
 		};
 		const previewContainerStyles = {
 			width: this._previewWidth ? `${this._previewWidth}px` : '100%',
 		};
-
 		return html`
 			<div class="d2l-slider-region">
 				<playground-project id='demo'>
@@ -231,6 +271,12 @@ class ComponentCatalogDemoResizablePreview extends LitElement {
 			this._project.saveDebounced();
 		}
 		super.update(changedProperties);
+	}
+	_handleIFrameMessage(event) {
+		const { height, id } = event.data;
+		if (id === this._id && event.origin === 'https://unpkg.com') {
+			this._previewHeight = height;
+		}
 	}
 	_moveSliderLeft() {
 		const { left: hostLeft, right: hostRight } = this.getBoundingClientRect();

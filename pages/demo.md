@@ -6,7 +6,7 @@ layout: layouts/demo
 
 ### Interactive demo - Includes text variations for coloring [demo-snippet]
 
-<!-- docs: demo live name:d2l-button -->
+<!-- docs: demo live name:d2l-button size:small autoSize:false -->
 ```html
 <script type="module">
 	/*
@@ -52,7 +52,9 @@ defaults:{"disabled":true}
 
 ### Demo - non-interactive
 
-<!-- docs: demo -->
+<!-- docs: demo 
+size:small
+-->
 ```html
 <script type="module">
 	import '@brightspace-ui/core/components/button/button.js';
