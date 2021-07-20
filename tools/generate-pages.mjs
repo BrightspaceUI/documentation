@@ -60,6 +60,8 @@ function _copyCustomElements(repos) {
 
 			const attributeMembers = declaration.members.filter((dec) => {
 				if (dec.name === 'properties' && dec.static) return false;
+				if (dec.name.startsWith('_')) return false;
+				if (dec.ignore) return false;
 				return dec.kind === 'field';
 			});
 			attributeMembers.forEach((attributeMember) => {

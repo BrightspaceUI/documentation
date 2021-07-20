@@ -1,4 +1,5 @@
 /* global require, module */
+const anchor = require('markdown-it-anchor');
 const cleanCSS = require('clean-css');
 const eleventyNavigationPlugin = require('@11ty/eleventy-navigation');
 const { escapeHtml } = require('markdown-it/lib/common/utils');
@@ -26,8 +27,11 @@ module.exports = function(eleventyConfig) {
 	eleventyConfig.addShortcode('statusTable', (tier) => {
 		return `<d2l-component-catalog-status-table tier="${tier}"></d2l-component-catalog-status-table>`;
 	});
+	eleventyConfig.addFilter('cssmin', (code) => {
+		return new cleanCSS({}).minify(code).styles;
+	});
 
-	const options = {
+	const markdownItOptions = {
 		html: true,
 		breaks: false,
 		linkify: true,
@@ -62,10 +66,16 @@ module.exports = function(eleventyConfig) {
 			}
 		}
 	};
-	const markdownIt = require('markdown-it')(options).use(require('markdown-it-modify-token'));
-	eleventyConfig.addFilter('cssmin', (code) => {
-		return new cleanCSS({}).minify(code).styles;
-	});
+	const anchorOpts = {
+		level: 2,
+		permalink: anchor.permalink.ariaHidden({
+			placement: 'before',
+			symbol: '<d2l-icon icon="tier1:link"></d2l-icon>'
+		})
+	};
+	const markdownIt = require('markdown-it')(markdownItOptions)
+		.use(require('markdown-it-modify-token'))
+		.use(anchor, anchorOpts);
 
 	markdownIt.renderer.rules.fence = (tokens, idx) => {
 		const content = tokens[idx].content;
@@ -108,6 +118,9 @@ module.exports = function(eleventyConfig) {
 			let openingTag = '<d2l-component-catalog-demo-snippet resizable ';
 			const size = parseConfigurationValue('size', content);
 			if (size) openingTag += ` size="${size}" `;
+
+			const align = parseConfigurationValue('align', content);
+			if (align) openingTag += ` content-alignment="${align}"`;
 
 			if (content.includes('<!-- docs: demo live')) {
 				const tag = parseConfigurationValue('name', content);

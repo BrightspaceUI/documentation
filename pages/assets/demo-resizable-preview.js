@@ -29,6 +29,10 @@ class ComponentCatalogDemoResizablePreview extends LitElement {
 			*/
 			code: { type: String },
 			/**
+			 * Corresponds to align-items value for demo content. Defaults to center.
+			 */
+			contentAlignment: { type: String, attribute: 'content-alignment' },
+			/**
 			* Necessary imports for the code running in the IFrame
 			*/
 			imports: { type: String },
@@ -122,6 +126,7 @@ class ComponentCatalogDemoResizablePreview extends LitElement {
 		this.size = 'small';
 	}
 	get indexHTML() {
+		const align = this.contentAlignment || 'center';
 		return `
 			<script>
 				window.addEventListener('load', function () {
@@ -142,7 +147,7 @@ class ComponentCatalogDemoResizablePreview extends LitElement {
 					margin: 20px;
 				}
 				.layout {
-					align-items: center;
+					align-items: ${align};
 					display: flex;
 					flex-wrap: wrap;
 					height: 100%;
