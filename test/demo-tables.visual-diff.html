@@ -212,6 +212,9 @@
 					{
 						"name": "d2l-real-component-event",
 						"description": "Dispatched when the event happens"
+					},
+					{
+						"name": "d2l-real-component-event2"
 					}
 				],
 				"slots": [
@@ -255,6 +258,7 @@
 					if (table.id === 'invalid-tag') table._componentInfo = undefined;
 					else if (table.id === 'valid-tag') table._componentInfo = validInfo;
 					else if (table.id === 'interactive') table._componentInfo = interactiveInfo;
+					else if (table.id === 'hide-events') table._componentInfo = interactiveInfo;
 					else if (table.id === 'hide-slots') table._componentInfo = interactiveInfo;
 					else if (table.id === 'no-slots') table._componentInfo = noSlotsComponent;
 				});
@@ -284,6 +288,9 @@
 		</div>
 		<div class="visual-diff">
 			<d2l-component-catalog-demo-tables id="no-slots" tag="d2l-no-slot-component"></d2l-component-catalog-demo-tables>
+		</div>
+		<div class="visual-diff">
+			<d2l-component-catalog-demo-tables id="hide-events" tag="d2l-real-component" hide-events></d2l-component-catalog-demo-tables>
 		</div>
 		<div class="visual-diff">
 			<d2l-component-catalog-demo-tables id="hide-slots" tag="d2l-real-component" hide-slots></d2l-component-catalog-demo-tables>
